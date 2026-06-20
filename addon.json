@@ -1,0 +1,22 @@
+{
+	"title"  : "SW ZDevTools",
+	"type"   : "tool",
+	"tags"   : ["fun", "build"],
+	"ignore" :
+	[
+		"glualint.json",
+		"*.git*",
+		"*.vscode*",
+		"*.svn*",
+		"*.txt",
+		"*.bat",
+		"*.gma",
+		"*.zip",
+		"*.tmp",
+		"*.fgd",
+		"_deployment/*",
+		"*.md",
+		"LICENSE"
+	]
+}
+
