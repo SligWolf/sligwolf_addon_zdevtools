@@ -3,6 +3,7 @@
 This is an internal development and testing tool for SligWolf's Addons.
 Do not use on production servers/clients. Only use this during addon development.
 Use this addon at your own risk! This will not be publicly available on Workshop!
+The name makes sure it appears last in lists and load orders.
 Do not reupload in any way!
 
 Safe operation:
