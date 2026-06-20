@@ -39,8 +39,8 @@ function SLIGWOLF_ADDON:IsDebugKeyDown(ply, key)
 end
 
 if SERVER then
-	local cvDebugMode = LIBConvar.GetConvar("sv_sligwolf_addons_debug_mode")
-	local cvDebugTraceEnable = LIBConvar.GetConvar("sv_sligwolf_addons_debug_trace_enable")
+	local cvDebugMode = LIBConvar.GetConvar("sv_sligwolf_base_debug_mode")
+	local cvDebugTraceEnable = LIBConvar.GetConvar("sv_sligwolf_base_debug_trace_enable")
 
 	local function playSwitchSound(ply, soundFile, recipientFilter)
 		ply:EmitSound(
@@ -133,7 +133,7 @@ if SERVER then
 	local helptext = "Show SW-Names of all SligWolf Addons entities for 60 secounds. This requires 'developer 1' or above. Params: all, console"
 	local cvarFlags = bit.bor(FCVAR_GAMEDLL, FCVAR_DONTRECORD)
 
-	concommand.Add("dev_sligwolf_addons_show_entity_names", function(ply, cmd, args)
+	concommand.Add("dev_sligwolf_zdevtools_show_entity_names", function(ply, cmd, args)
 		if not SLIGWOLF_ADDON:IsValidDeveloperPlayerForCmd(ply) then
 			return
 		end
