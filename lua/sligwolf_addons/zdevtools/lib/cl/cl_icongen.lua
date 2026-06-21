@@ -16,6 +16,7 @@ local LIBEntities = SligWolf_Addons.Entities
 local LIBTrace = SligWolf_Addons.Trace
 local LIBHook = SligWolf_Addons.Hook
 local LIBFile = SligWolf_Addons.File
+local LIBUtil = SligWolf_Addons.Util
 local LIBNet = SligWolf_Addons.Net
 
 local META = LIB.meta
@@ -696,7 +697,7 @@ function LIB.IsUIOpen()
 		return true
 	end
 
-	if gui.IsConsoleVisible() then
+	if LIBUtil.GameIsPaused() then
 		return true
 	end
 
@@ -851,6 +852,12 @@ function META:ShowPreviewAndCapture()
 	LIB.SetCamera(captureRequest.camera)
 	LIB.SetSuperDof(captureRequest.camera.dof)
 	LIB.RequestCopyScreenCopyScreenToBuffer()
+
+	if gui.IsGameUIVisible() then
+		-- Close the main menu when we start rendering
+		ProtectedCall(RunConsoleCommand, "gamemenucommand", "ResumeGame")
+	end
+
 
 	SLIGWOLF_ADDON:TimerUntil(screenDelayTimer, 0, function(addon, success)
 		if not IsValid(self) then
