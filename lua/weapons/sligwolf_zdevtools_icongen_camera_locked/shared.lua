@@ -36,6 +36,7 @@ SWEP.ShootSound				= ""
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
+SWEP.m_bPlayPickupSound		= false
 if CLIENT then
 	SWEP.BounceWeaponIcon 	= false
 	SWEP.WepSelectIcon 		= surface.GetTextureID("hud/sligwolf/zdevtools/weaponicon/sligwolf_zdevtools_icongen_camera")
@@ -46,7 +47,15 @@ if not SligWolf_Addons.HasLoadedAddon then return end
 if not SligWolf_Addons.HasLoadedAddon(addonName) then return end
 
 local addon = SligWolf_Addons.GetAddon(addonName)
+
 local LIBIconGenerator = addon.IconGenerator
+local LIBHook = SligWolf_Addons.Hook
+
+LIBHook.Add("HUDWeaponPickedUp", "Addon_ZDevTools_Icongen_Camera_HidePickupNotification", function(weapon)
+	if weapon:GetClass() == "sligwolf_zdevtools_icongen_camera_locked" then
+		return true
+	end
+end)
 
 function SWEP:Initialize()
 	self:SetAddonID(addonName)
