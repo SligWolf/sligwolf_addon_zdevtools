@@ -73,6 +73,10 @@ function SWEP:Initialize()
 	self:SetAddonID(addonName)
 	self:SetHoldType("camera")
 
+	self:AddClientCallForPredictionHook("Deploy")
+	self:AddClientCallForPredictionHook("Holster")
+	self:AddClientCallForPredictionHook("Equip")
+
 	if SERVER then
 		self:SetZoom(70)
 	end
@@ -104,7 +108,18 @@ end
 function SWEP:SecondaryAttack()
 end
 
-function SWEP:Tick()
+function SWEP:Deploy()
+	return true
+end
+
+function SWEP:Holster()
+	return true
+end
+
+function SWEP:Equip()
+end
+
+function SWEP:Think()
 	local owner = self:GetOwner()
 	if CLIENT and owner ~= LocalPlayer() then -- If someone is spectating a player holding this weapon, bail
 		return
@@ -158,38 +173,45 @@ end
 
 function SWEP:OnRemove()
 	if CLIENT then
-		LIBIconGenerator.ResetCamera()
-		LIBIconGenerator.ResetSuperDof()
-		LIBIconGenerator.ClearBufferRenderTarget()
-		LIBIconGenerator.ClearRenderTarget()
-
-		self.oldPos = nil
-		self.oldAng = nil
-		self.oldFov = nil
-		self.posTime = nil
-
-		self.dofRendered = nil
-		self.dof = nil
+		self:ResetRender()
 	end
 end
 
 function SWEP:OnReloaded()
 	if CLIENT then
-		LIBIconGenerator.ResetCamera()
-		LIBIconGenerator.ResetSuperDof()
-		LIBIconGenerator.ClearBufferRenderTarget()
-		LIBIconGenerator.ClearRenderTarget()
-
-		self.oldPos = nil
-		self.oldAng = nil
-		self.oldFov = nil
-		self.posTime = nil
-		self.dofRendered = nil
+		self:ResetRender()
 	end
 end
 
 if SERVER then
 	return
+end
+
+function SWEP:DeployClient()
+	self:ResetRender()
+end
+
+function SWEP:HolsterClient()
+	self:ResetRender()
+end
+
+function SWEP:EquipClient()
+	self:ResetRender()
+end
+
+function SWEP:ResetRender()
+	LIBIconGenerator.ResetCamera()
+	LIBIconGenerator.ResetSuperDof()
+	LIBIconGenerator.ClearBufferRenderTarget()
+	LIBIconGenerator.ClearRenderTarget()
+
+	self.oldPos = nil
+	self.oldAng = nil
+	self.oldFov = nil
+	self.posTime = nil
+
+	self.dofRendered = nil
+	self.dof = nil
 end
 
 function SWEP:IsStandingStill()

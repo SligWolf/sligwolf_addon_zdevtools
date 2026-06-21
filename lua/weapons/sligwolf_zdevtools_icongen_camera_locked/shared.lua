@@ -64,6 +64,10 @@ end)
 function SWEP:Initialize()
 	self:SetAddonID(addonName)
 	self:SetHoldType("camera")
+
+	self:AddClientCallForPredictionHook("Deploy")
+	self:AddClientCallForPredictionHook("Holster")
+	self:AddClientCallForPredictionHook("Equip")
 end
 
 function SWEP:Reload()
@@ -82,6 +86,10 @@ function SWEP:Deploy()
 	return true
 end
 
+function SWEP:Holster()
+	return true
+end
+
 function SWEP:Equip()
 end
 
@@ -94,28 +102,40 @@ end
 
 function SWEP:OnRemove()
 	if CLIENT then
-		LIBIconGenerator.ResetCamera()
-		LIBIconGenerator.ResetSuperDof()
-		LIBIconGenerator.ClearBufferRenderTarget()
-		LIBIconGenerator.ClearRenderTarget()
-
-		self.renderStarted = false
+		self:ResetRender()
 	end
 end
 
 function SWEP:OnReloaded()
 	if CLIENT then
-		LIBIconGenerator.ResetCamera()
-		LIBIconGenerator.ResetSuperDof()
-		LIBIconGenerator.ClearBufferRenderTarget()
-		LIBIconGenerator.ClearRenderTarget()
-
-		self.renderStarted = false
+		self:ResetRender()
 	end
 end
 
+
 if SERVER then
 	return
+end
+
+function SWEP:DeployClient()
+	self:ResetRender()
+end
+
+function SWEP:HolsterClient()
+	self:ResetRender()
+end
+
+function SWEP:EquipClient()
+	self:ResetRender()
+end
+
+function SWEP:ResetRender()
+	LIBIconGenerator.ResetCamera()
+	LIBIconGenerator.ResetSuperDof()
+	LIBIconGenerator.ClearBufferRenderTarget()
+	LIBIconGenerator.ClearRenderTarget()
+
+	self.renderStarted = false
 end
 
 function SWEP:DrawHUD()
