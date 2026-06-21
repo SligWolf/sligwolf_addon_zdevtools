@@ -36,6 +36,11 @@ SWEP.ShootSound				= "NPC_CScanner.TakePhoto"
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
+SWEP.m_bPlayPickupSound		= true
+
+SWEP.DisableDuplicator		= false
+SWEP.DoNotDuplicate			= false
+
 if CLIENT then
 	SWEP.BounceWeaponIcon 	= false
 	SWEP.WepSelectIcon 		= surface.GetTextureID("hud/sligwolf/zdevtools/weaponicon/sligwolf_zdevtools_icongen_camera")

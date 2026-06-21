@@ -37,6 +37,10 @@ SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
 SWEP.m_bPlayPickupSound		= false
+
+SWEP.DisableDuplicator		= true
+SWEP.DoNotDuplicate			= true
+
 if CLIENT then
 	SWEP.BounceWeaponIcon 	= false
 	SWEP.WepSelectIcon 		= surface.GetTextureID("hud/sligwolf/zdevtools/weaponicon/sligwolf_zdevtools_icongen_camera")
