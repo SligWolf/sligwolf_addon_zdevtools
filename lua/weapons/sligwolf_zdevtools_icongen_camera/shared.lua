@@ -202,6 +202,7 @@ end
 function SWEP:ResetRender()
 	LIBIconGenerator.ResetCamera()
 	LIBIconGenerator.ResetSuperDof()
+	LIBIconGenerator.ResetProgressStats()
 	LIBIconGenerator.ClearBufferRenderTarget()
 	LIBIconGenerator.ClearRenderTarget()
 
@@ -263,9 +264,6 @@ function SWEP:DrawHUD()
 		return
 	end
 
-	local defaults = LIBIconGenerator.config.defaults
-	local defaultsCamera = defaults.camera
-
 	local standingStill = self:IsStandingStill()
 	local oldStandingStill = self.oldStandingStill
 	local changedStandingStill = standingStill ~= oldStandingStill
@@ -287,19 +285,7 @@ function SWEP:DrawHUD()
 	end
 
 	if not self.dof then
-		local tr = LIBTrace.PlayerAimTrace(owner, 10000)
-
-		local distance = tr.Hit and tr.HitPos:Distance(tr.StartPos) or 0
-		distance = math.Clamp(distance or 0, 0, 10000)
-
-		if distance > 0 then
-			self.dof = {
-				distance = distance,
-				blur = defaultsCamera.dof.blur,
-				passes = defaultsCamera.dof.passes,
-				steps = defaultsCamera.dof.steps,
-			}
-		end
+		self.dof = LIBIconGenerator.EstimateSuperDof()
 	end
 
 	if self.dof then

@@ -30,6 +30,36 @@ if CLIENT then
 	end, nil, nil, cvarFlags)
 end
 
+local g_iconGenerator = LIBIconGenerator.NewInstance("test")
+
+g_iconGenerator.OnProgress = function(this, currentIndex, workloadCount)
+	MsgN("g_iconGenerator OnProgress ", currentIndex, " ", workloadCount)
+end
+
+g_iconGenerator.OnProgressDone = function(this, currentIndex, workloadCount)
+	MsgN("g_iconGenerator OnProgressDone ", currentIndex, " ", workloadCount)
+end
+
+g_iconGenerator.OnStart = function(this)
+	MsgN("g_iconGenerator OnStart ")
+end
+
+g_iconGenerator.OnCancel = function(this)
+	MsgN("g_iconGenerator OnCancel ")
+end
+
+g_iconGenerator.OnFinished = function(this)
+	MsgN("g_iconGenerator OnFinished ")
+end
+
+g_iconGenerator.OnTimeout = function(this)
+	MsgN("g_iconGenerator OnTimeout ")
+end
+
+g_iconGenerator.OnSpawn = function(this, ent)
+	MsgN("g_iconGenerator OnSpawn ", ent)
+end
+
 if SERVER then
 	local workload = {
 		{
@@ -168,40 +198,23 @@ if SERVER then
 	}
 
 	concommand.Add("dev_sligwolf_zdevtools_icongen_start", function(ply)
-		GlobalGenerator = LIBIconGenerator.NewInstance("test")
-
-		GlobalGenerator:Initialize(ply)
-		GlobalGenerator:AddWorkload(workload)
-
-		GlobalGenerator.OnProgress = function(this, currentEntry, currentIndex, workloadCount)
-			MsgN("GlobalGenerator OnProgress ", currentEntry.spawnname, " ", currentIndex, " ", workloadCount)
-		end
-
-		GlobalGenerator.OnCancel = function(this)
-			MsgN("GlobalGenerator OnCancel ")
-		end
-
-		GlobalGenerator.OnTimeout = function(this)
-			MsgN("GlobalGenerator OnTimeout ")
-		end
-
-		GlobalGenerator.OnSpawn = function(this, ent)
-			MsgN("GlobalGenerator OnSpawn ", ent)
-		end
-
-		GlobalGenerator.OnDone = function(this)
-			MsgN("GlobalGenerator OnDone ")
-		end
-
-		GlobalGenerator:Start()
-	end)
-
-	concommand.Add("dev_sligwolf_zdevtools_icongen_stop", function(ply)
-		if not IsValid(GlobalGenerator) then
+		if not IsValid(g_iconGenerator) then
 			return
 		end
 
-		GlobalGenerator:Cancel()
+		g_iconGenerator:Initialize(ply)
+
+		g_iconGenerator:AddWorkload(workload)
+
+		g_iconGenerator:Start()
+	end)
+
+	concommand.Add("dev_sligwolf_zdevtools_icongen_stop", function(ply)
+		if not IsValid(g_iconGenerator) then
+			return
+		end
+
+		g_iconGenerator:Cancel()
 	end)
 else
 	local function clientInit()
@@ -209,12 +222,8 @@ else
 			return
 		end
 
-		GlobalGenerator = LIBIconGenerator.NewInstance("test")
-
-		ProtectedCall(function()
-			GlobalGenerator:Initialize()
-			GlobalGenerator:Start()
-		end)
+		g_iconGenerator:Initialize()
+		g_iconGenerator:Start()
 	end
 
 	LIBHook.Add("InitPostEntity", "Addon_ZDevTools_Icongen_ClientInit", clientInit)

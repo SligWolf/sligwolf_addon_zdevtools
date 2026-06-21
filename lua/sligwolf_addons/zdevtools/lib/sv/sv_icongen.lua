@@ -98,6 +98,7 @@ function META:Lock()
 	if IsValid(ply) then
 		ply:ExitVehicle()
 		ply:ExitLadder()
+		ply:SetViewEntity(nil)
 
 		ply:SetNotSolid(true)
 		ply:SetNoTarget(true)
@@ -111,7 +112,7 @@ function META:Lock()
 		ply:SelectWeapon(lockWeapon)
 
 		ply:SetNWVector("sligwolf_zdevtools_icongen_lock_pos", ply:GetPos())
-		ply:SetNWAngle("sligwolf_zdevtools_icongen_lock_ang", ply:GetAngles())
+		ply:SetNWAngle("sligwolf_zdevtools_icongen_lock_ang", ply:EyeAngles())
 		ply:SetNWBool("sligwolf_zdevtools_icongen_lock", true)
 	end
 
@@ -439,11 +440,13 @@ function META:AddWorkload(workload)
 end
 
 function META:DestroyInternal()
+	self:ResetPlayerPosition()
 	self:CleanupSpawn()
 	self:Unlock()
 end
 
 function META:CancelInternal()
+	self:ResetPlayerPosition()
 	self:CleanupSpawn()
 	self:Unlock()
 end
@@ -468,17 +471,17 @@ function META:ProcessNextEntry()
 	self.processSubId = LIB.processSubId
 
 	local workload = self.workload
-	local workloadCount = self.workloadCount
+	local count = self.workloadCount
 
 	self.currentIndex = self.currentIndex + 1
-	local currentIndex = self.currentIndex
+	local index = self.currentIndex
 
-	if currentIndex > workloadCount then
+	if index > count then
 		self:ProcessEnd()
 		return
 	end
 
-	local currentEntry = workload[currentIndex]
+	local currentEntry = workload[index]
 	if not currentEntry then
 		self:ProcessEnd()
 		return
@@ -486,15 +489,32 @@ function META:ProcessNextEntry()
 
 	self.currentEntry = currentEntry
 
-	if self.OnProgress then
-		ProtectedCall(self.OnProgress, self, currentEntry, currentIndex, workloadCount)
+	if index == 1 then
+		self:ProcessStart()
 	end
 
-	-- Move player to specified position
-	self:MovePlayerToEntry(function()
-		-- Spawn the entity
-		self:SpawnEntityForEntry()
-	end)
+	if self.OnProgress then
+		ProtectedCall(self.OnProgress, self, index, count)
+	end
+
+	self:MovePlayerToEntry()
+	self:SpawnEntityForEntry()
+end
+
+function META:ProcessStart()
+	self.isProcessing = true
+
+	local ply = self.player
+
+	self.originalPos = ply:GetPos()
+	self.originalAng = ply:EyeAngles()
+
+	-- self.originalPos = ply:GetNWVector("sligwolf_zdevtools_icongen_lock_pos", ply:GetPos())
+	-- self.originalAng = ply:etNWAngle("sligwolf_zdevtools_icongen_lock_ang", ply:EyeAngles())
+
+	if self.OnStart then
+		ProtectedCall(self.OnStart, self)
+	end
 end
 
 function META:ProcessEnd()
@@ -512,14 +532,28 @@ function META:ProcessEnd()
 	self.currentTheme = nil
 	self.currentPath = nil
 
+	self:ResetPlayerPosition()
 	self:Unlock()
 
-	if self.OnDone then
-		ProtectedCall(self.OnDone, self)
+	if self.OnFinished then
+		ProtectedCall(self.OnFinished, self)
 	end
 end
 
-function META:MovePlayerToPosition(playerPos, playerAng, callback)
+function META:ResetPlayerPosition()
+	if not self:ValidateState() then
+		return
+	end
+
+	if self.originalPos and self.originalAng then
+		self:MovePlayerToPosition(self.originalPos, self.originalAng)
+	end
+
+	self.originalPos = nil
+	self.originalAng = nil
+end
+
+function META:MovePlayerToPosition(playerPos, playerAng)
 	if not self:ValidateState() then
 		return
 	end
@@ -530,11 +564,9 @@ function META:MovePlayerToPosition(playerPos, playerAng, callback)
 	ply:SetNWAngle("sligwolf_zdevtools_icongen_lock_ang", playerAng)
 	ply:SetPos(playerPos)
 	ply:SetEyeAngles(playerAng)
-
-	callback(self)
 end
 
-function META:MovePlayerToEntry(callback)
+function META:MovePlayerToEntry()
 	if not self:ValidateState() then
 		return
 	end
@@ -557,10 +589,10 @@ function META:MovePlayerToEntry(callback)
 	local viewOffset = ply:GetCurrentViewOffset()
 	local playerPos = eyePos - viewOffset
 
-	self:MovePlayerToPosition(playerPos, playerAng, callback)
+	self:MovePlayerToPosition(playerPos, playerAng)
 end
 
-function META:MovePlayerToCamera(callback)
+function META:MovePlayerToCamera()
 	if not self:ValidateState() then
 		return
 	end
@@ -575,7 +607,7 @@ function META:MovePlayerToCamera(callback)
 	local viewOffset = ply:GetCurrentViewOffset()
 	local playerPos = eyePos - viewOffset
 
-	self:MovePlayerToPosition(playerPos, playerAng, callback)
+	self:MovePlayerToPosition(playerPos, playerAng)
 end
 
 function META:MoveEntityToPosition(entPos, entAng, callback)
@@ -583,6 +615,7 @@ function META:MoveEntityToPosition(entPos, entAng, callback)
 		return
 	end
 
+	local processSubId = self.processSubId
 	local ent = self.currentEntity
 
 	if LIBEntities.IsMarkedForDeletion(ent) then
@@ -592,6 +625,10 @@ function META:MoveEntityToPosition(entPos, entAng, callback)
 
 	LIBPosition.SetPosAng(ent, entPos, entAng, function()
 		if not IsValid(self) then
+			return
+		end
+
+		if processSubId ~= self.processSubId then
 			return
 		end
 
@@ -804,10 +841,10 @@ function META:HandleSpawnedEntity(ent, spawnname)
 	end
 
 	self:MoveEntityToPosition(entPos, entAng, function()
-		self:MovePlayerToCamera(function()
-			self:WaitForEntityReady(function()
-				self:SendCaptureRequest()
-			end)
+		self:MovePlayerToCamera()
+
+		self:WaitForEntityReady(function()
+			self:SendCaptureRequest()
 		end)
 	end)
 end
@@ -914,6 +951,8 @@ function META:SendCaptureRequest()
 	LIBNet.Start("zdevtools_icongen_start")
 		net.WriteString(self.name)
 		net.WriteUInt(self.processSubId, 32)
+		net.WriteUInt(self.currentIndex, 16)
+		net.WriteUInt(self.workloadCount, 16)
 		net.WriteString(self.currentPath or "")
 
 		net.WriteVector(camera.pos)
@@ -952,6 +991,18 @@ function META:HandleCaptureDone(captureResponce)
 	end
 
 	self:CleanupSpawn()
+
+	local index = self.currentIndex
+	local count = self.workloadCount
+
+	if self.OnProgressDone then
+		ProtectedCall(self.OnProgressDone, self, index, count)
+	end
+
+	if index >= count then
+		self:ProcessEnd()
+		return
+	end
 
 	SLIGWOLF_ADDON:TimerOnce(self.delayTimer, self.config.time.delay, function()
 		if not IsValid(self) then

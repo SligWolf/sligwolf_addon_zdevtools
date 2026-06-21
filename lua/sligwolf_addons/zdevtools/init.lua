@@ -45,14 +45,18 @@ SLIGWOLF_ADDON.Version = "1.0.0"
 
 -- Libaries
 SLIGWOLF_ADDON:LuaInclude("lib/icongen.lua")
+SLIGWOLF_ADDON:LuaInclude("lib/icongen_hooks.lua")
 
 if SERVER then
 	SLIGWOLF_ADDON:LuaInclude("lib/sv/sv_icongen.lua")
+
 	SLIGWOLF_ADDON:AddCSLuaFile("lib/cl/cl_icongen.lua")
+	SLIGWOLF_ADDON:AddCSLuaFile("lib/cl/cl_icongen_render.lua")
 end
 
 if CLIENT then
 	SLIGWOLF_ADDON:LuaInclude("lib/cl/cl_icongen.lua")
+	SLIGWOLF_ADDON:LuaInclude("lib/cl/cl_icongen_render.lua")
 end
 
 -- Modules

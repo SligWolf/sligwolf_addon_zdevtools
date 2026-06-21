@@ -132,6 +132,7 @@ end
 function SWEP:ResetRender()
 	LIBIconGenerator.ResetCamera()
 	LIBIconGenerator.ResetSuperDof()
+	LIBIconGenerator.ResetProgressStats()
 	LIBIconGenerator.ClearBufferRenderTarget()
 	LIBIconGenerator.ClearRenderTarget()
 
