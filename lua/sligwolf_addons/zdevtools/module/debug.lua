@@ -11,6 +11,7 @@ local SLIGWOLF_ADDON = SLIGWOLF_ADDON
 local LIBHook = SligWolf_Addons.Hook
 local LIBDebug = SligWolf_Addons.Debug
 local LIBConvar = SligWolf_Addons.Convar
+local LIBPrint = SligWolf_Addons.Print
 
 function SLIGWOLF_ADDON:IsDebugKeyDown(ply, key)
 	if not IsValid(ply) then
@@ -26,12 +27,12 @@ function SLIGWOLF_ADDON:IsDebugKeyDown(ply, key)
 		return false
 	end
 
-	if not inKey then
+	if not key then
 		return true
 	end
 
 	-- Debug control key
-	if not ply:KeyDown(inKey) then
+	if not ply:KeyDown(key) then
 		return false
 	end
 
@@ -109,7 +110,7 @@ if SERVER then
 			return
 		end
 
-		if LIBConvar.GetValue("developer") > 0 then
+		if LIBConvar.GetValue("developer") <= 0 then
 			return
 		end
 
