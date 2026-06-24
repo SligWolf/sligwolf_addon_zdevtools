@@ -109,7 +109,7 @@ function PANEL:Init()
 		self.distance = distance
 
 		panel:SetPos(10, 30)
-		panel:SetSize(300, 90)
+		panel:SetSize(244, 90)
 		panel:DockPadding(8, 8, 8, 8)
 		panel:DockMargin(0, 0, 4, 0)
 		panel:Dock(FILL)
@@ -184,7 +184,7 @@ function PANEL:Init()
 		end
 
 		panel:SetPos(10, 30)
-		panel:SetSize(150, 100)
+		panel:SetSize(206, 100)
 		panel:DockPadding(8, 8, 8, 8)
 		panel:Dock(RIGHT)
 	end
