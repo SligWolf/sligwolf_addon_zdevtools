@@ -40,12 +40,26 @@ LIB.currentCount = nil
 LIB.currentCamera = nil
 LIB.currentSuperDof = nil
 
+if IsValid(LIB.previewContentIcon) then
+	LIB.previewContentIcon:Remove()
+	LIB.previewContentIcon = nil
+end
+
 LIBHook.Add("OnScreenSizeChanged", "Addon_ZDevTools_Icongen_ScreenResized", function()
 	LIB.renderTarget = nil
 	LIB.renderTargetMaterial = nil
 	LIB.bufferRenderTarget = nil
 	LIB.bufferRenderTargetMaterial = nil
 	LIB.superDofResources = nil
+
+	LIB.hasDofRendered = nil
+	LIB.hasCanvasRendered = nil
+	LIB.hasBufferRendered = nil
+
+	if IsValid(LIB.previewContentIcon) then
+		LIB.previewContentIcon:Remove()
+		LIB.previewContentIcon = nil
+	end
 end)
 
 LIBHook.Add("CalcView", "Addon_ZDevTools_Icongen_Camera", function(ply, origin, angles, fov)
@@ -754,6 +768,8 @@ function LIB.EstimateViewWorkloadEntry()
 		dof = superDof
 	end
 
+	local title = spawntable.PrintName or spawntable.Name or spawnname
+
 	local workloadEntry = {
 		map = game.GetMap(),
 		category = spawntable.SLIGWOLF_SkinCategory,
@@ -768,6 +784,7 @@ function LIB.EstimateViewWorkloadEntry()
 		entity = {
 			pos = ent:GetPos(),
 			ang = ent:GetAngles(),
+			title = title,
 			ent = ent,
 		},
 	}
@@ -775,23 +792,31 @@ function LIB.EstimateViewWorkloadEntry()
 	return workloadEntry
 end
 
-local g_lineBuffer = {}
+function LIB.GetPreviewContentIcon()
+	if IsValid(LIB.previewContentIcon) then
+		return LIB.previewContentIcon
+	end
 
-function LIB.DrawPreviewScreenCover(viewW, viewH, bufferW, bufferH)
-	local scale = math.min(bufferW / viewW, bufferH / viewH)
+	local icon = vgui.Create("ContentIcon")
+	icon:SetPaintedManually(true)
 
-	local newW = viewW * scale
-	local newH = viewH * scale
+	icon:SetName("Preview")
+	icon:SetContentType("entity")
+	icon:SetSpawnName("")
+	icon:SetAdminOnly(false)
 
-	local centerX = (bufferW - newW) / 2
-	local centerY = (bufferH - newH) / 2
+	icon:SetMouseInputEnabled(false)
+	icon:SetKeyboardInputEnabled(false)
 
-	surface.SetDrawColor(0, 0, 0, 224)
-	surface.DrawRect(0, 0, bufferW, centerY)
-	surface.DrawRect(0, centerY + newH, bufferW, bufferH - (centerY + newH))
-	surface.DrawRect(0, centerY, centerX, newH)
-	surface.DrawRect(centerX + newW, centerY, bufferW - (centerX + newW), newH)
+	icon.DoRightClick = function() end
+	icon.DoClick = function() end
+	icon.OpenMenu = function() end
+
+	LIB.previewContentIcon = icon
+	return icon
 end
+
+local g_lineBuffer = {}
 
 function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMaterial, dofPercent)
 	local viewW = renderTargetMaterial:Width()
@@ -800,10 +825,25 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 	local bufferW = bufferRenderTargetMaterial:Width()
 	local bufferH = bufferRenderTargetMaterial:Height()
 
-	LIB.DrawPreviewScreenCover(viewW, viewH, bufferW, bufferH)
+	local scale = math.min(bufferW / viewW, bufferH / viewH)
 
-	render.PushFilterMag(TEXFILTER.ANISOTROPIC)
-	render.PushFilterMin(TEXFILTER.ANISOTROPIC)
+	local newW = viewW * scale
+	local newH = viewH * scale
+
+	local centerX = (bufferW - newW) / 2
+	local centerY = (bufferH - newH) / 2
+
+	local leftEdgeX = centerX
+	local rightEdgeX = leftEdgeX + newW
+
+	local topEdgeY = centerY
+	local bottomEdgeY = topEdgeY + newH
+
+	surface.SetDrawColor(0, 0, 0, 224)
+	surface.DrawRect(0, 0, bufferW, topEdgeY)
+	surface.DrawRect(0, bottomEdgeY, bufferW, bufferH - bottomEdgeY)
+	surface.DrawRect(0, topEdgeY, leftEdgeX, newH)
+	surface.DrawRect(rightEdgeX, topEdgeY, bufferW - rightEdgeX, newH)
 
 	local index, count = LIB.GetProgressStats()
 
@@ -826,50 +866,75 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 	local textX = margin
 	local textY = margin
 
-	do
-		local totalProgress = "Progress: 0 / 0"
+	local workloadEntry = LIB.EstimateViewWorkloadEntry()
 
-		if count > 0 then
-			local percent = math.Round(index / count * 100, 2)
-			totalProgress = string.format("Progress: %i / %i  %6.2f%%", index, count, percent)
+	do
+		g_lineBuffer[#g_lineBuffer + 1] = "Progress: "
+
+		local percent = 0
+
+		if count <= 0 then
+			index = 0
+			count = 0
+			percent = 0
+		else
+			percent = math.Round(index / count * 100, 2)
 		end
 
-		surface.SetTextColor(0, 0, 0, 255)
-		surface.SetTextPos(textX + shadowOffset, textY + shadowOffset)
-		surface.DrawText(totalProgress, false)
+		g_lineBuffer[#g_lineBuffer + 1] = string.format("  Total: %i / %i  %6.2f%%", index, count, percent)
+		g_lineBuffer[#g_lineBuffer + 1] = string.format("  DoF:   %.2f%%", dofPercent or 0)
 
-		surface.SetTextColor(255, 255, 255, 255)
-		surface.SetTextPos(textX, textY)
-		surface.DrawText(totalProgress, false)
+		textX = margin
+		textY = margin
+		lineY = textY
 
-		local progress = string.format("DoF:      %.2f%%", dofPercent or 0)
+		for _, line in ipairs(g_lineBuffer) do
+			if line == "" then
+				lineY = lineY + textH
+				continue
+			end
 
-		surface.SetTextColor(0, 0, 0, 255)
-		surface.SetTextPos(textX + shadowOffset, textY + textH + shadowOffset)
-		surface.DrawText(progress, false)
+			surface.SetTextColor(0, 0, 0, 255)
+			surface.SetTextPos(textX + shadowOffset, lineY + shadowOffset)
+			surface.DrawText(line, false)
 
-		surface.SetTextColor(255, 255, 255, 255)
-		surface.SetTextPos(textX, textY + textH)
-		surface.DrawText(progress, false)
+			surface.SetTextColor(255, 255, 255, 255)
+			surface.SetTextPos(textX, lineY)
+			surface.DrawText(line, false)
+
+			lineY = lineY + textH
+		end
+
+		table.Empty(g_lineBuffer)
 	end
 
 	do
-		g_lineBuffer[#g_lineBuffer + 1] = "Buffer: "
+		local previewIcon = LIB.GetPreviewContentIcon()
+
+		g_lineBuffer[#g_lineBuffer + 1] = "Raw buffer: "
 		g_lineBuffer[#g_lineBuffer + 1] = string.format("  %ix%i", bufferW, bufferH)
 		g_lineBuffer[#g_lineBuffer + 1] = bufferRenderTargetMaterial
 		g_lineBuffer[#g_lineBuffer + 1] = ""
 
-		g_lineBuffer[#g_lineBuffer + 1] = "Result: "
+		g_lineBuffer[#g_lineBuffer + 1] = "Raw result: "
 		g_lineBuffer[#g_lineBuffer + 1] = string.format("  %ix%i", viewW, viewH)
 		g_lineBuffer[#g_lineBuffer + 1] = renderTargetMaterial
+		g_lineBuffer[#g_lineBuffer + 1] = ""
 
-		local miniX = margin
-		local miniY = margin + textH * 4
+		if IsValid(previewIcon) then
+			g_lineBuffer[#g_lineBuffer + 1] = "Preview Icon: "
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  %ix%i", previewIcon:GetWide(), previewIcon:GetTall())
+			g_lineBuffer[#g_lineBuffer + 1] = previewIcon
+		end
+
+		local miniX = rightEdgeX + margin
+		local miniY = margin
 		local miniH = textH * 9
 		local miniW = miniH * bufferW / bufferH
 
 		local miniXInd = miniX + 14
 
+		textX = miniX
 		textY = miniY
 		lineY = textY
 
@@ -881,33 +946,67 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 			end
 
 			if line == bufferRenderTargetMaterial then
+				render.PushFilterMag(TEXFILTER.ANISOTROPIC)
+				render.PushFilterMin(TEXFILTER.ANISOTROPIC)
+
 				surface.SetDrawColor(0, 0, 0, 255)
-				surface.SetMaterial(bufferRenderTargetMaterial)
 				surface.DrawRect(miniXInd + shadowOffset, lineY + shadowOffset, miniW, miniH)
 
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.SetMaterial(bufferRenderTargetMaterial)
 				surface.DrawTexturedRect(miniXInd, lineY, miniW, miniH)
 
+				render.PopFilterMin()
+				render.PopFilterMag()
+
 				lineY = lineY + miniH
 				continue
 			end
 
 			if line == renderTargetMaterial then
+				render.PushFilterMag(TEXFILTER.ANISOTROPIC)
+				render.PushFilterMin(TEXFILTER.ANISOTROPIC)
+
 				surface.SetDrawColor(0, 0, 0, 255)
-				surface.SetMaterial(renderTargetMaterial)
 				surface.DrawRect(miniXInd + shadowOffset, lineY + shadowOffset, miniH, miniH)
 
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.SetMaterial(renderTargetMaterial)
 				surface.DrawTexturedRect(miniXInd, lineY, miniH, miniH)
 
+				render.PopFilterMin()
+				render.PopFilterMag()
+
 				lineY = lineY + miniH
 				continue
 			end
 
-			if line == renderTargetMaterial then
-				lineY = lineY + miniH
+			if line == previewIcon then
+				if not IsValid(previewIcon) then
+					continue
+				end
+
+				previewIcon:SetPos(miniXInd, lineY)
+				previewIcon:SetMaterial("!" .. renderTargetMaterial:GetName())
+				previewIcon:PaintManual(false)
+
+				if workloadEntry then
+					local title = workloadEntry.entity.title
+					local category = workloadEntry.category
+					local spawnname = workloadEntry.spawnname
+
+					previewIcon:SetName(title)
+					previewIcon:SetContentType(category)
+					previewIcon:SetSpawnName(spawnname)
+					previewIcon:SetAdminOnly(false)
+				else
+					previewIcon:SetName("Preview")
+					previewIcon:SetContentType("entity")
+					previewIcon:SetSpawnName("")
+					previewIcon:SetAdminOnly(false)
+				end
+
+				lineY = lineY + previewIcon:GetTall() + 4
 				continue
 			end
 
@@ -926,8 +1025,6 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 	end
 
 	do
-		local workloadEntry = LIB.EstimateViewWorkloadEntry()
-
 		if workloadEntry then
 			local entity = workloadEntry.entity
 			local camera = workloadEntry.camera
@@ -981,6 +1078,7 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 
 		local linesCount = #g_lineBuffer
 
+		textX = margin
 		textY = bufferH - linesCount * textH - margin
 		lineY = textY
 
@@ -1003,9 +1101,6 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 
 		table.Empty(g_lineBuffer)
 	end
-
-	render.PopFilterMin()
-	render.PopFilterMag()
 end
 
 function LIB.DrawPreviewScreen()
