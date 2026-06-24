@@ -39,6 +39,34 @@ if SERVER then
 	end
 
 	LIBHook.Add("StartCommand", "Addon_ZDevTools_Icongen_FreezePlayerMove", freezePlayerMove)
+
+	local function preventItemPickup(ply, item)
+		if not IsValid(ply) then
+			return
+		end
+
+		if ply:GetNWBool("sligwolf_zdevtools_icongen_lock", false) then
+			return false
+		end
+
+		local weapon = ply:GetActiveWeapon()
+		if not IsValid(weapon) then
+			return
+		end
+
+		local weaponClass = weapon:GetClass()
+
+		if weaponClass == LIB.config.cameraWeapon then
+			return false
+		end
+
+		if weaponClass == LIB.config.lockWeapon then
+			return false
+		end
+	end
+
+	LIBHook.Add("PlayerCanPickupItem", "Addon_ZDevTools_Icongen_PreventItemPickup", preventItemPickup)
+	LIBHook.Add("PlayerCanPickupWeapon", "Addon_ZDevTools_Icongen_PreventItemPickup", preventItemPickup)
 end
 
 local function freezePlayerSwitchWeapon(ply, oldWeapon, newWeapon)
