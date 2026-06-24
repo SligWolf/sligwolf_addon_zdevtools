@@ -12,6 +12,7 @@ local LIBEntities = SligWolf_Addons.Entities
 local LIBHook = SligWolf_Addons.Hook
 
 local LIBIconGenerator = SLIGWOLF_ADDON.IconGenerator
+local LIBString = SligWolf_Addons.String
 local LIBTimer = SligWolf_Addons.Timer
 local LIBFile = SligWolf_Addons.File
 
@@ -153,10 +154,6 @@ end
 
 g_iconGenerator.OnReset = function(this)
 	log("OnReset")
-end
-
-g_iconGenerator.OnDestroy = function(this)
-	log("OnDestroy")
 end
 
 g_iconGenerator.OnTimeout = function(this)
@@ -351,14 +348,42 @@ if SERVER then
 			return
 		end
 
+		local spawnname = string.Trim(tostring(args[1] or ""))
+		local theme = string.Trim(tostring(args[2] or ""))
+
+		if spawnname == "" or spawnname == "all" then
+			spawnname = "*"
+		end
+
+		if theme == "" or theme == "all" then
+			theme = "*"
+		end
+
+		if theme == "all" then
+			theme = "*"
+		end
+
 		g_iconGenerator:Initialize(ply)
+
+		g_iconGenerator:AddWorkloadFilter("cmd_parameter_wildcard", function(item)
+			local itemSpawnname = item.spawnname
+			local itemTheme = item.theme
+
+			if not LIBString.WildcardMatch(itemSpawnname, spawnname) then
+				return false
+			end
+
+			if not LIBString.WildcardMatch(itemTheme, theme) then
+				return false
+			end
+		end)
 
 		g_iconGenerator:AddWorkload(workload)
 
 		g_iconGenerator:Start()
 	end)
 
-	concommand.Add("dev_sligwolf_zdevtools_icongen_stop", function(ply)
+	concommand.Add("dev_sligwolf_zdevtools_icongen_cancel", function(ply)
 		if not IsValid(g_iconGenerator) then
 			return
 		end

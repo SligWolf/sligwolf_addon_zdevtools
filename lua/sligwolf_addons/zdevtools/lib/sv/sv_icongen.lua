@@ -172,12 +172,12 @@ function META:Start()
 	local ply = self.player
 
 	if not IsValid(ply) or not ply:IsPlayer() then
-		LIBPrint.Error("No player given, call Initialize(player, workload) first.")
+		LIBPrint.Error("No player given, call Initialize(player) first.")
 		return
 	end
 
-	if not self.workload or table.IsEmpty(self.workload) then
-		LIBPrint.Error("No workload given, add Workload first.")
+	if not self.workload then
+		LIBPrint.Error("No workload given, call Initialize(player) first.")
 		return
 	end
 
@@ -226,8 +226,6 @@ function META:AddWorkloadItem(workloadItem)
 	local workload = self.workload
 	local workloadByPath = self.workloadByPath
 
-	local id = #workload + 1
-
 	local spawnnames = workloadItem.spawnname or ""
 	if not istable(spawnnames) then
 		spawnnames = {spawnnames}
@@ -243,8 +241,7 @@ function META:AddWorkloadItem(workloadItem)
 	local category = tostring(workloadItem.category or "")
 	if category == "" then
 		self:Warn(
-			"AddWorkloadItem: No category given, skipping. (ID: %i, Spawnname: '%s')",
-			id,
+			"AddWorkloadItem: No category given, skipping. (Spawnname: '%s')",
 			firstSpawnname
 		)
 
@@ -252,14 +249,9 @@ function META:AddWorkloadItem(workloadItem)
 	end
 
 	local map = tostring(workloadItem.map or "")
-	local loadedMap = game.GetMap()
-
-	if map ~= loadedMap then
+	if map == "" then
 		self:Warn(
-			"AddWorkloadItem: Unloaded map given, skipping. ('%s' != '%s') (ID: %i, Spawnname: '%s', Category: '%s')",
-			map,
-			loadedMap,
-			id,
+			"AddWorkloadItem: No map given, skipping. (Spawnname: '%s', Category: '%s')",
 			firstSpawnname,
 			category
 		)
@@ -291,34 +283,34 @@ function META:AddWorkloadItem(workloadItem)
 	for _, spawnname in ipairs(spawnnames) do
 		spawnname = tostring(spawnname or "")
 
-		local spawntable = LIBEntities.GetSpawntableByName(category, spawnname)
-		if not spawntable or not spawntable.Is_SLIGWOLF then
+		if spawnname == "" then
 			self:Warn(
-				"AddWorkloadItem: Invalid spawnname given, skipping. (ID: %i, Spawnname: '%s', Category: '%s')",
-				id,
-				spawnname,
+				"AddWorkloadItem: Empty spawnname given, skipping. (Category: '%s')",
 				category
 			)
 
 			continue
 		end
 
-		local addonname = spawntable.SLIGWOLF_Addonname or ""
+		local addon = nil
+		local addonname = nil
 
-		local addon = SligWolf_Addons.GetAddon(addonname)
-		if not addon then
-			self:Warn(
-				"AddWorkloadItem: Spawntable with bad addon given, skipping. (ID: %i, Spawnname: '%s', Category: '%s', Addonname: '%s')",
-				id,
-				spawnname,
-				category,
-				addonname
-			)
+		local spawntable = LIBEntities.GetSpawntableByName(category, spawnname)
+		if spawntable and spawntable.Is_SLIGWOLF then
+			addon = SligWolf_Addons.GetAddon(spawntable.SLIGWOLF_Addonname or "")
 
-			continue
+			if addon then
+				addonname = addon.Addonname
+			end
 		end
 
-		local themeCategoryName, themeNapName = addon:SkinGetCategoryAndMapNameFromSpawntable(spawntable)
+		local themeCategoryName = nil
+		local themeNapName = nil
+
+		if addon then
+			themeCategoryName, themeNapName = addon:SkinGetCategoryAndMapNameFromSpawntable(spawntable)
+		end
+
 		local themes = {}
 
 		if themeCategoryName and themeNapName then
@@ -381,6 +373,7 @@ function META:AddWorkloadItem(workloadItem)
 
 		local newItemTemplate = {}
 
+		newItemTemplate.map = map
 		newItemTemplate.spawnname = spawnname
 		newItemTemplate.category = category
 		newItemTemplate.addonname = addonname
@@ -437,19 +430,19 @@ function META:AddWorkloadItem(workloadItem)
 
 			path = string.lower(path)
 
-			if workloadByPath[path] then
-				self:Warn(
-					"AddWorkloadItem: Duplicate entry given, skipping. (ID: %i, Path: '%s')",
-					id,
-					path
-				)
-
-				continue
-			end
+			local id = #workload + 1
 
 			newItem.id = id
 			newItem.path = path
 			newItem.theme = theme
+
+			if not self:CallWorkloadFilters(newItem) then
+				continue
+			end
+
+			if not self:ValidateWorkloadItem(newItem) then
+				continue
+			end
 
 			workloadByPath[path] = newItem
 			table.insert(workload, newItem)
@@ -463,6 +456,110 @@ function META:AddWorkload(workload)
 	for _, workloadItem in ipairs(workload) do
 		self:AddWorkloadItem(workloadItem)
 	end
+end
+
+function META:AddWorkloadFilter(name, filter)
+	local workloadFilters = self.workloadFilters or {}
+	self.workloadFilters = workloadFilters
+
+	workloadFilters[name] = filter
+end
+
+function META:CallWorkloadFilters(item)
+	if not item then
+		return false
+	end
+
+	local workloadFilters = self.workloadFilters
+
+	if not workloadFilters then
+		return true
+	end
+
+	for _, filter in pairs(workloadFilters) do
+		if not filter then
+			continue
+		end
+
+		local result = filter(item)
+		if result == nil then
+			continue
+		end
+
+		if result then
+			return true
+		end
+
+		return false
+	end
+
+	return true
+end
+
+function META:ValidateWorkloadItem(item)
+	if not item then
+		return false
+	end
+
+	local workloadByPath = self.workloadByPath
+
+	local map = item.map
+	local spawnname = item.spawnname
+	local category = item.category
+	local addonname = item.addonname
+
+	local id = item.id
+	local path = item.path
+
+	local loadedMap = game.GetMap()
+
+	if map ~= loadedMap then
+		self:Warn(
+			"ValidateWorkloadItem: Unloaded map given, skipping. ('%s' != '%s') (ID: %i, Spawnname: '%s', Category: '%s')",
+			map,
+			loadedMap,
+			id,
+			spawnname,
+			category
+		)
+
+		return false
+	end
+
+	local spawntable = LIBEntities.GetSpawntableByName(category, spawnname)
+	if not spawntable or not spawntable.Is_SLIGWOLF then
+		self:Warn(
+			"ValidateWorkloadItem: Given spawnname does not exist, skipping. (ID: %i, Spawnname: '%s', Category: '%s')",
+			id,
+			spawnname,
+			category
+		)
+
+		return false
+	end
+
+	if not addonname then
+		self:Warn(
+			"ValidateWorkloadItem: Addon does not exist, skipping. (ID: %i, Spawnname: '%s', Category: '%s')",
+			id,
+			spawnname,
+			category
+		)
+
+		return false
+	end
+
+	if workloadByPath[path] then
+		self:Warn(
+			"AddWorkloadItem: Duplicate entry given, skipping. (ID: %i, Path: '%s')",
+			id,
+			path
+		)
+
+		return false
+	end
+
+	return true
 end
 
 function META:DestroyInternal()
@@ -479,7 +576,7 @@ end
 
 function META:ValidateStateInternal()
 	local workload = self.workload
-	if not workload or #workload <= 0 then
+	if not workload then
 		return false
 	end
 
@@ -501,6 +598,12 @@ function META:ProcessNextEntry()
 
 	self.currentIndex = self.currentIndex + 1
 	local index = self.currentIndex
+
+	if count <= 0 then
+		self:ProcessStart()
+		self:ProcessEnd()
+		return
+	end
 
 	if index > count then
 		self:ProcessEnd()
