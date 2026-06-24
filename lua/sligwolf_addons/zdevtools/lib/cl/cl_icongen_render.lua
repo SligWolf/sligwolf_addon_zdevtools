@@ -13,22 +13,27 @@ if not LIB then
 end
 
 local LIBEntities = SligWolf_Addons.Entities
-local LIBTrace = SligWolf_Addons.Trace
 local LIBHook = SligWolf_Addons.Hook
 
 LIB.renderTarget = nil
 LIB.renderTargetMaterial = nil
 LIB.bufferRenderTarget = nil
 LIB.bufferRenderTargetMaterial = nil
+
 LIB.superDofResources = nil
+
+LIB.hasDofRendered = nil
+LIB.hasCanvasRendered = nil
+LIB.hasBufferRendered = nil
+
+LIB.renderDofRequest = {}
+LIB.copyToBufferRequest = {}
 
 LIB.currentView = {
 	pos = Vector(),
 	ang = Angle(),
 	fov = 0,
 }
-
-LIB.requestCopyScreenToBuffer = nil
 
 LIB.currentIndex = nil
 LIB.currentCount = nil
@@ -68,61 +73,65 @@ LIBHook.Add("CalcView", "Addon_ZDevTools_Icongen_Camera", function(ply, origin, 
 end)
 
 LIBHook.Add("RenderScene", "Addon_ZDevTools_Icongen_SuperDof", function(pos, ang, fov)
-	local camera = LIB.GetCamera()
-	if not camera then
+	local renderDofRequest = LIB.renderDofRequest
+	if not renderDofRequest then
 		return
 	end
+
+	local renderNow = renderDofRequest.renderNow
+	if not renderNow then
+		return
+	end
+
+	local callbacks = renderDofRequest.callbacks
+	local realtime = renderDofRequest.realtime
 
 	local superDof = LIB.GetSuperDof()
 
-	if not superDof then
-		return
+	if superDof then
+		local distance = superDof.distance
+		local blur = superDof.blur
+		local passes = superDof.passes
+		local steps = superDof.steps
+		local shape = superDof.shape
+
+		local focus = pos + ang:Forward() * distance
+
+		if realtime then
+			LIB.RenderSuperDofRealtime(pos, ang, fov, focus, blur, shape)
+			LIB.hasDofRendered = true
+		else
+			LIB.RenderSuperDof(pos, ang, fov, focus, blur, shape, steps, passes)
+			LIB.hasDofRendered = true
+		end
+	else
+		LIB.hasDofRendered = false
 	end
-
-	if superDof.rendered then
-		return
-	end
-
-	local distance = superDof.distance
-	local blur = superDof.blur
-	local passes = superDof.passes
-	local steps = superDof.steps
-
-	local focuspoint = pos + ang:Forward() * distance
-
-	superDof.rendered = false
-
-	LIB.RenderSuperDof(pos, ang, focuspoint, blur, steps, passes, fov)
-
-	local resources = LIB.GetSuperDofResources()
-	local texFP = resources.texFP
-	local matMotionblur = resources.matMotionblur
-
-	matMotionblur:SetFloat( "$alpha", 1 )
-	matMotionblur:SetTexture( "$basetexture", texFP )
-
-	render.SetMaterial( matMotionblur )
-	render.DrawScreenQuad()
 
 	local renderTargetMaterial = LIB.GetRenderTargetMaterial()
 	local bufferRenderTargetMaterial = LIB.GetBufferRenderTargetMaterial()
 
-	local viewW = renderTargetMaterial:Width()
-	local viewH = renderTargetMaterial:Height()
-
-	local bufferW = bufferRenderTargetMaterial:Width()
-	local bufferH = bufferRenderTargetMaterial:Height()
+	LIB.CopyScreenToBuffer()
 
 	cam.Start2D()
-		LIB.DrawPreviewScreenStats(viewW, viewH, bufferW, bufferH)
+		LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMaterial)
 	cam.End2D()
 
-	superDof.rendered = true
+	if not realtime then
+		if callbacks then
+			for _, callback in pairs(callbacks) do
+				if not callback then
+					continue
+				end
 
-	LIB.RequestCopyScreenCopyScreenToBuffer()
+				ProtectedCall(callback)
+			end
+		end
 
-	return true
-end)
+		renderDofRequest.callbacks = nil
+		renderDofRequest.renderNow = false
+	end
+end, 20000)
 
 function LIB.GetRenderTarget()
 	if LIB.renderTarget then
@@ -289,35 +298,30 @@ function LIB.GetSuperDofResources()
 	return LIB.superDofResources
 end
 
-function LIB.RenderSuperDof(vOrigin, vAngle, vFocus, fAngleSize, steps, passes, ViewFOV)
+function LIB.RenderSuperDof(origin, ang, fov, focus, blur, shape, steps, passes)
 	-- Borrowed code from Garry's Mod
 	-- garrysmod\lua\postprocess\super_dof.lua
 
 	local renderTargetMaterial = LIB.GetRenderTargetMaterial()
 	local bufferRenderTargetMaterial = LIB.GetBufferRenderTargetMaterial()
 
-	local viewW = renderTargetMaterial:Width()
-	local viewH = renderTargetMaterial:Height()
-
 	local bufferW = bufferRenderTargetMaterial:Width()
 	local bufferH = bufferRenderTargetMaterial:Height()
 
-	local Shape = 0.5
-
 	local OldRT = render.GetRenderTarget()
 
-	local fDistance = vOrigin:Distance(vFocus)
-	fAngleSize = fAngleSize * math.Clamp(256 / fDistance, 0.1, 1) * 0.5
+	local fDistance = origin:Distance(focus)
+	blur = blur * math.Clamp(256 / fDistance, 0.1, 1) * 0.5
 
 	local view = {
 		x = 0,
 		y = 0,
-		w = ScrW(),
-		h = ScrH(),
+		w = bufferW,
+		h = bufferH,
 		dopostprocess = true,
-		origin = vOrigin,
-		angles = vAngle,
-		fov = ViewFOV
+		origin = origin,
+		angles = ang,
+		fov = fov
 	}
 
 	local resources = LIB.GetSuperDofResources()
@@ -336,21 +340,24 @@ function LIB.RenderSuperDof(vOrigin, vAngle, vFocus, fAngleSize, steps, passes, 
 	render.SetMaterial(matFB)
 	render.DrawScreenQuad()
 
-	-- cam.Start2D()
-	-- 	LIB.DrawPreviewScreenStats(viewW, viewH, bufferW, bufferH)
-	-- cam.End2D()
+	local hasForcedRealTime = false
+	local isRealTime = steps <= 2 and passes <= 2
 
 	local Radials = math.tau / steps
 	for mul = 1 / passes, 1, 1 / passes do
+		if hasForcedRealTime then
+			break
+		end
+
 		for i = 0, math.tau, Radials do
-			local VA = Angle(vAngle)
-			local VRot = Angle(vAngle)
+			local VA = Angle(ang)
+			local VRot = Angle(ang)
 
 			-- Rotate around the focus point
-			VA:RotateAroundAxis(VRot:Right(), math.sin(i + mul) * fAngleSize * mul * Shape * 2)
-			VA:RotateAroundAxis(VRot:Up(), math.cos(i + mul) * fAngleSize * mul * (1 - Shape) * 2)
+			VA:RotateAroundAxis(VRot:Right(), math.sin(i + mul) * blur * mul * shape * 2)
+			VA:RotateAroundAxis(VRot:Up(), math.cos(i + mul) * blur * mul * (1 - shape) * 2)
 
-			view.origin = vFocus - VA:Forward() * fDistance
+			view.origin = focus - VA:Forward() * fDistance
 			view.angles = VA
 
 			-- Render to the front buffer
@@ -368,24 +375,26 @@ function LIB.RenderSuperDof(vOrigin, vAngle, vFocus, fAngleSize, steps, passes, 
 			render.SetMaterial(matFB)
 			render.DrawScreenQuad()
 
-			-- Restore RT
-			render.SetRenderTarget(OldRT)
+			if not isRealTime then
+				-- Restore RT
+				render.SetRenderTarget(OldRT)
 
-			-- Render our result buffer to the screen
-			matMotionblur:SetFloat("$alpha", 1)
-			matMotionblur:SetTexture("$basetexture", texFP)
-			render.SetMaterial(matMotionblur)
-			render.DrawScreenQuad()
+				-- Render our result buffer to the screen
+				matMotionblur:SetFloat("$alpha", 1)
+				matMotionblur:SetTexture("$basetexture", texFP)
+				render.SetMaterial(matMotionblur)
+				render.DrawScreenQuad()
 
-			cam.Start2D()
-				local add = (i / math.tau) * (1 / passes)
-				local percent = (mul - (1 / passes) + add) * 100
+				cam.Start2D()
+					local add = (i / math.tau) * (1 / passes)
+					local percent = (mul - (1 / passes) + add) * 100
 
-				LIB.DrawPreviewScreenStats(viewW, viewH, bufferW, bufferH, percent)
-			cam.End2D()
+					LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMaterial, percent)
+				cam.End2D()
 
-			-- We have to SPIN here to stop the Source engine running out of render queue space.
-			render.Spin()
+				-- We have to SPIN here to stop the Source engine running out of render queue space.
+				render.Spin()
+			end
 		end
 	end
 
@@ -394,46 +403,68 @@ function LIB.RenderSuperDof(vOrigin, vAngle, vFocus, fAngleSize, steps, passes, 
 	render.Clear(0, 0, 0, 255, true, true)
 
 	-- Render our result buffer to the screen
-	-- matMotionblur:SetFloat("$alpha", 1)
-	-- matMotionblur:SetTexture("$basetexture", texFP)
-	-- render.SetMaterial(matMotionblur)
-	-- render.DrawScreenQuad()
-
-	-- cam.Start2D()
-	-- 	LIB.DrawPreviewScreenStats(viewW, viewH, bufferW, bufferH)
-	-- cam.End2D()
+	matMotionblur:SetFloat("$alpha", 1)
+	matMotionblur:SetTexture("$basetexture", texFP)
+	render.SetMaterial(matMotionblur)
+	render.DrawScreenQuad()
 end
 
-function LIB.CopyScreenCopyScreenToBuffer()
+function LIB.RenderSuperDofRealtime(origin, ang, fov, focus, blur, shape)
+	LIB.RenderSuperDof(origin, ang, fov, focus, blur, shape, 2, 2)
+end
+
+local function copyScreenToBuffer()
 	local bufferRenderTarget = LIB.GetBufferRenderTarget()
 
-	local superDof = LIB.GetSuperDof()
-	if superDof and superDof.rendered then
-		local resources = LIB.GetSuperDofResources()
-		local texFP = resources.texFP
+	if LIB.hasDofRendered then
+	 	local resources = LIB.GetSuperDofResources()
+	 	local texFP = resources.texFP
 
-		render.CopyTexture(texFP, bufferRenderTarget)
-		return
+	 	render.CopyTexture(texFP, bufferRenderTarget)
+		LIB.hasBufferRendered = true
+	 	return
 	end
 
 	render.CopyRenderTargetToTexture(bufferRenderTarget)
+	LIB.hasBufferRendered = true
 end
 
-function LIB.CopyScreenCopyScreenToBufferIfRequested()
-	if not LIB.requestCopyScreenToBuffer then
+function LIB.CopyScreenToBuffer()
+	local copyToBufferRequest = LIB.copyToBufferRequest
+	if not copyToBufferRequest then
 		return
 	end
 
-	if not LIB.HasSuperDofRendered() then
+	local callbacks = copyToBufferRequest.callbacks
+
+	copyScreenToBuffer()
+
+	if callbacks then
+		for _, callback in pairs(callbacks) do
+			if not callback then
+				continue
+			end
+
+			ProtectedCall(callback)
+		end
+	end
+
+	copyToBufferRequest.callbacks = nil
+	copyToBufferRequest.copyNow = false
+end
+
+function LIB.PollCopyScreenToBuffer()
+	local copyToBufferRequest = LIB.copyToBufferRequest
+	if not copyToBufferRequest then
 		return
 	end
 
-	LIB.CopyScreenCopyScreenToBuffer()
-	LIB.requestCopyScreenToBuffer = nil
-end
+	local copyNow = copyToBufferRequest.copyNow
+	if not copyNow then
+		return
+	end
 
-function LIB.RequestCopyScreenCopyScreenToBuffer()
-	LIB.requestCopyScreenToBuffer = true
+	LIB.CopyScreenToBuffer()
 end
 
 function LIB.SetCamera(camera)
@@ -450,6 +481,94 @@ end
 
 function LIB.GetView()
 	return LIB.currentView
+end
+
+function LIB.RequestDofRender(realtime, callbackname, callback)
+	local renderDofRequest = LIB.renderDofRequest or {}
+	LIB.renderDofRequest = renderDofRequest
+
+	renderDofRequest.renderNow = true
+	renderDofRequest.realtime = realtime
+
+	if realtime then
+		renderDofRequest.callbacks = nil
+		return
+	end
+
+	callbackname = tostring(callbackname or "")
+
+	if callbackname ~= "" then
+		local callbacks = renderDofRequest.callbacks or {}
+		renderDofRequest.callbacks = callbacks
+
+		callbacks[callbackname] = callback
+	end
+end
+
+function LIB.ResetRequestDofRender()
+	local renderDofRequest = LIB.renderDofRequest or {}
+	LIB.renderDofRequest = renderDofRequest
+
+	renderDofRequest.realtime = false
+	renderDofRequest.renderNow = false
+	renderDofRequest.callbacks = nil
+
+	LIB.hasDofRendered = nil
+end
+
+function LIB.RemoveRequestDofRenderCallback(callbackname)
+	local renderDofRequest = LIB.renderDofRequest or {}
+	LIB.renderDofRequest = renderDofRequest
+
+	callbackname = tostring(callbackname or "")
+	local callbacks = renderDofRequest.callbacks
+
+	if callbacks and callbackname ~= "" then
+		callbacks[callbackname] = nil
+	end
+end
+
+function LIB.RequestCopyToBuffer(callbackname, callback)
+	local copyToBufferRequest = LIB.copyToBufferRequest or {}
+	LIB.copyToBufferRequest = copyToBufferRequest
+
+	copyToBufferRequest.copyNow = true
+	copyToBufferRequest.realtime = realtime
+
+	if realtime then
+		copyToBufferRequest.callbacks = nil
+		return
+	end
+
+	callbackname = tostring(callbackname or "")
+
+	if callbackname ~= "" then
+		local callbacks = copyToBufferRequest.callbacks or {}
+		copyToBufferRequest.callbacks = callbacks
+
+		callbacks[callbackname] = callback
+	end
+end
+
+function LIB.ResetRequestCopyToBuffer()
+	local copyToBufferRequest = LIB.copyToBufferRequest or {}
+	LIB.copyToBufferRequest = copyToBufferRequest
+
+	copyToBufferRequest.realtime = false
+	copyToBufferRequest.copyNow = false
+	copyToBufferRequest.callbacks = nil
+end
+
+function LIB.RemoveRequestCopyToBufferCallback(callbackname)
+	local copyToBufferRequest = LIB.copyToBufferRequest or {}
+	LIB.copyToBufferRequest = copyToBufferRequest
+
+	callbackname = tostring(callbackname or "")
+	local callbacks = copyToBufferRequest.callbacks
+
+	if callbacks and callbackname ~= "" then
+		callbacks[callbackname] = nil
+	end
 end
 
 function LIB.SetSuperDof(superDof)
@@ -482,12 +601,33 @@ function LIB.SetSuperDof(superDof)
 		return
 	end
 
-	superDof.rendered = false
 	LIB.currentSuperDof = superDof
 end
 
 function LIB.GetSuperDof()
-	return LIB.currentSuperDof
+	local superDof = LIB.currentSuperDof
+
+	if not superDof then
+		return
+	end
+
+	if superDof.distance <= 0 then
+		return nil
+	end
+
+	if superDof.blur <= 0 then
+		return nil
+	end
+
+	if superDof.passes <= 0 then
+		return nil
+	end
+
+	if superDof.steps <= 0 then
+		return nil
+	end
+
+	return superDof
 end
 
 function LIB.ResetSuperDof()
@@ -513,17 +653,21 @@ function LIB.ResetProgressStats()
 	LIB.currentCount = nil
 end
 
-function LIB.HasSuperDofRendered()
-	local superDof = LIB.GetSuperDof()
-	if not superDof then
-		return true
+function LIB.SetEntity(ent)
+	if not IsValid(ent) then
+		LIB.ResetEntity()
+		return
 	end
 
-	if not superDof.rendered then
-		return false
-	end
+	LIB.currentEntity = ent
+end
 
-	return true
+function LIB.ResetEntity()
+	LIB.currentEntity = nil
+end
+
+function LIB.GetEntity()
+	return LIB.currentEntity
 end
 
 function LIB.FindTargetEntityInView()
@@ -533,7 +677,7 @@ function LIB.FindTargetEntityInView()
 	local fov = view.fov
 
 	local normal = ang:Forward()
-	local maxDofDistance = LIB.config.maxDofDistance
+	local maxDofDistance = LIB.config.limits.dof.distance
 
 	local entities = LIBEntities.FindEntitiesInCone(pos, normal, maxDofDistance, fov)
 
@@ -575,31 +719,6 @@ function LIB.FindTargetEntityInView()
 	return nearestEnt
 end
 
-function LIB.EstimateSuperDof()
-	local defaults = LIB.config.defaults
-	local defaultsCamera = defaults.camera
-
-	local maxDofDistance = LIB.config.maxDofDistance
-
-	local tr = LIBTrace.PlayerAimTrace(LocalPlayer(), maxDofDistance)
-
-	local distance = tr.Hit and tr.HitPos:Distance(tr.StartPos) or 0
-	distance = math.Clamp(distance or 0, 0, maxDofDistance)
-
-	local dof = nil
-
-	if distance > 0 then
-		dof = {
-			distance = distance,
-			blur = defaultsCamera.dof.blur,
-			passes = defaultsCamera.dof.passes,
-			steps = defaultsCamera.dof.steps,
-		}
-	end
-
-	return dof
-end
-
 function LIB.EstimateViewWorkloadEntry()
 	local view = LIB.GetView()
 
@@ -607,9 +726,15 @@ function LIB.EstimateViewWorkloadEntry()
 	local ang = view.ang
 	local fov = view.fov
 
-	local ent = LIB.FindTargetEntityInView()
+	local superDof = LIB.GetSuperDof()
+
+	local ent = LIB.GetEntity()
 	if not IsValid(ent) then
-		return nil
+		ent = LIB.FindTargetEntityInView()
+
+		if not IsValid(ent) then
+			return nil
+		end
 	end
 
 	local spawnname = LIBEntities.GetSpawnname(ent, true)
@@ -623,23 +748,10 @@ function LIB.EstimateViewWorkloadEntry()
 	end
 
 	local dof = nil
-
-	local currentCamera = LIB.GetCamera()
-
 	local defaults = LIB.config.defaults
 
-	if currentCamera then
-		local currentDof = LIB.GetSuperDof()
-		if currentDof and currentDof.distance > 0 then
-			dof = {
-				distance = currentDof.distance,
-				blur = currentDof.blur,
-				passes = currentDof.passes,
-				steps = currentDof.steps,
-			}
-		end
-	else
-		dof = LIB.EstimateSuperDof()
+	if superDof then
+		dof = superDof
 	end
 
 	local workloadEntry = {
@@ -656,6 +768,7 @@ function LIB.EstimateViewWorkloadEntry()
 		entity = {
 			pos = ent:GetPos(),
 			ang = ent:GetAngles(),
+			ent = ent,
 		},
 	}
 
@@ -680,11 +793,19 @@ function LIB.DrawPreviewScreenCover(viewW, viewH, bufferW, bufferH)
 	surface.DrawRect(centerX + newW, centerY, bufferW - (centerX + newW), newH)
 end
 
-function LIB.DrawPreviewScreenStats(viewW, viewH, bufferW, bufferH, dofPercent)
+function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMaterial, dofPercent)
+	local viewW = renderTargetMaterial:Width()
+	local viewH = renderTargetMaterial:Height()
+
+	local bufferW = bufferRenderTargetMaterial:Width()
+	local bufferH = bufferRenderTargetMaterial:Height()
+
 	LIB.DrawPreviewScreenCover(viewW, viewH, bufferW, bufferH)
 
+	render.PushFilterMag(TEXFILTER.ANISOTROPIC)
+	render.PushFilterMin(TEXFILTER.ANISOTROPIC)
+
 	local index, count = LIB.GetProgressStats()
-	local workloadEntry = LIB.EstimateViewWorkloadEntry()
 
 	index = index or 0
 	count = count or 0
@@ -692,123 +813,199 @@ function LIB.DrawPreviewScreenStats(viewW, viewH, bufferW, bufferH, dofPercent)
 	count = math.max(count, 0)
 	index = math.Clamp(index, 0, count)
 
-	--index = 5
-	--count = 10
-
 	surface.SetFont("DefaultFixed")
 
-	local _, topTextH = surface.GetTextSize("DefaultFixed")
-	topTextH = topTextH + 8
+	local shadowOffset = 1
+	local margin = 32
 
-	local topTextX = 32
-	local topTextY = 32
+	local lineY = 0
 
-	local totalProgress = "Progress: 0 / 0"
+	local _, textH = surface.GetTextSize("DefaultFixed")
+	textH = textH + 8
 
-	if count > 0 then
-		local percent = math.Round(index / count * 100, 2)
-		totalProgress = string.format("Progress: %i / %i  %6.2f%%", index, count, percent)
+	local textX = margin
+	local textY = margin
+
+	do
+		local totalProgress = "Progress: 0 / 0"
+
+		if count > 0 then
+			local percent = math.Round(index / count * 100, 2)
+			totalProgress = string.format("Progress: %i / %i  %6.2f%%", index, count, percent)
+		end
+
+		surface.SetTextColor(0, 0, 0, 255)
+		surface.SetTextPos(textX + shadowOffset, textY + shadowOffset)
+		surface.DrawText(totalProgress, false)
+
+		surface.SetTextColor(255, 255, 255, 255)
+		surface.SetTextPos(textX, textY)
+		surface.DrawText(totalProgress, false)
+
+		local progress = string.format("DoF:      %.2f%%", dofPercent or 0)
+
+		surface.SetTextColor(0, 0, 0, 255)
+		surface.SetTextPos(textX + shadowOffset, textY + textH + shadowOffset)
+		surface.DrawText(progress, false)
+
+		surface.SetTextColor(255, 255, 255, 255)
+		surface.SetTextPos(textX, textY + textH)
+		surface.DrawText(progress, false)
 	end
 
-	surface.SetTextColor(0, 0, 0, 255)
-	surface.SetTextPos(topTextX + 2, topTextY + 2)
-	surface.DrawText(totalProgress, false)
-
-	surface.SetTextColor(255, 255, 255, 255)
-	surface.SetTextPos(topTextX, topTextY)
-	surface.DrawText(totalProgress, false)
-
-	local progress = string.format("DoF:      %.2f%%", dofPercent or 0)
-
-	surface.SetTextColor(0, 0, 0, 255)
-	surface.SetTextPos(topTextX + 2, topTextY + topTextH + 2)
-	surface.DrawText(progress, false)
-
-	surface.SetTextColor(255, 255, 255, 255)
-	surface.SetTextPos(topTextX, topTextY + topTextH)
-	surface.DrawText(progress, false)
-
-	if workloadEntry then
-		local entity = workloadEntry.entity
-		local camera = workloadEntry.camera
-		local dof = camera.dof
-
-		g_lineBuffer[#g_lineBuffer + 1] = "Map: "
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  %s", workloadEntry.map)
+	do
+		g_lineBuffer[#g_lineBuffer + 1] = "Buffer: "
+		g_lineBuffer[#g_lineBuffer + 1] = string.format("  %ix%i", bufferW, bufferH)
+		g_lineBuffer[#g_lineBuffer + 1] = bufferRenderTargetMaterial
 		g_lineBuffer[#g_lineBuffer + 1] = ""
 
-		g_lineBuffer[#g_lineBuffer + 1] = "Spawn: "
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  %s", workloadEntry.spawnname)
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  LIBEntities.SPAWN_CATEGORY_%s", string.upper(workloadEntry.category))
-		g_lineBuffer[#g_lineBuffer + 1] = ""
+		g_lineBuffer[#g_lineBuffer + 1] = "Result: "
+		g_lineBuffer[#g_lineBuffer + 1] = string.format("  %ix%i", viewW, viewH)
+		g_lineBuffer[#g_lineBuffer + 1] = renderTargetMaterial
 
-		g_lineBuffer[#g_lineBuffer + 1] = "Entity: "
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  Pos: Vector(%10.3f, %10.3f, %10.3f)", entity.pos:Unpack())
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang:  Angle(%10.3f, %10.3f, %10.3f)", entity.ang:Unpack())
-		g_lineBuffer[#g_lineBuffer + 1] = ""
+		local miniX = margin
+		local miniY = margin + textH * 4
+		local miniH = textH * 9
+		local miniW = miniH * bufferW / bufferH
 
-		g_lineBuffer[#g_lineBuffer + 1] = "Camera: "
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  Pos: Vector(%10.3f, %10.3f, %10.3f)", camera.pos:Unpack())
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang:  Angle(%10.3f, %10.3f, %10.3f)", camera.ang:Unpack())
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  FOV: %8.3f", camera.fov)
+		local miniXInd = miniX + 14
 
-		if dof and dof.distance > 0 then
-			g_lineBuffer[#g_lineBuffer + 1] = ""
-			g_lineBuffer[#g_lineBuffer + 1] = "DoF: "
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Distance: %.3f", dof.distance)
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Blur:     %.3f", dof.blur)
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Passes:   %i", dof.passes)
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Steps:    %i", dof.steps)
-		end
-	else
-		local view = LIB.GetView()
-		local dof = LIB.EstimateSuperDof()
+		textY = miniY
+		lineY = textY
 
-		g_lineBuffer[#g_lineBuffer + 1] = "Camera: "
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  Pos: Vector(%10.3f, %10.3f, %10.3f)", view.pos:Unpack())
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang:  Angle(%10.3f, %10.3f, %10.3f)", view.ang:Unpack())
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  FOV: %7.3f", view.fov)
-
-		if dof and dof.distance > 0 then
-			g_lineBuffer[#g_lineBuffer + 1] = ""
-			g_lineBuffer[#g_lineBuffer + 1] = "DoF: "
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Distance: %.3f", dof.distance)
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Blur:     %.3f", dof.blur)
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Passes:   %i", dof.passes)
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Steps:    %i", dof.steps)
-		end
-	end
-
-	local linesCount = #g_lineBuffer
-
-	if linesCount > 0 then
-		surface.SetFont("DefaultFixed")
-
-		local _, textH = surface.GetTextSize("DefaultFixed")
-		textH = textH + 8
-
-		local textX = 32
-		local textY = bufferH - linesCount * textH - 32
-
-
-		for i, line in ipairs(g_lineBuffer) do
-			local lineY = textY + (i - 1) * textH
+		for _, line in ipairs(g_lineBuffer) do
 
 			if line == "" then
+				lineY = lineY + textH
+				continue
+			end
+
+			if line == bufferRenderTargetMaterial then
+				surface.SetDrawColor(0, 0, 0, 255)
+				surface.SetMaterial(bufferRenderTargetMaterial)
+				surface.DrawRect(miniXInd + shadowOffset, lineY + shadowOffset, miniW, miniH)
+
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetMaterial(bufferRenderTargetMaterial)
+				surface.DrawTexturedRect(miniXInd, lineY, miniW, miniH)
+
+				lineY = lineY + miniH
+				continue
+			end
+
+			if line == renderTargetMaterial then
+				surface.SetDrawColor(0, 0, 0, 255)
+				surface.SetMaterial(renderTargetMaterial)
+				surface.DrawRect(miniXInd + shadowOffset, lineY + shadowOffset, miniH, miniH)
+
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetMaterial(renderTargetMaterial)
+				surface.DrawTexturedRect(miniXInd, lineY, miniH, miniH)
+
+				lineY = lineY + miniH
+				continue
+			end
+
+			if line == renderTargetMaterial then
+				lineY = lineY + miniH
 				continue
 			end
 
 			surface.SetTextColor(0, 0, 0, 255)
-			surface.SetTextPos(textX + 2, lineY + 2)
+			surface.SetTextPos(textX + shadowOffset, lineY + shadowOffset)
 			surface.DrawText(line, false)
 
-			surface.SetTextColor(250, 255, 210)
+			surface.SetTextColor(210, 255, 210, 255)
 			surface.SetTextPos(textX, lineY)
 			surface.DrawText(line, false)
+
+			lineY = lineY + textH
 		end
 
 		table.Empty(g_lineBuffer)
 	end
+
+	do
+		local workloadEntry = LIB.EstimateViewWorkloadEntry()
+
+		if workloadEntry then
+			local entity = workloadEntry.entity
+			local camera = workloadEntry.camera
+			local superDof = camera.dof
+
+			g_lineBuffer[#g_lineBuffer + 1] = "Map: "
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  %s", workloadEntry.map)
+			g_lineBuffer[#g_lineBuffer + 1] = ""
+
+			g_lineBuffer[#g_lineBuffer + 1] = "Spawn: "
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  %s", workloadEntry.spawnname)
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  LIBEntities.SPAWN_CATEGORY_%s", string.upper(workloadEntry.category))
+			g_lineBuffer[#g_lineBuffer + 1] = ""
+
+			g_lineBuffer[#g_lineBuffer + 1] = "Entity: "
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Pos: Vector(%10.3f, %10.3f, %10.3f)", entity.pos:Unpack())
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang:  Angle(%10.3f, %10.3f, %10.3f)", entity.ang:Unpack())
+			g_lineBuffer[#g_lineBuffer + 1] = ""
+
+			g_lineBuffer[#g_lineBuffer + 1] = "Camera: "
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Pos: Vector(%10.3f, %10.3f, %10.3f)", camera.pos:Unpack())
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang:  Angle(%10.3f, %10.3f, %10.3f)", camera.ang:Unpack())
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  FOV: %7.3f", camera.fov)
+
+			if superDof then
+				g_lineBuffer[#g_lineBuffer + 1] = ""
+				g_lineBuffer[#g_lineBuffer + 1] = "DoF: "
+				g_lineBuffer[#g_lineBuffer + 1] = string.format("  Distance: %.3f", superDof.distance)
+				g_lineBuffer[#g_lineBuffer + 1] = string.format("  Blur:     %.3f", superDof.blur)
+				g_lineBuffer[#g_lineBuffer + 1] = string.format("  Passes:   %i", superDof.passes)
+				g_lineBuffer[#g_lineBuffer + 1] = string.format("  Steps:    %i", superDof.steps)
+			end
+		else
+			local view = LIB.GetView()
+			local superDof = LIB.GetSuperDof()
+
+			g_lineBuffer[#g_lineBuffer + 1] = "Camera: "
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Pos: Vector(%10.3f, %10.3f, %10.3f)", view.pos:Unpack())
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang:  Angle(%10.3f, %10.3f, %10.3f)", view.ang:Unpack())
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  FOV: %7.3f", view.fov)
+
+			if superDof then
+				g_lineBuffer[#g_lineBuffer + 1] = ""
+				g_lineBuffer[#g_lineBuffer + 1] = "DoF: "
+				g_lineBuffer[#g_lineBuffer + 1] = string.format("  Distance: %.3f", superDof.distance)
+				g_lineBuffer[#g_lineBuffer + 1] = string.format("  Blur:     %.3f", superDof.blur)
+				g_lineBuffer[#g_lineBuffer + 1] = string.format("  Passes:   %i", superDof.passes)
+				g_lineBuffer[#g_lineBuffer + 1] = string.format("  Steps:    %i", superDof.steps)
+			end
+		end
+
+		local linesCount = #g_lineBuffer
+
+		textY = bufferH - linesCount * textH - margin
+		lineY = textY
+
+		for _, line in ipairs(g_lineBuffer) do
+			if line == "" then
+				lineY = lineY + textH
+				continue
+			end
+
+			surface.SetTextColor(0, 0, 0, 255)
+			surface.SetTextPos(textX + shadowOffset, lineY + shadowOffset)
+			surface.DrawText(line, false)
+
+			surface.SetTextColor(210, 255, 250, 255)
+			surface.SetTextPos(textX, lineY)
+			surface.DrawText(line, false)
+
+			lineY = lineY + textH
+		end
+
+		table.Empty(g_lineBuffer)
+	end
+
+	render.PopFilterMin()
+	render.PopFilterMag()
 end
 
 function LIB.DrawPreviewScreen()
@@ -843,10 +1040,10 @@ function LIB.DrawPreviewScreen()
 	render.PopFilterMin()
 	render.PopFilterMag()
 
-	LIB.DrawPreviewScreenStats(viewW, viewH, bufferW, bufferH)
+	LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMaterial)
 end
 
-function LIB.RenderBufferToRenderTarget()
+function LIB.RenderBufferToCanvas()
 	local renderTarget = LIB.GetRenderTarget()
 	local bufferRenderTargetMaterial = LIB.GetBufferRenderTargetMaterial()
 
@@ -878,9 +1075,11 @@ function LIB.RenderBufferToRenderTarget()
 
 		render.OverrideAlphaWriteEnable(false)
 	render.PopRenderTarget()
+
+	LIB.hasCanvasRendered = true
 end
 
-function LIB.ClearRenderTarget()
+function LIB.ClearCanvas()
 	local renderTarget = LIB.GetRenderTarget()
 
 	local viewW = renderTarget:Width()
@@ -889,9 +1088,11 @@ function LIB.ClearRenderTarget()
 	render.PushRenderTarget(renderTarget, 0, 0, viewW, viewH)
 		render.Clear(0, 0, 0, 255, true, true)
 	render.PopRenderTarget()
+
+	LIB.hasCanvasRendered = nil
 end
 
-function LIB.ClearBufferRenderTarget()
+function LIB.ClearBuffer()
 	local bufferRenderTarget = LIB.GetBufferRenderTarget()
 
 	local bufferW = bufferRenderTarget:Width()
@@ -900,6 +1101,8 @@ function LIB.ClearBufferRenderTarget()
 	render.PushRenderTarget(bufferRenderTarget, 0, 0, bufferW, bufferH)
 		render.Clear(0, 0, 0, 255, true, true)
 	render.PopRenderTarget()
+
+	LIB.hasBufferRendered = nil
 end
 
 return true

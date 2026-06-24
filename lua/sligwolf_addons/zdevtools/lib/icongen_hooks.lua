@@ -61,5 +61,31 @@ end
 
 LIBHook.Add("PlayerSwitchWeapon", "Addon_ZDevTools_Icongen_FreezePlayerSwitchWeapon", freezePlayerSwitchWeapon)
 
+if CLIENT then
+	local hideWeaponPickedUp = function(weapon)
+		if not IsValid(weapon) then
+			return
+		end
+
+		if weapon:GetClass() ~= LIB.config.lockWeapon then
+			return true
+		end
+
+		local ply = weapon:GetOwner()
+		if not IsValid(ply) then
+			return
+		end
+
+		if not ply:GetNWBool("sligwolf_zdevtools_icongen_lock", false) then
+			return
+		end
+
+		return true
+	end
+
+	LIBHook.Add("HUDWeaponPickedUp", "Addon_ZDevTools_Icongen_HideWeaponPickedUp", hideWeaponPickedUp)
+end
+
+
 return true
 

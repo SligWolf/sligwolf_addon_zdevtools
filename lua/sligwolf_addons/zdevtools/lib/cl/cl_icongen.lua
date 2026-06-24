@@ -24,6 +24,7 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 	local index = net.ReadUInt(16)
 	local count = net.ReadUInt(16)
 	local path = net.ReadString()
+	local ent = net.ReadEntity()
 
 	local pos = net.ReadVector()
 	local ang = net.ReadAngle()
@@ -33,6 +34,7 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 	local blur = net.ReadFloat()
 	local passes = net.ReadUInt(8)
 	local steps = net.ReadUInt(8)
+	local shape = net.ReadFloat()
 
 	local instance = LIB.GetInstance(name)
 	if not IsValid(instance) then
@@ -44,6 +46,7 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 		index = index,
 		count = count,
 		path = path,
+		ent = ent,
 		camera = {
 			pos = pos,
 			ang = ang,
@@ -53,6 +56,7 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 				blur = blur,
 				passes = passes,
 				steps = steps,
+				shape = shape,
 			},
 		},
 	}
@@ -84,10 +88,13 @@ function META:ResetInternal()
 	self.currentCaptureRequest = nil
 	self.processSubId = nil
 
+	self.currentEntity = nil
 	self.currentIndex = nil
 	self.workloadCount = nil
 
 	self.screenDelayTimer = string.format("screendelay_%s", self.namespace)
+	self.dofCallback = string.format("dofcallback_%s", self.namespace)
+	self.copyCallback = string.format("copycallback_%s", self.namespace)
 end
 
 function META:Initialize()
@@ -131,8 +138,11 @@ function META:DestroyInternal()
 	LIB.ResetCamera()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
-	LIB.ClearBufferRenderTarget()
-	LIB.ClearRenderTarget()
+	LIB.ResetEntity()
+	LIB.ClearBuffer()
+	LIB.ClearCanvas()
+	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
+	LIB.RemoveRequestCopyToBufferCallback(self.copyCallback)
 end
 
 function META:CancelInternal()
@@ -141,8 +151,11 @@ function META:CancelInternal()
 	LIB.ResetCamera()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
-	LIB.ClearBufferRenderTarget()
-	LIB.ClearRenderTarget()
+	LIB.ResetEntity()
+	LIB.ClearBuffer()
+	LIB.ClearCanvas()
+	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
+	LIB.RemoveRequestCopyToBufferCallback(self.copyCallback)
 end
 
 function META:ValidateStateInternal()
@@ -151,6 +164,10 @@ function META:ValidateStateInternal()
 	end
 
 	if table.IsEmpty(self.currentCaptureRequest) then
+		return false
+	end
+
+	if not IsValid(self.currentEntity) then
 		return false
 	end
 
@@ -171,9 +188,11 @@ function META:HandleCaptureRequest(captureRequest)
 	self.currentCaptureRequest = captureRequest
 	self.processSubId = captureRequest.processSubId
 
+	local ent = captureRequest.ent
 	local index = captureRequest.index
 	local count = captureRequest.count
 
+	self.currentEntity = ent
 	self.currentIndex = index
 	self.workloadCount = count
 
@@ -194,8 +213,11 @@ function META:ProcessStart()
 	LIB.ResetCamera()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
-	LIB.ClearBufferRenderTarget()
-	LIB.ClearRenderTarget()
+	LIB.ResetEntity()
+	LIB.ClearBuffer()
+	LIB.ClearCanvas()
+	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
+	LIB.RemoveRequestCopyToBufferCallback(self.copyCallback)
 
 	if gui.IsGameUIVisible() then
 		-- Close the main menu when we start rendering
@@ -213,14 +235,18 @@ function META:ProcessEnd()
 	self.currentCaptureRequest = nil
 	self.processSubId = nil
 
+	self.currentEntity = nil
 	self.workloadCount = nil
 	self.currentIndex = 0
 
 	LIB.ResetCamera()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
-	LIB.ClearBufferRenderTarget()
-	LIB.ClearRenderTarget()
+	LIB.ResetEntity()
+	LIB.ClearBuffer()
+	LIB.ClearCanvas()
+	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
+	LIB.RemoveRequestCopyToBufferCallback(self.copyCallback)
 
 	if self.OnFinished then
 		ProtectedCall(self.OnFinished, self)
@@ -264,46 +290,32 @@ function META:ShowPreviewAndCapture()
 	local captureRequest = self.currentCaptureRequest
 	local index = self.currentIndex
 	local count = self.workloadCount
+	local ent = self.currentEntity
 
 	local processSubId = self.processSubId
 	local screenDelayTimer = self.screenDelayTimer
+	local dofCallback = self.dofCallback
+	local copyCallback = self.copyCallback
 
 	LIB.SetCamera(captureRequest.camera)
 	LIB.SetSuperDof(captureRequest.camera.dof)
 	LIB.SetProgressStats(index, count)
-	LIB.RequestCopyScreenCopyScreenToBuffer()
+	LIB.SetEntity(ent)
 
-	SLIGWOLF_ADDON:TimerUntil(screenDelayTimer, 0, function(addon, success)
+	LIB.RequestDofRender(false, dofCallback, function()
 		if not IsValid(self) then
-			return true
+			return
 		end
 
 		if self.processSubId ~= processSubId then
-			return true
+			return
 		end
 
 		if not self:ValidateState() then
-			return true
+			return
 		end
 
-		if not success then
-			self:SendCaptureDone(false)
-			return true
-		end
-
-		if not LIB.HasSuperDofRendered() then
-			-- Wait until the dof render has been completed
-			return false
-		end
-
-		if LIB.requestCopyScreenToBuffer then
-			-- Wait until the frame copy request has been completed
-			return false
-		end
-
-		LIB.RenderBufferToRenderTarget()
-
-		SLIGWOLF_ADDON:TimerOnce(screenDelayTimer, self.config.time.preview, function()
+		LIB.RequestCopyToBuffer(copyCallback, function()
 			if not IsValid(self) then
 				return
 			end
@@ -316,22 +328,36 @@ function META:ShowPreviewAndCapture()
 				return
 			end
 
-			local menuIsOpen = LIB.IsUIOpen()
-			if menuIsOpen then
-				self:SendCaptureDone(false)
-				return
-			end
+			LIB.RenderBufferToCanvas()
 
-			if not self:CaptureAndSave() then
-				self:SendCaptureDone(false)
-				return
-			end
+			SLIGWOLF_ADDON:TimerOnce(screenDelayTimer, self.config.time.preview, function()
+				if not IsValid(self) then
+					return
+				end
 
-			self:SendCaptureDone(true)
+				if self.processSubId ~= processSubId then
+					return
+				end
+
+				if not self:ValidateState() then
+					return
+				end
+
+				local menuIsOpen = LIB.IsUIOpen()
+				if menuIsOpen then
+					self:SendCaptureDone(false)
+					return
+				end
+
+				if not self:CaptureAndSave() then
+					self:SendCaptureDone(false)
+					return
+				end
+
+				self:SendCaptureDone(true)
+			end)
 		end)
-
-		return true
-	end, 0, 5)
+	end)
 end
 
 function META:CaptureAndSave()

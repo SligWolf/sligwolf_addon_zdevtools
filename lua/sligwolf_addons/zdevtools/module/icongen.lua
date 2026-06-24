@@ -76,6 +76,7 @@ if SERVER then
 					blur = 0.5,
 					passes = 12,
 					steps = 24,
+					shape = 0.5,
 				}
 			},
 			entity = {
@@ -97,6 +98,7 @@ if SERVER then
 					blur = 0.5,
 					passes = 12,
 					steps = 24,
+					shape = 0.5,
 				}
 			},
 			entity = {
@@ -118,6 +120,7 @@ if SERVER then
 					blur = 0.5,
 					passes = 12,
 					steps = 24,
+					shape = 0.5,
 				}
 			},
 			entity = {
@@ -139,6 +142,7 @@ if SERVER then
 		-- 			blur = 0.5,
 		-- 			passes = 12,
 		-- 			steps = 24,
+		-- 			shape = 0.5,
 		-- 		}
 		-- 	},
 		-- 	entity = {
@@ -162,6 +166,7 @@ if SERVER then
 		-- 			blur = 0.5,
 		-- 			passes = 12,
 		-- 			steps = 24,
+		-- 			shape = 0.5,
 		-- 		}
 		-- 	},
 		-- 	entity = {
@@ -186,6 +191,7 @@ if SERVER then
 		-- 			blur = 0.5,
 		-- 			passes = 12,
 		-- 			steps = 24,
+		-- 			shape = 0.5,
 		-- 		}
 		-- 	},
 		-- 	entity = {

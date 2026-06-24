@@ -46,6 +46,7 @@ LIB.config = {
 				blur = 0.5,
 				passes = 12,
 				steps = 24,
+				shape = 0.5,
 			}
 		},
 		entity = {
@@ -56,9 +57,18 @@ LIB.config = {
 		},
 	},
 
-	maxDofDistance = 10000,
+	limits = {
+		dof = {
+			distance = 10000,
+			blur = 10,
+			passes = 64,
+			steps = 64,
+			shape = 1,
+		}
+	},
 
 	lockWeapon = "sligwolf_zdevtools_icongen_camera_locked",
+	cameraWeapon = "sligwolf_zdevtools_icongen_camera",
 	unlockWeapon = "weapon_physgun",
 }
 

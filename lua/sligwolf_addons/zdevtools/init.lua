@@ -52,11 +52,13 @@ if SERVER then
 
 	SLIGWOLF_ADDON:AddCSLuaFile("lib/cl/cl_icongen.lua")
 	SLIGWOLF_ADDON:AddCSLuaFile("lib/cl/cl_icongen_render.lua")
+	SLIGWOLF_ADDON:AddCSLuaFile("lib/cl/cl_icongen_controls.lua")
 end
 
 if CLIENT then
 	SLIGWOLF_ADDON:LuaInclude("lib/cl/cl_icongen.lua")
 	SLIGWOLF_ADDON:LuaInclude("lib/cl/cl_icongen_render.lua")
+	SLIGWOLF_ADDON:LuaInclude("lib/cl/cl_icongen_controls.lua")
 end
 
 -- Modules

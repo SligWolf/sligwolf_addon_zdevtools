@@ -132,14 +132,12 @@ function META:Unlock()
 		ply:SetMoveType(MOVETYPE_NOCLIP)
 		ply:GodDisable()
 
-		local lockWeaponEntity = ply:GetWeapon(LIB.config.lockWeapon)
-		if IsValid(lockWeaponEntity) then
-			lockWeaponEntity:Remove()
-		end
+		local lockWeapon = LIB.config.lockWeapon
+		ply:StripWeapon(lockWeapon)
 
-		local weapon = LIB.config.unlockWeapon
-		ply:Give(weapon)
-		ply:SelectWeapon(weapon)
+		local unlockWeapon = LIB.config.unlockWeapon
+		ply:Give(unlockWeapon)
+		ply:SelectWeapon(unlockWeapon)
 	end
 
 	self:RemoveControlHook()
@@ -252,7 +250,11 @@ function META:AddWorkloadItem(workloadItem)
 		themesTmp = {themesTmp}
 	end
 
-	local maxDofDistance = LIB.config.maxDofDistance
+	local maxDofDistance = LIB.config.limits.dof.distance
+	local maxDofBlur = LIB.config.limits.dof.blur
+	local maxDofPasses = LIB.config.limits.dof.passes
+	local maxDofSteps = LIB.config.limits.dof.steps
+	local maxDofShape = LIB.config.limits.dof.shape
 
 	local camera = workloadItem.camera or {}
 	local dof = camera.dof or {}
@@ -368,9 +370,10 @@ function META:AddWorkloadItem(workloadItem)
 			fov = math.Clamp(camera.fov or defaultsCamera.fov, 0.1, 175),
 			dof = {
 				distance = math.Clamp(dof.distance or defaultsCamera.dof.distance, 0, maxDofDistance),
-				blur = math.Clamp(dof.blur or defaultsCamera.dof.blur, 0, 10),
-				passes = math.Clamp(math.floor(dof.passes or defaultsCamera.dof.passes), 0, 64),
-				steps = math.Clamp(math.floor(dof.steps or defaultsCamera.dof.steps), 0, 64),
+				blur = math.Clamp(dof.blur or defaultsCamera.dof.blur, 0, maxDofBlur),
+				passes = math.Clamp(math.floor(dof.passes or defaultsCamera.dof.passes), 0, maxDofPasses),
+				steps = math.Clamp(math.floor(dof.steps or defaultsCamera.dof.steps), 0, maxDofSteps),
+				shape = math.Clamp(dof.shape or defaultsCamera.dof.shape, 0, maxDofShape),
 			},
 		}
 
@@ -954,6 +957,7 @@ function META:SendCaptureRequest()
 		net.WriteUInt(self.currentIndex, 16)
 		net.WriteUInt(self.workloadCount, 16)
 		net.WriteString(self.currentPath or "")
+		net.WriteEntity(ent)
 
 		net.WriteVector(camera.pos)
 		net.WriteAngle(camera.ang)
@@ -963,6 +967,7 @@ function META:SendCaptureRequest()
 		net.WriteFloat(dof.blur)
 		net.WriteUInt(dof.passes, 8)
 		net.WriteUInt(dof.steps, 8)
+		net.WriteFloat(dof.shape)
 	LIBNet.Send(self.player)
 end
 

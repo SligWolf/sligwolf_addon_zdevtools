@@ -32,7 +32,6 @@ SWEP.SlotPos				= 2
 SWEP.DrawAmmo				= false
 SWEP.DrawCrosshair			= false
 
-SWEP.ShootSound				= ""
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
@@ -53,21 +52,10 @@ if not SligWolf_Addons.HasLoadedAddon(addonName) then return end
 local addon = SligWolf_Addons.GetAddon(addonName)
 
 local LIBIconGenerator = addon.IconGenerator
-local LIBHook = SligWolf_Addons.Hook
-
-LIBHook.Add("HUDWeaponPickedUp", "Addon_ZDevTools_Icongen_Camera_HidePickupNotification", function(weapon)
-	if weapon:GetClass() == "sligwolf_zdevtools_icongen_camera_locked" then
-		return true
-	end
-end)
 
 function SWEP:Initialize()
 	self:SetAddonID(addonName)
 	self:SetHoldType("camera")
-
-	self:AddClientCallForPredictionHook("Deploy")
-	self:AddClientCallForPredictionHook("Holster")
-	self:AddClientCallForPredictionHook("Equip")
 end
 
 function SWEP:Reload()
@@ -77,27 +65,15 @@ function SWEP:Reload()
 end
 
 function SWEP:PrimaryAttack()
+	-- do nothing
 end
 
 function SWEP:SecondaryAttack()
-end
-
-function SWEP:Deploy()
-	return true
-end
-
-function SWEP:Holster()
-	return true
-end
-
-function SWEP:Equip()
+	-- do nothing
 end
 
 function SWEP:ShouldDropOnDie()
 	return false
-end
-
-function SWEP:DoShootEffect()
 end
 
 function SWEP:OnRemove()
@@ -112,42 +88,31 @@ function SWEP:OnReloaded()
 	end
 end
 
+function SWEP:Reset()
+	if CLIENT then
+		self:ResetRender()
+	end
+end
 
 if SERVER then
 	return
-end
-
-function SWEP:DeployClient()
-	self:ResetRender()
-end
-
-function SWEP:HolsterClient()
-	self:ResetRender()
-end
-
-function SWEP:EquipClient()
-	self:ResetRender()
 end
 
 function SWEP:ResetRender()
 	LIBIconGenerator.ResetCamera()
 	LIBIconGenerator.ResetSuperDof()
 	LIBIconGenerator.ResetProgressStats()
-	LIBIconGenerator.ClearBufferRenderTarget()
-	LIBIconGenerator.ClearRenderTarget()
-
-	self.renderStarted = false
+	LIBIconGenerator.ClearBuffer()
+	LIBIconGenerator.ClearCanvas()
 end
 
 function SWEP:DrawHUD()
-	if not self.renderStarted then
-		LIBIconGenerator.CopyScreenCopyScreenToBuffer()
-		LIBIconGenerator.RenderBufferToRenderTarget()
-
-		self.renderStarted = true
+	if not LIBIconGenerator.hasCanvasRendered then
+		LIBIconGenerator.CopyScreenToBuffer()
+		LIBIconGenerator.RenderBufferToCanvas()
 	end
 
-	LIBIconGenerator.CopyScreenCopyScreenToBufferIfRequested()
+	LIBIconGenerator.PollCopyScreenToBuffer()
 	LIBIconGenerator.DrawPreviewScreen()
 end
 
