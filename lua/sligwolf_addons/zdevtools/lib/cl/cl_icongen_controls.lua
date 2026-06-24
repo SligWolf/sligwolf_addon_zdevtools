@@ -430,22 +430,5 @@ LIBHook.Add("RenderScene", "Addon_ZDevTools_Icongen_SuperDOFOptions_FocusHelper"
 	end
 end, 10000)
 
-
-local cvarFlags = bit.bor(FCVAR_CLIENTDLL, FCVAR_DONTRECORD)
-
-concommand.Add("dev_sligwolf_zdevtools_icongen_snapshot", function(ply)
-	if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
-		return
-	end
-
-	local workloadEntry = LIBIconGenerator.EstimateViewWorkloadEntry()
-	if not workloadEntry then
-		return
-	end
-
-	-- @TODO: Will be replaced soon!
-	PrintTable(workloadEntry)
-end, nil, nil, cvarFlags)
-
 return true
 

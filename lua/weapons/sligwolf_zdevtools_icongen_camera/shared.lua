@@ -54,8 +54,6 @@ SWEP.Spawnable = true
 local addon = SligWolf_Addons.GetAddon(addonName)
 
 local LIBIconGenerator = addon.IconGenerator
-
-local LIBEntities = SligWolf_Addons.Entities
 local LIBPrint = SligWolf_Addons.Print
 
 function SWEP:SetupDataTables()

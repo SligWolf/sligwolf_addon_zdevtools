@@ -12,6 +12,8 @@ if not LIB then
 	return
 end
 
+local LIBEntities = SligWolf_Addons.Entities
+local LIBPrint = SligWolf_Addons.Print
 local LIBFile = SligWolf_Addons.File
 local LIBUtil = SligWolf_Addons.Util
 local LIBNet = SligWolf_Addons.Net
@@ -92,6 +94,11 @@ function META:ResetInternal()
 	self.currentIndex = nil
 	self.workloadCount = nil
 
+	self.entriesTotal = 0
+	self.entriesRun = 0
+	self.entriesDone = 0
+	self.entriesError = 0
+
 	self.screenDelayTimer = string.format("screendelay_%s", self.namespace)
 	self.dofCallback = string.format("dofcallback_%s", self.namespace)
 	self.copyCallback = string.format("copycallback_%s", self.namespace)
@@ -101,12 +108,7 @@ function META:Initialize()
 	local ply = LocalPlayer()
 
 	if not IsValid(ply) or not ply:IsPlayer() then
-		error("No player provided")
-		return
-	end
-
-	if self:IsLocked() then
-		error("System is already locked by another instance")
+		LIBPrint.Error("No player provided.")
 		return
 	end
 
@@ -119,12 +121,7 @@ function META:Start()
 	local ply = self.player
 
 	if not IsValid(ply) or not ply:IsPlayer() then
-		error("No Player given. Call Initialize() first.")
-		return
-	end
-
-	if self:IsLocked() then
-		error("System is already locked by another instance")
+		LIBPrint.Error("No Player given, call Initialize() first.")
 		return
 	end
 
@@ -158,6 +155,19 @@ function META:CancelInternal()
 	LIB.RemoveRequestCopyToBufferCallback(self.copyCallback)
 end
 
+function META:ValidateEntity(ent)
+	if not LIBEntities.IsMarkedForDeletion(ent) then
+		return true
+	end
+
+	if self.OnEarlyEntityRemove then
+		ProtectedCall(self.OnEarlyEntityRemove, self)
+	end
+
+	self:Warn("ValidateEntity: Entity has been removed early.")
+	return false
+end
+
 function META:ValidateStateInternal()
 	if not self.currentCaptureRequest then
 		return false
@@ -167,7 +177,7 @@ function META:ValidateStateInternal()
 		return false
 	end
 
-	if not IsValid(self.currentEntity) then
+	if not self:ValidateEntity(self.currentEntity) then
 		return false
 	end
 
@@ -210,6 +220,11 @@ end
 function META:ProcessStart()
 	self.isProcessing = true
 
+	self.entriesTotal = self.workloadCount
+	self.entriesRun = 0
+	self.entriesDone = 0
+	self.entriesError = 0
+
 	LIB.ResetCamera()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
@@ -251,6 +266,11 @@ function META:ProcessEnd()
 	if self.OnFinished then
 		ProtectedCall(self.OnFinished, self)
 	end
+
+	self.entriesTotal = 0
+	self.entriesRun = 0
+	self.entriesDone = 0
+	self.entriesError = 0
 end
 
 function META:SendCaptureDone(success)
@@ -258,20 +278,28 @@ function META:SendCaptureDone(success)
 		return
 	end
 
-	local captureRequest = self.currentCaptureRequest
+	local name = self.name
+	local processSubId = self.processSubId
 	local index = self.currentIndex
 	local count = self.workloadCount
 
-	LIBNet.Start("zdevtools_icongen_done")
-		net.WriteString(self.name)
-		net.WriteUInt(captureRequest.processSubId, 32)
-		net.WriteBool(success)
-	LIBNet.SendToServer()
-
 	if not success then
+		self.entriesRun = math.min(self.entriesRun + 1, self.entriesTotal)
+		self.entriesError = math.min(self.entriesError + 1, self.entriesTotal)
+
 		self:Cancel()
+
+		LIBNet.Start("zdevtools_icongen_done")
+			net.WriteString(name)
+			net.WriteUInt(processSubId, 32)
+			net.WriteBool(false)
+		LIBNet.SendToServer()
+
 		return
 	end
+
+	self.entriesRun = math.min(self.entriesRun + 1, self.entriesTotal)
+	self.entriesDone = math.min(self.entriesDone + 1, self.entriesTotal)
 
 	if self.OnProgressDone then
 		ProtectedCall(self.OnProgressDone, self, index, count)
@@ -280,6 +308,12 @@ function META:SendCaptureDone(success)
 	if index >= count then
 		self:ProcessEnd()
 	end
+
+	LIBNet.Start("zdevtools_icongen_done")
+		net.WriteString(name)
+		net.WriteUInt(processSubId, 32)
+		net.WriteBool(true)
+	LIBNet.SendToServer()
 end
 
 function META:ShowPreviewAndCapture()
@@ -302,62 +336,68 @@ function META:ShowPreviewAndCapture()
 	LIB.SetProgressStats(index, count)
 	LIB.SetEntity(ent)
 
-	LIB.RequestDofRender(false, dofCallback, function()
+	local validate = function()
 		if not IsValid(self) then
-			return
+			return false
 		end
 
 		if self.processSubId ~= processSubId then
-			return
+			return false
 		end
 
 		if not self:ValidateState() then
+			return false
+		end
+
+		if LIB.IsUIOpen() then
+			self:Warn("ShowPreviewAndCapture: Can not capture render target with menus open.")
+			self:SendCaptureDone(false)
+			return false
+		end
+
+		return true
+	end
+
+	local capture = function()
+		if not validate() then
 			return
 		end
 
-		LIB.RequestCopyToBuffer(copyCallback, function()
-			if not IsValid(self) then
-				return
-			end
+		if not self:CaptureAndSave() then
+			self:Warn("ShowPreviewAndCapture: Could not capture render target.")
+			self:SendCaptureDone(false)
+			return
+		end
 
-			if self.processSubId ~= processSubId then
-				return
-			end
+		self:SendCaptureDone(true)
+	end
 
-			if not self:ValidateState() then
-				return
-			end
+	local renderBufferToCanvas = function()
+		if not validate() then
+			return
+		end
 
-			LIB.RenderBufferToCanvas()
+		LIB.RenderBufferToCanvas()
+		SLIGWOLF_ADDON:TimerOnce(screenDelayTimer, self.config.time.preview, capture)
+	end
 
-			SLIGWOLF_ADDON:TimerOnce(screenDelayTimer, self.config.time.preview, function()
-				if not IsValid(self) then
-					return
-				end
+	local requestCopyToBuffer = function()
+		if not validate() then
+			return
+		end
 
-				if self.processSubId ~= processSubId then
-					return
-				end
+		LIB.RequestCopyToBuffer(copyCallback, renderBufferToCanvas)
+	end
 
-				if not self:ValidateState() then
-					return
-				end
+	local nextFrame = function()
+		if not validate() then
+			return
+		end
 
-				local menuIsOpen = LIB.IsUIOpen()
-				if menuIsOpen then
-					self:SendCaptureDone(false)
-					return
-				end
+		LIB.RequestDofRender(false, dofCallback, requestCopyToBuffer)
+	end
 
-				if not self:CaptureAndSave() then
-					self:SendCaptureDone(false)
-					return
-				end
-
-				self:SendCaptureDone(true)
-			end)
-		end)
-	end)
+	SLIGWOLF_ADDON:TimerNextFrame(self.config.time.preview, nextFrame)
 end
 
 function META:CaptureAndSave()
@@ -369,6 +409,7 @@ function META:CaptureAndSave()
 	local path = captureRequest.path or ""
 
 	if path == "" then
+		self:Warn("CaptureAndSave: No path given.")
 		return false
 	end
 
@@ -396,16 +437,25 @@ function META:CaptureAndSave()
 	render.PopRenderTarget()
 
 	if not data then
+		self:Warn("CaptureAndSave: No data returned.")
 		return false
 	end
 
 	if data == "" then
+		self:Warn("CaptureAndSave: No data returned.")
 		return false
 	end
 
+	local absoluteFilename = LIBFile.GetAbsolutePath(filename, SLIGWOLF_ADDON)
+
 	local success = LIBFile.Write(filename, data, SLIGWOLF_ADDON)
 	if not success then
+		self:Warn("CaptureAndSave: Could not write too 'data/%s'.", absoluteFilename)
 		return false
+	end
+
+	if self.OnFileWritten then
+		ProtectedCall(self.OnFileWritten, self, filename, absoluteFilename)
 	end
 
 	return true

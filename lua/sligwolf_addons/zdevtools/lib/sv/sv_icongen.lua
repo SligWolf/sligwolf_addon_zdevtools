@@ -80,6 +80,11 @@ function META:ResetInternal()
 
 	self.currentEntity = nil
 
+	self.entriesTotal = 0
+	self.entriesRun = 0
+	self.entriesDone = 0
+	self.entriesError = 0
+
 	self.timeoutTotalTimer = string.format("timeout_total_%s", self.namespace)
 	self.timeoutEntityTimer = string.format("timeout_entity_%s", self.namespace)
 	self.playerTimer = string.format("player_%s", self.namespace)
@@ -167,12 +172,12 @@ function META:Start()
 	local ply = self.player
 
 	if not IsValid(ply) or not ply:IsPlayer() then
-		LIBPrint.Error("No player given. Call Initialize(player, workload) first.")
+		LIBPrint.Error("No player given, call Initialize(player, workload) first.")
 		return
 	end
 
 	if not self.workload or table.IsEmpty(self.workload) then
-		LIBPrint.Error("No workload given. Add Workload first.")
+		LIBPrint.Error("No workload given, add Workload first.")
 		return
 	end
 
@@ -212,24 +217,16 @@ function META:AddWorkloadItem(workloadItem)
 	local defaultsCamera = defaults.camera
 	local defaultsEntity = defaults.entity
 
-	local category = tostring(workloadItem.category or "")
-	if category == "" then
-		LIBPrint.Error("No category given.")
-		return
-	end
+	local maxDofDistance = LIB.config.limits.dof.distance
+	local maxDofBlur = LIB.config.limits.dof.blur
+	local maxDofPasses = LIB.config.limits.dof.passes
+	local maxDofSteps = LIB.config.limits.dof.steps
+	local maxDofShape = LIB.config.limits.dof.shape
 
-	local map = tostring(workloadItem.map or "")
-	local loadedMap = game.GetMap()
+	local workload = self.workload
+	local workloadByPath = self.workloadByPath
 
-	if map ~= loadedMap then
-		LIBPrint.Warn(
-			"Different map given, skipping. (Map: '%s', Loaded map: '%s')",
-			map,
-			loadedMap
-		)
-
-		return
-	end
+	local id = #workload + 1
 
 	local spawnnames = workloadItem.spawnname or ""
 	if not istable(spawnnames) then
@@ -237,6 +234,38 @@ function META:AddWorkloadItem(workloadItem)
 	end
 
 	spawnnames = LIBUtil.DeduplicateTable(spawnnames)
+
+	local firstSpawnname = tostring(spawnnames[1] or "")
+	if firstSpawnname == "" then
+		firstSpawnname = "<empty spawnname>"
+	end
+
+	local category = tostring(workloadItem.category or "")
+	if category == "" then
+		self:Warn(
+			"AddWorkloadItem: No category given, skipping. (ID: %i, Spawnname: '%s')",
+			id,
+			firstSpawnname
+		)
+
+		return
+	end
+
+	local map = tostring(workloadItem.map or "")
+	local loadedMap = game.GetMap()
+
+	if map ~= loadedMap then
+		self:Warn(
+			"AddWorkloadItem: Unloaded map given, skipping. ('%s' != '%s') (ID: %i, Spawnname: '%s', Category: '%s')",
+			map,
+			loadedMap,
+			id,
+			firstSpawnname,
+			category
+		)
+
+		return
+	end
 
 	local spawnparams = workloadItem.spawnparams or ""
 	if not istable(spawnparams) then
@@ -250,19 +279,10 @@ function META:AddWorkloadItem(workloadItem)
 		themesTmp = {themesTmp}
 	end
 
-	local maxDofDistance = LIB.config.limits.dof.distance
-	local maxDofBlur = LIB.config.limits.dof.blur
-	local maxDofPasses = LIB.config.limits.dof.passes
-	local maxDofSteps = LIB.config.limits.dof.steps
-	local maxDofShape = LIB.config.limits.dof.shape
-
 	local camera = workloadItem.camera or {}
 	local dof = camera.dof or {}
 
 	local entity = workloadItem.entity or {}
-
-	local workload = self.workload
-	local workloadByPath = self.workloadByPath
 
 	if table.IsEmpty(themesTmp) then
 		themesTmp = {defaults.theme}
@@ -273,8 +293,9 @@ function META:AddWorkloadItem(workloadItem)
 
 		local spawntable = LIBEntities.GetSpawntableByName(category, spawnname)
 		if not spawntable or not spawntable.Is_SLIGWOLF then
-			LIBPrint.Warn(
-				"Invalid spawnname given, skipping. (Spawnname: '%s', Category: '%s')",
+			self:Warn(
+				"AddWorkloadItem: Invalid spawnname given, skipping. (ID: %i, Spawnname: '%s', Category: '%s')",
+				id,
 				spawnname,
 				category
 			)
@@ -286,8 +307,9 @@ function META:AddWorkloadItem(workloadItem)
 
 		local addon = SligWolf_Addons.GetAddon(addonname)
 		if not addon then
-			LIBPrint.Warn(
-				"Spawntable with bad addon given, skipping. (Spawnname: '%s', Category: '%s', Addonname: '%s')",
+			self:Warn(
+				"AddWorkloadItem: Spawntable with bad addon given, skipping. (ID: %i, Spawnname: '%s', Category: '%s', Addonname: '%s')",
+				id,
 				spawnname,
 				category,
 				addonname
@@ -416,15 +438,16 @@ function META:AddWorkloadItem(workloadItem)
 			path = string.lower(path)
 
 			if workloadByPath[path] then
-				LIBPrint.Warn(
-					"Duplicate entry given, skipping. (Path: '%s')",
+				self:Warn(
+					"AddWorkloadItem: Duplicate entry given, skipping. (ID: %i, Path: '%s')",
+					id,
 					path
 				)
 
 				continue
 			end
 
-			newItem.id = #workload + 1
+			newItem.id = id
 			newItem.path = path
 			newItem.theme = theme
 
@@ -491,6 +514,11 @@ function META:ProcessNextEntry()
 	end
 
 	self.currentEntry = currentEntry
+	self.currentAddonname = currentEntry.addonname
+	self.currentCategory = currentEntry.category
+	self.currentSpawnname = currentEntry.spawnname
+	self.currentTheme = currentEntry.theme
+	self.currentPath = currentEntry.path
 
 	if index == 1 then
 		self:ProcessStart()
@@ -504,6 +532,17 @@ function META:ProcessNextEntry()
 	self:SpawnEntityForEntry()
 end
 
+function META:ProcessNextEntryOnError()
+	if not self:ValidateState() then
+		return
+	end
+
+	self.entriesError = math.min(self.entriesError + 1, self.entriesTotal)
+	self.entriesRun = math.min(self.entriesRun + 1, self.entriesTotal)
+
+	self:ProcessNextEntry()
+end
+
 function META:ProcessStart()
 	self.isProcessing = true
 
@@ -512,8 +551,10 @@ function META:ProcessStart()
 	self.originalPos = ply:GetPos()
 	self.originalAng = ply:EyeAngles()
 
-	-- self.originalPos = ply:GetNWVector("sligwolf_zdevtools_icongen_lock_pos", ply:GetPos())
-	-- self.originalAng = ply:etNWAngle("sligwolf_zdevtools_icongen_lock_ang", ply:EyeAngles())
+	self.entriesTotal = self.workloadCount
+	self.entriesRun = 0
+	self.entriesDone = 0
+	self.entriesError = 0
 
 	if self.OnStart then
 		ProtectedCall(self.OnStart, self)
@@ -541,13 +582,14 @@ function META:ProcessEnd()
 	if self.OnFinished then
 		ProtectedCall(self.OnFinished, self)
 	end
+
+	self.entriesTotal = 0
+	self.entriesRun = 0
+	self.entriesDone = 0
+	self.entriesError = 0
 end
 
 function META:ResetPlayerPosition()
-	if not self:ValidateState() then
-		return
-	end
-
 	if self.originalPos and self.originalAng then
 		self:MovePlayerToPosition(self.originalPos, self.originalAng)
 	end
@@ -557,7 +599,7 @@ function META:ResetPlayerPosition()
 end
 
 function META:MovePlayerToPosition(playerPos, playerAng)
-	if not self:ValidateState() then
+	if not IsValid(self.player) then
 		return
 	end
 
@@ -613,6 +655,21 @@ function META:MovePlayerToCamera()
 	self:MovePlayerToPosition(playerPos, playerAng)
 end
 
+function META:ValidateEntity(ent)
+	if not LIBEntities.IsMarkedForDeletion(ent) then
+		return true
+	end
+
+	if self.OnEarlyEntityRemove then
+		ProtectedCall(self.OnEarlyEntityRemove, self)
+	end
+
+	self:Warn("ValidateEntity: Entity has been removed early, skipping.")
+	self:ProcessNextEntryOnError()
+
+	return false
+end
+
 function META:MoveEntityToPosition(entPos, entAng, callback)
 	if not self:ValidateState() then
 		return
@@ -621,8 +678,7 @@ function META:MoveEntityToPosition(entPos, entAng, callback)
 	local processSubId = self.processSubId
 	local ent = self.currentEntity
 
-	if LIBEntities.IsMarkedForDeletion(ent) then
-		self:ProcessNextEntry()
+	if not self:ValidateEntity(ent) then
 		return
 	end
 
@@ -639,8 +695,7 @@ function META:MoveEntityToPosition(entPos, entAng, callback)
 			return
 		end
 
-		if LIBEntities.IsMarkedForDeletion(ent) then
-			self:ProcessNextEntry()
+		if not self:ValidateEntity(ent) then
 			return
 		end
 
@@ -657,16 +712,12 @@ function META:SpawnEntityForEntry()
 
 	local ply = self.player
 	local entry = self.currentEntry
-
-	self.currentAddonname = entry.addonname
-	self.currentCategory = entry.category
-	self.currentSpawnname = entry.spawnname
-	self.currentTheme = entry.theme
-	self.currentPath = entry.path
+	local category = self.currentCategory
 
 	local spawncommand = g_spawnCategoryToCmd[self.currentCategory]
 	if not spawncommand then
-		self:ProcessNextEntry()
+		self:Warn("SpawnEntityForEntry: No spawncommand for given category '%s', skipping.", category)
+		self:ProcessNextEntryOnError()
 		return
 	end
 
@@ -700,7 +751,8 @@ function META:SpawnEntityForEntry()
 			ProtectedCall(self.OnTimeout, self)
 		end
 
-		self:ProcessNextEntry()
+		self:Warn("SpawnEntityForEntry: Processing timed out, skipping.")
+		self:ProcessNextEntryOnError()
 	end)
 
 	-- Set timeout for entity spawn
@@ -717,7 +769,8 @@ function META:SpawnEntityForEntry()
 			ProtectedCall(self.OnTimeout, self)
 		end
 
-		self:ProcessNextEntry()
+		self:Warn("SpawnEntityForEntry: Entity spawn timed out, skipping.")
+		self:ProcessNextEntryOnError()
 	end)
 end
 
@@ -802,8 +855,7 @@ function META:HandleSpawnedEntity(ent, spawnname)
 
 	self.currentEntity = ent
 
-	if LIBEntities.IsMarkedForDeletion(ent) then
-		self:ProcessNextEntry()
+	if not self:ValidateEntity(ent) then
 		return
 	end
 
@@ -811,8 +863,7 @@ function META:HandleSpawnedEntity(ent, spawnname)
 		ProtectedCall(self.OnSpawn, self, ent)
 	end
 
-	if LIBEntities.IsMarkedForDeletion(ent) then
-		self:ProcessNextEntry()
+	if not self:ValidateEntity(ent) then
 		return
 	end
 
@@ -821,14 +872,16 @@ function META:HandleSpawnedEntity(ent, spawnname)
 	self:RemoveSpawnHooks()
 
 	local entry = self.currentEntry
+	local addonname = self.currentAddonname
 
 	local entPos = entry.entity.pos
 	local entAng = entry.entity.ang
 	local entSpawnFrozen = entry.entity.spawnFrozen
 
-	local addon = SligWolf_Addons.GetAddon(self.currentAddonname)
+	local addon = SligWolf_Addons.GetAddon(addonname)
 	if not addon then
-		self:ProcessNextEntry()
+		self:Warn("HandleSpawnedEntity: Addon '%s' not found, skipping", addonname)
+		self:ProcessNextEntryOnError()
 		return
 	end
 
@@ -859,8 +912,7 @@ function META:WaitForEntityReady(callback)
 
 	local ent = self.currentEntity
 
-	if LIBEntities.IsMarkedForDeletion(ent) then
-		self:ProcessNextEntry()
+	if not self:ValidateEntity(ent) then
 		return
 	end
 
@@ -892,8 +944,7 @@ function META:WaitForEntityReady(callback)
 			return false
 		end
 
-		if LIBEntities.IsMarkedForDeletion(ent) then
-			self:ProcessNextEntry()
+		if not self:ValidateEntity(ent) then
 			return
 		end
 
@@ -920,8 +971,7 @@ function META:WaitForEntityReady(callback)
 				return
 			end
 
-			if LIBEntities.IsMarkedForDeletion(ent) then
-				self:ProcessNextEntry()
+			if not self:ValidateEntity(ent) then
 				return
 			end
 
@@ -941,9 +991,7 @@ function META:SendCaptureRequest()
 	end
 
 	local ent = self.currentEntity
-
-	if not IsValid(ent) then
-		self:ProcessNextEntry()
+	if not self:ValidateEntity(ent) then
 		return
 	end
 
@@ -991,6 +1039,9 @@ function META:HandleCaptureDone(captureResponce)
 	local success = captureResponce.success
 
 	if not success then
+		self.entriesRun = math.min(self.entriesRun + 1, self.entriesTotal)
+		self.entriesError = math.min(self.entriesError + 1, self.entriesTotal)
+
 		self:Cancel()
 		return
 	end
@@ -999,6 +1050,9 @@ function META:HandleCaptureDone(captureResponce)
 
 	local index = self.currentIndex
 	local count = self.workloadCount
+
+	self.entriesRun = math.min(self.entriesRun + 1, self.entriesTotal)
+	self.entriesDone = math.min(self.entriesDone + 1, self.entriesTotal)
 
 	if self.OnProgressDone then
 		ProtectedCall(self.OnProgressDone, self, index, count)

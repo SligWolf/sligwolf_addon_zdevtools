@@ -12,6 +12,8 @@ local LIBEntities = SligWolf_Addons.Entities
 local LIBHook = SligWolf_Addons.Hook
 
 local LIBIconGenerator = SLIGWOLF_ADDON.IconGenerator
+local LIBTimer = SligWolf_Addons.Timer
+local LIBFile = SligWolf_Addons.File
 
 if CLIENT then
 	local cvarFlags = bit.bor(FCVAR_CLIENTDLL, FCVAR_DONTRECORD)
@@ -30,34 +32,175 @@ if CLIENT then
 	end, nil, nil, cvarFlags)
 end
 
-local g_iconGenerator = LIBIconGenerator.NewInstance("test")
+local function log(format, ...)
+	local text = string.format(format, ...)
+	local line = ""
+
+	local now = LIBTimer.UnixSysTime()
+
+	local sec = math.floor(now)
+	local msec = math.floor(now * 1000) % 100
+
+	local time = string.format(
+		"%s.%03d",
+		os.date("%Y-%m-%d %H:%M:%S", sec),
+		msec
+	)
+
+	if SERVER then
+		line = string.format("[%s][SV] %s\n", time, text)
+	else
+		line = string.format("[%s][CL] %s\n", time, text)
+	end
+
+	local filename = "icongen/log.txt"
+
+	LIBFile.Log(filename, line, SLIGWOLF_ADDON)
+
+	Msg(filename .. " > ")
+	MsgC(Color(220, 220, 255), line)
+end
+
+local g_iconGenerator = LIBIconGenerator.NewInstance("g_iconGenerator")
 
 g_iconGenerator.OnProgress = function(this, currentIndex, workloadCount)
-	MsgN("g_iconGenerator OnProgress ", currentIndex, " ", workloadCount)
+	if SERVER then
+		local addonname = this.currentAddonname or "?"
+		local category = this.currentCategory or "?"
+		local spawnname = this.currentSpawnname or "?"
+		local theme = this.currentTheme or "?"
+
+		log("OnProgress: %05i / %05i | %s, %s, %s, %s",
+			currentIndex, workloadCount,
+			addonname, category, spawnname, theme
+		)
+	else
+		log("OnProgress: %05i / %05i",
+			currentIndex, workloadCount
+		)
+	end
 end
 
 g_iconGenerator.OnProgressDone = function(this, currentIndex, workloadCount)
-	MsgN("g_iconGenerator OnProgressDone ", currentIndex, " ", workloadCount)
+	if SERVER then
+		local addonname = this.currentAddonname or "?"
+		local category = this.currentCategory or "?"
+		local spawnname = this.currentSpawnname or "?"
+		local theme = this.currentTheme or "?"
+
+		log("OnProgressDone: %05i / %05i | %s, %s, %s, %s",
+			currentIndex, workloadCount,
+			addonname, category, spawnname, theme
+		)
+	else
+		log("OnProgressDone: %05i / %05i",
+			currentIndex, workloadCount
+		)
+	end
 end
 
 g_iconGenerator.OnStart = function(this)
-	MsgN("g_iconGenerator OnStart ")
-end
-
-g_iconGenerator.OnCancel = function(this)
-	MsgN("g_iconGenerator OnCancel ")
+	log("OnStart: %i items found", this.entriesTotal or 0)
 end
 
 g_iconGenerator.OnFinished = function(this)
-	MsgN("g_iconGenerator OnFinished ")
+	local entriesTotal = this.entriesTotal or 0
+	local entriesRun = this.entriesRun or 0
+	local entriesDone = this.entriesDone or 0
+	local entriesError = this.entriesError or 0
+
+	log(
+		"OnFinished | total %i, run %i, done %i, error %i",
+		entriesTotal,
+		entriesRun,
+		entriesDone,
+		entriesError
+	)
 end
 
-g_iconGenerator.OnTimeout = function(this)
-	MsgN("g_iconGenerator OnTimeout ")
+g_iconGenerator.OnCancel = function(this)
+	local entriesTotal = this.entriesTotal or 0
+	local entriesRun = this.entriesRun or 0
+	local entriesDone = this.entriesDone or 0
+	local entriesError = this.entriesError or 0
+
+	log(
+		"OnCancel | total %i, run %i, done %i, error %i",
+		entriesTotal,
+		entriesRun,
+		entriesDone,
+		entriesError
+	)
 end
 
 g_iconGenerator.OnSpawn = function(this, ent)
-	MsgN("g_iconGenerator OnSpawn ", ent)
+	if SERVER then
+		local addonname = this.currentAddonname or "?"
+		local category = this.currentCategory or "?"
+		local spawnname = this.currentSpawnname or "?"
+		local theme = this.currentTheme or "?"
+
+		log("OnSpawn: %s | %s, %s, %s, %s",
+			tostring(ent),
+			addonname, category, spawnname, theme
+		)
+	end
+end
+
+g_iconGenerator.OnFileWritten = function(this, path, absoluteFilename)
+	log("OnFileWritten: 'data/%s'", absoluteFilename)
+end
+
+g_iconGenerator.OnReset = function(this)
+	log("OnReset")
+end
+
+g_iconGenerator.OnDestroy = function(this)
+	log("OnDestroy")
+end
+
+g_iconGenerator.OnTimeout = function(this)
+	log("ERROR: OnTimeout")
+end
+
+g_iconGenerator.OnEarlyEntityRemove = function(this)
+	log("ERROR: OnEarlyEntityRemove")
+end
+
+g_iconGenerator.OnWarn = function(this, err)
+	log("ERROR: %s", err)
+end
+
+if CLIENT then
+	local cvarFlags = bit.bor(FCVAR_CLIENTDLL, FCVAR_DONTRECORD)
+
+	concommand.Add("dev_sligwolf_zdevtools_icongen_snapshot", function(ply)
+		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
+			return
+		end
+
+		local workloadEntry = LIBIconGenerator.EstimateViewWorkloadEntry()
+		if not workloadEntry then
+			return
+		end
+
+		-- @TODO: Will be replaced soon!
+		PrintTable(workloadEntry)
+	end, nil, nil, cvarFlags)
+
+	local function clientInit()
+		if not IsValid(LocalPlayer()) then
+			return
+		end
+
+		ProtectedCall(function()
+			g_iconGenerator:Initialize()
+			g_iconGenerator:Start()
+		end)
+	end
+
+	LIBHook.Add("InitPostEntity", "Addon_ZDevTools_Icongen_ClientInit", clientInit)
+	clientInit()
 end
 
 if SERVER then
@@ -203,7 +346,7 @@ if SERVER then
 		-- Add more entries...
 	}
 
-	concommand.Add("dev_sligwolf_zdevtools_icongen_start", function(ply)
+	concommand.Add("dev_sligwolf_zdevtools_icongen_start", function(ply, cmd, args)
 		if not IsValid(g_iconGenerator) then
 			return
 		end
@@ -222,18 +365,6 @@ if SERVER then
 
 		g_iconGenerator:Cancel()
 	end)
-else
-	local function clientInit()
-		if not IsValid(LocalPlayer()) then
-			return
-		end
-
-		g_iconGenerator:Initialize()
-		g_iconGenerator:Start()
-	end
-
-	LIBHook.Add("InitPostEntity", "Addon_ZDevTools_Icongen_ClientInit", clientInit)
-	clientInit()
 end
 
 return true

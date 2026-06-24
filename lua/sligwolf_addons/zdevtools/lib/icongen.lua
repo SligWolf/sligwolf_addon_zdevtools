@@ -11,6 +11,8 @@ local SLIGWOLF_ADDON = SLIGWOLF_ADDON
 local LIB = SLIGWOLF_ADDON.IconGenerator or {}
 SLIGWOLF_ADDON.IconGenerator = LIB
 
+local LIBPrint = SligWolf_Addons.Print
+
 local META = LIB.meta or {}
 LIB.meta = META
 
@@ -89,7 +91,7 @@ function LIB.NewInstance(name)
 	name = tostring(name or "")
 
 	if name == "" then
-		error("No name provided")
+		LIBPrint.Error("No name provided.")
 		return
 	end
 
@@ -117,7 +119,7 @@ function LIB.GetInstance(name)
 	name = tostring(name or "")
 
 	if name == "" then
-		error("No name provided")
+		LIBPrint.Error("No name provided.")
 		return
 	end
 
@@ -162,7 +164,6 @@ function META:Destroy()
 	end
 
 	self:Cancel()
-	self:Reset()
 
 	table.Empty(self)
 
@@ -272,6 +273,16 @@ function META:ValidateState()
 	end
 
 	return true
+end
+
+function META:Warn(err, ...)
+	local text = string.format(err, ...)
+
+	LIBPrint.Warn(text)
+
+	if self.OnWarn then
+	 	ProtectedCall(self.OnWarn, self, text)
+	end
 end
 
 return true
