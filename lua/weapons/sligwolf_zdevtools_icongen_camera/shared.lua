@@ -283,8 +283,7 @@ function SWEP:TakeSnapshot()
 		return
 	end
 
-	local spawntable = LIBEntities.GetSpawntable(workloadEntry.entity.ent, true)
-	local title = spawntable.PrintName or spawntable.Name
+	local title = workloadEntry.entity.title
 
 	self:EmitSound("NPC_CScanner.TakePhoto")
 	RunConsoleCommand("dev_sligwolf_zdevtools_icongen_snapshot")
@@ -470,7 +469,8 @@ function SWEP:RenderHoldHint()
 	self.pulseAlpha = math.Approach(self.pulseAlpha, 1, FrameTime() * 4)
 	local pulseAlpha = self.pulseAlpha
 
-	local x, y = ScrW() / 2, ScrH() * 0.9
+	local x = ScrW() / 2
+	local y = ScrH() - 200
 
 	draw.NoTexture()
 	surface.SetFont("HudDefault")
