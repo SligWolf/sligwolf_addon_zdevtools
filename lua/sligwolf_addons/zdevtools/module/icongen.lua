@@ -182,6 +182,7 @@ if CLIENT then
 			return
 		end
 
+		LIBIconGenerator.PrintSnapshotToConsole(workloadEntry)
 	end, nil, nil, cvarFlags)
 
 	local function clientInit()
