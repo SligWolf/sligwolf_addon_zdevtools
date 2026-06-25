@@ -8,6 +8,24 @@ end
 
 local SLIGWOLF_ADDON = SLIGWOLF_ADDON
 
+SLIGWOLF_ADDON:LuaInclude("lib/icongen.lua")
+SLIGWOLF_ADDON:LuaInclude("lib/icongen_hooks.lua")
+SLIGWOLF_ADDON:LuaInclude("lib/icongen_parser.lua")
+
+if SERVER then
+	SLIGWOLF_ADDON:LuaInclude("lib/sv/sv_icongen.lua")
+
+	SLIGWOLF_ADDON:AddCSLuaFile("lib/cl/cl_icongen.lua")
+	SLIGWOLF_ADDON:AddCSLuaFile("lib/cl/cl_icongen_render.lua")
+	SLIGWOLF_ADDON:AddCSLuaFile("lib/cl/cl_icongen_controls.lua")
+end
+
+if CLIENT then
+	SLIGWOLF_ADDON:LuaInclude("lib/cl/cl_icongen.lua")
+	SLIGWOLF_ADDON:LuaInclude("lib/cl/cl_icongen_render.lua")
+	SLIGWOLF_ADDON:LuaInclude("lib/cl/cl_icongen_controls.lua")
+end
+
 local LIBEntities = SligWolf_Addons.Entities
 local LIBHook = SligWolf_Addons.Hook
 
@@ -15,23 +33,6 @@ local LIBIconGenerator = SLIGWOLF_ADDON.IconGenerator
 local LIBString = SligWolf_Addons.String
 local LIBTimer = SligWolf_Addons.Timer
 local LIBFile = SligWolf_Addons.File
-
-if CLIENT then
-	local cvarFlags = bit.bor(FCVAR_CLIENTDLL, FCVAR_DONTRECORD)
-
-	concommand.Add("dev_sligwolf_zdevtools_icongen_snapshot", function(ply)
-		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
-			return
-		end
-
-		local workloadEntry = LIBIconGenerator.EstimateViewWorkloadEntry()
-		if not workloadEntry then
-			return
-		end
-
-		PrintTable(workloadEntry)
-	end, nil, nil, cvarFlags)
-end
 
 local function log(format, ...)
 	local text = string.format(format, ...)
@@ -181,8 +182,6 @@ if CLIENT then
 			return
 		end
 
-		-- @TODO: Will be replaced soon!
-		PrintTable(workloadEntry)
 	end, nil, nil, cvarFlags)
 
 	local function clientInit()
