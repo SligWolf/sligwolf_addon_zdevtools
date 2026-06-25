@@ -769,6 +769,7 @@ function LIB.EstimateViewWorkloadEntry()
 	end
 
 	local title = spawntable.PrintName or spawntable.Name or spawnname
+	local addonname = spawntable.SLIGWOLF_Addonname
 
 	local workloadEntry = {
 		map = game.GetMap(),
@@ -785,6 +786,7 @@ function LIB.EstimateViewWorkloadEntry()
 			pos = ent:GetPos(),
 			ang = ent:GetAngles(),
 			title = title,
+			addonname = addonname,
 			ent = ent,
 		},
 	}
@@ -853,14 +855,16 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 	count = math.max(count, 0)
 	index = math.Clamp(index, 0, count)
 
-	surface.SetFont("DefaultFixed")
+	local font = "DefaultFixed"
+
+	surface.SetFont(font)
 
 	local shadowOffset = 1
 	local margin = 32
 
 	local lineY = 0
 
-	local _, textH = surface.GetTextSize("DefaultFixed")
+	local _, textH = surface.GetTextSize(font)
 	textH = textH + 8
 
 	local textX = margin
@@ -893,6 +897,8 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 				lineY = lineY + textH
 				continue
 			end
+
+			surface.SetFont(font)
 
 			surface.SetTextColor(0, 0, 0, 255)
 			surface.SetTextPos(textX + shadowOffset, lineY + shadowOffset)
@@ -1010,6 +1016,8 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 				continue
 			end
 
+			surface.SetFont(font)
+
 			surface.SetTextColor(0, 0, 0, 255)
 			surface.SetTextPos(textX + shadowOffset, lineY + shadowOffset)
 			surface.DrawText(line, false)
@@ -1030,8 +1038,15 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 			local camera = workloadEntry.camera
 			local superDof = camera.dof
 
+			local addon = SligWolf_Addons.GetAddon(entity.addonname or "")
+
 			g_lineBuffer[#g_lineBuffer + 1] = "Map: "
 			g_lineBuffer[#g_lineBuffer + 1] = string.format("  %s", workloadEntry.map)
+			g_lineBuffer[#g_lineBuffer + 1] = ""
+
+			g_lineBuffer[#g_lineBuffer + 1] = "Addon: "
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  %s", addon.Addonname)
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  %s", addon.NiceName)
 			g_lineBuffer[#g_lineBuffer + 1] = ""
 
 			g_lineBuffer[#g_lineBuffer + 1] = "Spawn: "
@@ -1040,14 +1055,15 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 			g_lineBuffer[#g_lineBuffer + 1] = ""
 
 			g_lineBuffer[#g_lineBuffer + 1] = "Entity: "
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Pos: Vector(%10.3f, %10.3f, %10.3f)", entity.pos:Unpack())
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang:  Angle(%10.3f, %10.3f, %10.3f)", entity.ang:Unpack())
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Pos:   Vector(%10.3f, %10.3f, %10.3f)", entity.pos:Unpack())
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang:   Angle (%10.3f, %10.3f, %10.3f)", entity.ang:Unpack())
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Title: %s", entity.title)
 			g_lineBuffer[#g_lineBuffer + 1] = ""
 
 			g_lineBuffer[#g_lineBuffer + 1] = "Camera: "
 			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Pos: Vector(%10.3f, %10.3f, %10.3f)", camera.pos:Unpack())
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang:  Angle(%10.3f, %10.3f, %10.3f)", camera.ang:Unpack())
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  FOV: %7.3f", camera.fov)
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang: Angle (%10.3f, %10.3f, %10.3f)", camera.ang:Unpack())
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  FOV: %.3f", camera.fov)
 
 			if superDof then
 				g_lineBuffer[#g_lineBuffer + 1] = ""
@@ -1061,10 +1077,14 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 			local view = LIB.GetView()
 			local superDof = LIB.GetSuperDof()
 
+			g_lineBuffer[#g_lineBuffer + 1] = "Map: "
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  %s", game.GetMap())
+			g_lineBuffer[#g_lineBuffer + 1] = ""
+
 			g_lineBuffer[#g_lineBuffer + 1] = "Camera: "
 			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Pos: Vector(%10.3f, %10.3f, %10.3f)", view.pos:Unpack())
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang:  Angle(%10.3f, %10.3f, %10.3f)", view.ang:Unpack())
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  FOV: %7.3f", view.fov)
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang: Angle (%10.3f, %10.3f, %10.3f)", view.ang:Unpack())
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  FOV: %.3f", view.fov)
 
 			if superDof then
 				g_lineBuffer[#g_lineBuffer + 1] = ""
@@ -1087,6 +1107,8 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 				lineY = lineY + textH
 				continue
 			end
+
+			surface.SetFont(font)
 
 			surface.SetTextColor(0, 0, 0, 255)
 			surface.SetTextPos(textX + shadowOffset, lineY + shadowOffset)
