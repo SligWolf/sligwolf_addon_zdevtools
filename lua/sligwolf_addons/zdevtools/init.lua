@@ -67,6 +67,7 @@ SLIGWOLF_ADDON:LuaInclude("module/luapad.lua")
 SLIGWOLF_ADDON:LuaInclude("module/debug.lua")
 SLIGWOLF_ADDON:LuaInclude("module/restart.lua")
 SLIGWOLF_ADDON:LuaInclude("module/railscan.lua")
+SLIGWOLF_ADDON:LuaInclude("module/giveall.lua")
 SLIGWOLF_ADDON:LuaInclude("module/icongen.lua")
 
 if SERVER then
