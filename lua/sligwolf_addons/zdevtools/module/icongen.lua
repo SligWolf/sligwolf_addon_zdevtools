@@ -348,8 +348,8 @@ if SERVER then
 			return
 		end
 
-		local spawnname = string.Trim(tostring(args[1] or ""))
-		local theme = string.Trim(tostring(args[2] or ""))
+		local spawnname = string.lower(string.Trim(tostring(args[1] or "")))
+		local theme = string.lower(string.Trim(tostring(args[2] or "")))
 
 		if spawnname == "" or spawnname == "all" then
 			spawnname = "*"
@@ -366,8 +366,8 @@ if SERVER then
 		g_iconGenerator:Initialize(ply)
 
 		g_iconGenerator:AddWorkloadFilter("cmd_parameter_wildcard", function(item)
-			local itemSpawnname = item.spawnname
-			local itemTheme = item.theme
+			local itemSpawnname = string.lower(string.Trim(item.spawnname))
+			local itemTheme = string.lower(string.Trim(item.theme))
 
 			if not LIBString.WildcardMatch(itemSpawnname, spawnname) then
 				return false

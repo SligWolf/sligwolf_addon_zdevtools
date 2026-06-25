@@ -36,16 +36,18 @@ local function restartCmd(ply, command, args)
 	end
 end
 
-concommand.Add("dev_sligwolf_zdevtools_restart_server", restartCmd)
+local helptext = "Reloads the current map."
+local helptextAlias = "Reloads the current map. Alias of 'dev_sligwolf_zdevtools_restart_server'."
+
+concommand.Add("dev_sligwolf_zdevtools_restart_server", restartCmd, nil, helptext)
 
 -- aliases for fast access
-concommand.Add("restart_server", restartCmd)
-concommand.Add("server_restart", restartCmd)
-concommand.Add("reload_server", restartCmd)
-concommand.Add("server_reload", restartCmd)
+concommand.Add("restart_server", restartCmd, nil, helptextAlias)
+concommand.Add("server_restart", restartCmd, nil, helptextAlias)
+concommand.Add("reload_server", restartCmd, nil, helptextAlias)
+concommand.Add("server_reload", restartCmd, nil, helptextAlias)
 
-concommand.Add("restart", restartCmd)
-
+concommand.Add("restart", restartCmd, nil, helptextAlias)
 
 return true
 
