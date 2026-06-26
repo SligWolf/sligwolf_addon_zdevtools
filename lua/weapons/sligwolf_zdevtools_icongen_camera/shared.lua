@@ -11,6 +11,7 @@ SWEP.Category				= "SligWolf's Addons (Broken)"
 
 SWEP.Spawnable				= false
 SWEP.AdminOnly				= false
+SWEP.DeveloperOnly			= true
 SWEP.PrintName 				= "ZDevtools Icongen Camera"
 SWEP.Author 				= "Grocel"
 
@@ -308,7 +309,8 @@ function SWEP:TakeSnapshot()
 		return
 	end
 
-	local message = LIBPrint.FormatMessage("Printed snapshot of %s to console!", workloadEntry.entity.title)
+	local title = workloadEntry.entity.title
+	local message = LIBPrint.FormatMessage("Printed snapshot of %s to console!", title)
 
 	LIBIconGenerator.PrintSnapshotToConsole(workloadEntry)
 
@@ -327,6 +329,15 @@ function SWEP:TakeScreenshot()
 	end
 
 	local owner = self:GetOwner()
+
+	local title = workloadEntry.entity.title
+	local entityData = {
+		addonname = workloadEntry.addonname,
+		category = workloadEntry.category,
+		spawnname = workloadEntry.spawnname,
+		theme = workloadEntry.theme,
+		ent = workloadEntry.entity.ent,
+	}
 
 	local validateCallback = function()
 		if not IsValid(self) then
@@ -361,7 +372,7 @@ function SWEP:TakeScreenshot()
 		local jsonPath = LIBIconGenerator.config.iconsFolderManuelJson .. "/" .. workloadEntry.path .. ".json"
 		LIBIconGenerator.SaveWorkloadEntry(jsonPath, workloadEntry)
 
-		local message = LIBPrint.FormatMessage("Took screenshot of %s!", workloadEntry.entity.title)
+		local message = LIBPrint.FormatMessage("Took screenshot of %s!", title)
 
 		LIBPrint.Notify(LIBPrint.NOTIFY_GENERIC, message, 3)
 		LIBPrint.Print("Screenshot written to: %s", absolutePath)
@@ -375,7 +386,7 @@ function SWEP:TakeScreenshot()
 		camera = workloadEntry.camera,
 		index = 0,
 		count = 0,
-		ent = workloadEntry.entity.ent,
+		entityData = entityData,
 		imagePath = LIBIconGenerator.config.iconsFolderManuel .. "/" .. workloadEntry.path,
 		previewTime = 0,
 		validateCallback = validateCallback,

@@ -23,8 +23,14 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 	local processSubId = net.ReadUInt(32)
 	local index = net.ReadUInt(16)
 	local count = net.ReadUInt(16)
-	local path = net.ReadString()
+
+	local addonname = net.ReadString()
+	local category = net.ReadString()
+	local spawnname = net.ReadString()
+	local theme = net.ReadString()
 	local ent = net.ReadEntity()
+
+	local path = net.ReadString()
 
 	local pos = net.ReadVector()
 	local ang = net.ReadAngle()
@@ -46,7 +52,15 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 		index = index,
 		count = count,
 		path = path,
-		ent = ent,
+
+		entity = {
+			addonname = addonname,
+			category = category,
+			spawnname = spawnname,
+			theme = theme,
+			ent = ent,
+		},
+
 		camera = {
 			pos = pos,
 			ang = ang,
@@ -68,9 +82,15 @@ function META:ResetInternal()
 	self.currentCaptureRequest = nil
 	self.processSubId = nil
 
-	self.currentEntity = nil
-	self.currentIndex = nil
+	self.currentIndex = 0
 	self.workloadCount = nil
+	self.currentPath = nil
+
+	self.currentAddonname = nil
+	self.currentCategory = nil
+	self.currentSpawnname = nil
+	self.currentTheme = nil
+	self.currentEntity = nil
 
 	self.entriesTotal = 0
 	self.entriesRun = 0
@@ -113,7 +133,7 @@ function META:DestroyInternal()
 	LIB.ResetCamera()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
-	LIB.ResetEntity()
+	LIB.ResetEntityData()
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
 	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
@@ -126,7 +146,7 @@ function META:CancelInternal()
 	LIB.ResetCamera()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
-	LIB.ResetEntity()
+	LIB.ResetEntityData()
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
 	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
@@ -176,13 +196,19 @@ function META:HandleCaptureRequest(captureRequest)
 	self.currentCaptureRequest = captureRequest
 	self.processSubId = captureRequest.processSubId
 
-	local ent = captureRequest.ent
+	local entity = captureRequest.entity
 	local index = captureRequest.index
 	local count = captureRequest.count
 
-	self.currentEntity = ent
 	self.currentIndex = index
 	self.workloadCount = count
+	self.currentPath = captureRequest.path
+
+	self.currentAddonname = entity.addonname
+	self.currentCategory = entity.category
+	self.currentSpawnname = entity.spawnname
+	self.currentTheme = entity.theme
+	self.currentEntity = entity.ent
 
 	if index == 1 then
 		self:ProcessStart()
@@ -206,7 +232,7 @@ function META:ProcessStart()
 	LIB.ResetCamera()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
-	LIB.ResetEntity()
+	LIB.ResetEntityData()
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
 	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
@@ -225,14 +251,20 @@ function META:ProcessEnd()
 	self.currentCaptureRequest = nil
 	self.processSubId = nil
 
-	self.currentEntity = nil
-	self.workloadCount = nil
 	self.currentIndex = 0
+	self.workloadCount = nil
+	self.currentPath = nil
+
+	self.currentAddonname = nil
+	self.currentCategory = nil
+	self.currentSpawnname = nil
+	self.currentTheme = nil
+	self.currentEntity = nil
 
 	LIB.ResetCamera()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
-	LIB.ResetEntity()
+	LIB.ResetEntityData()
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
 	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
@@ -300,7 +332,15 @@ function META:ShowPreviewAndCapture()
 	local captureRequest = self.currentCaptureRequest
 	local index = self.currentIndex
 	local count = self.workloadCount
-	local ent = self.currentEntity
+	local path = self.currentPath
+
+	local entityData = {
+		addonname = self.currentAddonname,
+		category = self.currentCategory,
+		spawnname = self.currentSpawnname,
+		theme = self.currentTheme,
+		ent = self.currentEntity,
+	}
 
 	local validateCallback = function()
 		if not IsValid(self) then
@@ -327,7 +367,7 @@ function META:ShowPreviewAndCapture()
 
 		local workloadEntry = LIB.GetViewWorkloadEntry()
 		if workloadEntry then
-			local jsonPath = self.config.iconsFolderAutoJson .. "/" .. captureRequest.path .. ".json"
+			local jsonPath = self.config.iconsFolderAutoJson .. "/" .. path .. ".json"
 			LIB.SaveWorkloadEntry(jsonPath, workloadEntry)
 		end
 
@@ -342,8 +382,8 @@ function META:ShowPreviewAndCapture()
 		camera = captureRequest.camera,
 		index = index,
 		count = count,
-		ent = ent,
-		imagePath = self.config.iconsFolderAuto .. "/" .. captureRequest.path,
+		entityData = entityData,
+		imagePath = self.config.iconsFolderAuto .. "/" .. path,
 		previewTime = self.config.time.preview,
 		validateCallback = validateCallback,
 		callback = callback,

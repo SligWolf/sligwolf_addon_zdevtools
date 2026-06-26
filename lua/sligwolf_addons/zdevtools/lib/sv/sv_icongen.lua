@@ -12,6 +12,7 @@ if not LIB then
 	return
 end
 
+local LIBSkinsystem = SligWolf_Addons.Skinsystem
 local LIBEntities = SligWolf_Addons.Entities
 local LIBSourceIO = SligWolf_Addons.SourceIO
 local LIBPosition = SligWolf_Addons.Position
@@ -110,6 +111,10 @@ function META:Lock()
 
 		ply:SetMoveType(MOVETYPE_NONE)
 		ply:GodEnable()
+
+		local unlockWeapon = LIB.config.unlockWeapon
+		ply:Give(unlockWeapon)
+		ply:SelectWeapon(unlockWeapon)
 
 		local lockWeapon = LIB.config.lockWeapon
 		ply:Give(lockWeapon)
@@ -214,6 +219,7 @@ function META:AddWorkloadItem(workloadItem)
 	local defaults = LIB.config.defaults
 	local defaultsCamera = defaults.camera
 	local defaultsEntity = defaults.entity
+	local defaultsTheme = defaults.theme
 
 	local maxDofDistance = LIB.config.limits.dof.distance
 	local maxDofBlur = LIB.config.limits.dof.blur
@@ -264,7 +270,7 @@ function META:AddWorkloadItem(workloadItem)
 
 	spawnparams = LIBUtil.DeduplicateTable(spawnparams)
 
-	local themesTmp = workloadItem.theme or defaults.theme
+	local themesTmp = workloadItem.theme or defaultsTheme
 	if not istable(themesTmp) then
 		themesTmp = {themesTmp}
 	end
@@ -275,7 +281,7 @@ function META:AddWorkloadItem(workloadItem)
 	local entity = workloadItem.entity or {}
 
 	if table.IsEmpty(themesTmp) then
-		themesTmp = {defaults.theme}
+		themesTmp = {defaultsTheme}
 	end
 
 	for _, spawnname in ipairs(spawnnames) do
@@ -337,7 +343,7 @@ function META:AddWorkloadItem(workloadItem)
 				end
 
 				if themename == "" or themeconfig.isDefault then
-					themename = "default"
+					themename = LIBSkinsystem.THEME_DEFAULT
 				end
 
 				table.insert(themes, themename)
@@ -359,7 +365,7 @@ function META:AddWorkloadItem(workloadItem)
 
 					local themename = themeconfig.name
 					if themename == "" or themeconfig.isDefault then
-						themename = "default"
+						themename = LIBSkinsystem.THEME_DEFAULT
 					end
 
 					table.insert(themes, themename)
@@ -404,7 +410,7 @@ function META:AddWorkloadItem(workloadItem)
 		}
 
 		if table.IsEmpty(themes) then
-			themes = {"default"}
+			themes = {LIBSkinsystem.THEME_DEFAULT}
 		end
 
 		for _, theme in ipairs(themes) do
@@ -1089,8 +1095,14 @@ function META:SendCaptureRequest()
 		net.WriteUInt(self.processSubId, 32)
 		net.WriteUInt(self.currentIndex, 16)
 		net.WriteUInt(self.workloadCount, 16)
-		net.WriteString(self.currentPath or "")
+
+		net.WriteString(self.currentAddonname or "")
+		net.WriteString(self.currentCategory or "")
+		net.WriteString(self.currentSpawnname or "")
+		net.WriteString(self.currentTheme or "")
 		net.WriteEntity(ent)
+
+		net.WriteString(self.currentPath or "")
 
 		net.WriteVector(camera.pos)
 		net.WriteAngle(camera.ang)

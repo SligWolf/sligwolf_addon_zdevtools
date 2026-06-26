@@ -11,6 +11,7 @@ SWEP.Category				= "SligWolf's Addons (Broken)"
 
 SWEP.Spawnable				= false
 SWEP.AdminOnly				= false
+SWEP.DeveloperOnly			= true
 SWEP.PrintName 				= "ZDevtools Icongen Camera (Locked)"
 SWEP.Author 				= "Grocel"
 

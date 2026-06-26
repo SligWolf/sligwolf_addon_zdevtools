@@ -11,6 +11,7 @@ local SLIGWOLF_ADDON = SLIGWOLF_ADDON
 local LIB = SLIGWOLF_ADDON.IconGenerator or {}
 SLIGWOLF_ADDON.IconGenerator = LIB
 
+local LIBSkinsystem = SligWolf_Addons.Skinsystem
 local LIBPrint = SligWolf_Addons.Print
 
 local META = LIB.meta or {}
@@ -41,7 +42,7 @@ LIB.config = {
 	},
 
 	defaults = {
-		theme = "default",
+		theme = LIBSkinsystem.THEME_DEFAULT,
 		camera = {
 			pos = Vector(),
 			ang = Angle(),
@@ -194,7 +195,7 @@ end
 function META:IsLocked()
 	local ply = self.player
 
-	if not IsValid(ply) then
+	if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
 		return false
 	end
 
@@ -253,7 +254,7 @@ function META:ValidateState()
 
 	local ply = self.player
 
-	if not IsValid(ply) then
+	if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
 		self:Cancel()
 		return false
 	end

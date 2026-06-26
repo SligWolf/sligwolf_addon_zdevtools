@@ -13,6 +13,7 @@ if not LIB then
 	return
 end
 
+local LIBSkinsystem = SligWolf_Addons.Skinsystem
 local LIBPrint = SligWolf_Addons.Print
 local LIBFile = SligWolf_Addons.File
 
@@ -26,7 +27,7 @@ function LIB.GetPathFromWorkloadEntry(workloadEntry)
 
 	local theme = workloadEntry.theme or ""
 	if theme == "" then
-		theme = "default"
+		theme = LIBSkinsystem.THEME_DEFAULT
 	end
 
 	local addonname = workloadEntry.addonname
@@ -34,7 +35,7 @@ function LIB.GetPathFromWorkloadEntry(workloadEntry)
 
 	local path = ""
 
-	if theme == "default" then
+	if theme == LIBSkinsystem.THEME_DEFAULT then
 		path = string.format(
 			"%s/%s.png",
 			addonname,
@@ -58,6 +59,16 @@ function LIB.ParseString(str)
 	str = tostring(str or "")
 	str = string.Trim(str)
 	str = string.lower(str)
+
+	return str
+end
+
+function LIB.ParseTheme(str)
+	str = LIB.ParseString(str)
+
+	if str == "" then
+		str = LIBSkinsystem.THEME_DEFAULT
+	end
 
 	return str
 end
@@ -156,6 +167,11 @@ end
 
 function LIB.FormatString(str)
 	str = LIB.ParseString(str)
+	return str
+end
+
+function LIB.FormatTheme(str)
+	str = LIB.ParseTheme(str)
 	return str
 end
 
@@ -379,6 +395,16 @@ local function outputKeyValueStringListableLine(tab, key, space, value, comma)
 	outputKeyValueListLine(tab, key, space, {valueSegment}, comma)
 end
 
+local function outputKeyValueThemeListableLine(tab, key, space, value, comma)
+	local valueSegment = {
+		format = "\"%s\"",
+		formatParams = {LIB.FormatTheme(value)},
+		color = g_stringColor,
+	}
+
+	outputKeyValueListLine(tab, key, space, {valueSegment}, comma)
+end
+
 local function outputKeyValueVectorLine(tab, key, space, value, comma)
 	local valueSegment = {
 		format = "\"%s\"",
@@ -534,7 +560,7 @@ function LIB.FormatSnapshot(workloadEntry, outputToConsole)
 	outputKeyValueStringLine        (4, "map", "      ", workloadEntry.map, true)
 	outputKeyValueStringLine        (4, "category", " ", workloadEntry.category, true)
 	outputKeyValueStringListableLine(4, "spawnname", "", workloadEntry.spawnname, true)
-	outputKeyValueStringListableLine(4, "theme", "    ", workloadEntry.theme, true)
+	outputKeyValueThemeListableLine (4, "theme", "    ", workloadEntry.theme, true)
 
 	outputLine()
 

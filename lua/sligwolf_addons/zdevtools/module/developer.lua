@@ -11,6 +11,7 @@ local SLIGWOLF_ADDON = SLIGWOLF_ADDON
 local LIBConvar = SligWolf_Addons.Convar
 local LIBDebug = SligWolf_Addons.Debug
 local LIBUtil = SligWolf_Addons.Util
+local LIBHook = SligWolf_Addons.Hook
 
 local cvarFlags = bit.bor(FCVAR_GAMEDLL, FCVAR_REPLICATED, FCVAR_DONTRECORD)
 
@@ -150,6 +151,43 @@ function SLIGWOLF_ADDON:GetFirstDeveloperPlayer()
 
 	return nil
 end
+
+local function blockSwitchWeaponForNonDev(ply, oldWeapon, newWeapon)
+	if not IsValid(ply) then
+		return
+	end
+
+	if not newWeapon.DeveloperOnly then
+		return
+	end
+
+	if SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
+		return
+	end
+
+	return true
+end
+
+LIBHook.Add("PlayerSwitchWeapon", "Addon_ZDevTools_Developer_BlockDeveloperOnlyWeapons", blockSwitchWeaponForNonDev)
+
+local function preventItemPickup(ply, item)
+	if not IsValid(ply) then
+		return
+	end
+
+	if not item.DeveloperOnly then
+		return
+	end
+
+	if SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
+		return
+	end
+
+	return false
+end
+
+LIBHook.Add("PlayerCanPickupItem", "Addon_ZDevTools_Developer_BlockDeveloperOnlyWeapons", preventItemPickup)
+LIBHook.Add("PlayerCanPickupWeapon", "Addon_ZDevTools_Developer_BlockDeveloperOnlyWeapons", preventItemPickup)
 
 return true
 

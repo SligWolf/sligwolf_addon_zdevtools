@@ -12,6 +12,7 @@ if not LIB then
 	return
 end
 
+local LIBSkinsystem = SligWolf_Addons.Skinsystem
 local LIBEntities = SligWolf_Addons.Entities
 local LIBFile = SligWolf_Addons.File
 local LIBHook = SligWolf_Addons.Hook
@@ -668,21 +669,63 @@ function LIB.ResetProgressStats()
 	LIB.currentCount = nil
 end
 
-function LIB.SetEntity(ent)
-	if not IsValid(ent) then
-		LIB.ResetEntity()
+function LIB.SetEntityData(entityData)
+	if not entityData then
+		LIB.ResetEntityData()
 		return
 	end
 
-	LIB.currentEntity = ent
+	if not IsValid(entityData.ent) then
+		LIB.ResetEntityData()
+		return
+	end
+
+	if entityData.addonname == "" then
+		LIB.ResetEntityData()
+		return
+	end
+
+	if entityData.category == "" then
+		LIB.ResetEntityData()
+		return
+	end
+
+	if entityData.spawnname == "" then
+		LIB.ResetEntityData()
+		return
+	end
+
+	LIB.currentEntityData = entityData
 end
 
-function LIB.ResetEntity()
-	LIB.currentEntity = nil
+function LIB.ResetEntityData()
+	LIB.currentEntityData = nil
 end
 
-function LIB.GetEntity()
-	return LIB.currentEntity
+function LIB.GetEntityData()
+	local entityData = LIB.currentEntityData
+
+	if not entityData then
+		return nil
+	end
+
+	if not IsValid(entityData.ent) then
+		return nil
+	end
+
+	if entityData.addonname == "" then
+		return nil
+	end
+
+	if entityData.category == "" then
+		return nil
+	end
+
+	if entityData.spawnname == "" then
+		return nil
+	end
+
+	return entityData
 end
 
 local function captureAndSave(path, callback)
@@ -742,16 +785,17 @@ function LIB.TakeScreenshot(parameter)
 	local dof = camera.dof
 	local index = parameter.index
 	local count = parameter.count
-	local ent = parameter.ent
+	local entityData = parameter.entityData
 	local imagePath = parameter.imagePath
 	local previewTime = parameter.previewTime or 0
+
 	local validateCallback = parameter.validateCallback
 	local callback = parameter.callback
 
 	LIB.SetCamera(camera)
 	LIB.SetSuperDof(dof)
 	LIB.SetProgressStats(index, count)
-	LIB.SetEntity(ent)
+	LIB.SetEntityData(entityData)
 
 	local timerAndCallbackName = "icongen_callback"
 
@@ -860,43 +904,60 @@ function LIB.GetViewWorkloadEntry()
 	local ang = view.ang
 	local fov = view.fov
 
-	local superDof = LIB.GetSuperDof()
+	local dof = LIB.GetSuperDof()
+	local entityData = LIB.GetEntityData()
 
-	local ent = LIB.GetEntity()
-	if not IsValid(ent) then
-		ent = LIB.FindTargetEntityInView()
+	if not entityData then
+		local ent = LIB.FindTargetEntityInView()
 
 		if not IsValid(ent) then
 			return nil
 		end
+
+		local spawnname = LIBEntities.GetSpawnname(ent, true)
+		if not spawnname then
+			return nil
+		end
+
+		local spawntable = LIBEntities.GetSpawntable(ent, true)
+		if not spawntable then
+			return nil
+		end
+
+		local addonname = spawntable.SLIGWOLF_Addonname
+
+		entityData = {
+			addonname = addonname,
+			category = spawntable.SLIGWOLF_SkinCategory,
+			spawnname = spawnname,
+			theme = LIB.config.defaults.theme,
+			ent = ent,
+		}
 	end
 
-	local spawnname = LIBEntities.GetSpawnname(ent, true)
-	if not spawnname then
-		return nil
-	end
+	local addonname = entityData.addonname
+	local category = entityData.category
+	local spawnname = entityData.spawnname
+	local theme = entityData.theme or ""
+	local ent = entityData.ent
 
-	local spawntable = LIBEntities.GetSpawntable(ent, true)
+	local spawntable = LIBEntities.GetSpawntableByName(category, spawnname)
 	if not spawntable then
 		return nil
 	end
 
-	local dof = nil
-	local defaults = LIB.config.defaults
-
-	if superDof then
-		dof = superDof
+	if theme == "" then
+		theme = LIBSkinsystem.THEME_DEFAULT
 	end
 
 	local title = spawntable.PrintName or spawntable.Name or spawnname
-	local addonname = spawntable.SLIGWOLF_Addonname
 
 	local workloadEntry = {
 		map = game.GetMap(),
-		category = spawntable.SLIGWOLF_SkinCategory,
+		category = category,
 		spawnname = spawnname,
 		addonname = addonname,
-		theme = defaults.theme,
+		theme = theme,
 
 		entity = {
 			pos = ent:GetPos(),
@@ -1164,6 +1225,7 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 			local superDof = camera.dof
 
 			local addon = SligWolf_Addons.GetAddon(workloadEntry.addonname or "")
+			local category = workloadEntry.category
 
 			g_lineBuffer[#g_lineBuffer + 1] = "Map: "
 			g_lineBuffer[#g_lineBuffer + 1] = string.format("  %s", workloadEntry.map)
@@ -1176,13 +1238,13 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 
 			g_lineBuffer[#g_lineBuffer + 1] = "Spawn: "
 			g_lineBuffer[#g_lineBuffer + 1] = string.format("  %s", workloadEntry.spawnname)
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  LIBEntities.SPAWN_CATEGORY_%s", string.upper(workloadEntry.category))
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  LIBEntities.SPAWN_CATEGORY_%s", string.upper(category))
 			g_lineBuffer[#g_lineBuffer + 1] = ""
 
 			g_lineBuffer[#g_lineBuffer + 1] = "Entity: "
+			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Title: %s", entity.title)
 			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Pos:   Vector(%10.3f, %10.3f, %10.3f)", entity.pos:Unpack())
 			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Ang:   Angle (%10.3f, %10.3f, %10.3f)", entity.ang:Unpack())
-			g_lineBuffer[#g_lineBuffer + 1] = string.format("  Title: %s", entity.title)
 			g_lineBuffer[#g_lineBuffer + 1] = ""
 
 			g_lineBuffer[#g_lineBuffer + 1] = "Camera: "

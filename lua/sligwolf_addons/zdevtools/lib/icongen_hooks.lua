@@ -17,7 +17,7 @@ local LIBHook = SligWolf_Addons.Hook
 
 if SERVER then
 	local function freezePlayerMove(ply, cmd)
-		if not IsValid(ply) then
+		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
 			return
 		end
 
@@ -41,7 +41,7 @@ if SERVER then
 	LIBHook.Add("StartCommand", "Addon_ZDevTools_Icongen_FreezePlayerMove", freezePlayerMove)
 
 	local function preventItemPickup(ply, item)
-		if not IsValid(ply) then
+		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
 			return
 		end
 
@@ -70,7 +70,7 @@ if SERVER then
 end
 
 local function freezePlayerSwitchWeapon(ply, oldWeapon, newWeapon)
-	if not IsValid(ply) then
+	if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
 		return
 	end
 
@@ -100,7 +100,7 @@ if CLIENT then
 		end
 
 		local ply = weapon:GetOwner()
-		if not IsValid(ply) then
+		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
 			return
 		end
 
