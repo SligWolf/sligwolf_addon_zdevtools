@@ -170,21 +170,6 @@ g_iconGenerator.OnWarn = function(this, err)
 end
 
 if CLIENT then
-	local cvarFlags = bit.bor(FCVAR_CLIENTDLL, FCVAR_DONTRECORD)
-
-	concommand.Add("dev_sligwolf_zdevtools_icongen_snapshot", function(ply)
-		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
-			return
-		end
-
-		local workloadEntry = LIBIconGenerator.EstimateViewWorkloadEntry()
-		if not workloadEntry then
-			return
-		end
-
-		LIBIconGenerator.PrintSnapshotToConsole(workloadEntry)
-	end, nil, nil, cvarFlags)
-
 	local function clientInit()
 		if not IsValid(LocalPlayer()) then
 			return

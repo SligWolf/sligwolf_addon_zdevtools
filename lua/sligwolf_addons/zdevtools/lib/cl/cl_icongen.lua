@@ -14,8 +14,6 @@ end
 
 local LIBEntities = SligWolf_Addons.Entities
 local LIBPrint = SligWolf_Addons.Print
-local LIBFile = SligWolf_Addons.File
-local LIBUtil = SligWolf_Addons.Util
 local LIBNet = SligWolf_Addons.Net
 
 local META = LIB.meta
@@ -65,26 +63,6 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 
 	instance:HandleCaptureRequest(captureRequest)
 end)
-
-function LIB.IsUIOpen()
-	if gui.IsGameUIVisible() then
-		return true
-	end
-
-	if LIBUtil.GameIsPaused() then
-		return true
-	end
-
-	if vgui.GetHoveredPanel() ~= nil then
-		return true
-	end
-
-	if vgui.GetKeyboardFocus() ~= nil then
-		return true
-	end
-
-	return false
-end
 
 function META:ResetInternal()
 	self.currentCaptureRequest = nil
@@ -234,10 +212,7 @@ function META:ProcessStart()
 	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
 	LIB.RemoveRequestCopyToBufferCallback(self.copyCallback)
 
-	if gui.IsGameUIVisible() then
-		-- Close the main menu when we start rendering
-		ProtectedCall(RunConsoleCommand, "gamemenucommand", "ResumeGame")
-	end
+	LIB.CloseMainMenu()
 
 	if self.OnStart then
 		ProtectedCall(self.OnStart, self)
@@ -321,22 +296,13 @@ function META:ShowPreviewAndCapture()
 		return
 	end
 
+	local processSubId = self.processSubId
 	local captureRequest = self.currentCaptureRequest
 	local index = self.currentIndex
 	local count = self.workloadCount
 	local ent = self.currentEntity
 
-	local processSubId = self.processSubId
-	local screenDelayTimer = self.screenDelayTimer
-	local dofCallback = self.dofCallback
-	local copyCallback = self.copyCallback
-
-	LIB.SetCamera(captureRequest.camera)
-	LIB.SetSuperDof(captureRequest.camera.dof)
-	LIB.SetProgressStats(index, count)
-	LIB.SetEntity(ent)
-
-	local validate = function()
+	local validateCallback = function()
 		if not IsValid(self) then
 			return false
 		end
@@ -349,116 +315,39 @@ function META:ShowPreviewAndCapture()
 			return false
 		end
 
-		if LIB.IsUIOpen() then
-			self:Warn("ShowPreviewAndCapture: Can not capture render target with menus open.")
-			self:SendCaptureDone(false)
-			return false
-		end
-
 		return true
 	end
 
-	local capture = function()
-		if not validate() then
-			return
-		end
-
-		if not self:CaptureAndSave() then
-			self:Warn("ShowPreviewAndCapture: Could not capture render target.")
+	local callback = function(success, errorOrPath, absolutePath)
+		if not success then
+			self:Warn("ShowPreviewAndCapture: %s", errorOrPath)
 			self:SendCaptureDone(false)
 			return
 		end
 
+		local workloadEntry = LIB.GetViewWorkloadEntry()
+		if workloadEntry then
+			local jsonPath = self.config.iconsFolderAutoJson .. "/" .. captureRequest.path .. ".json"
+			LIB.SaveWorkloadEntry(jsonPath, workloadEntry)
+		end
+
 		self:SendCaptureDone(true)
-	end
 
-	local renderBufferToCanvas = function()
-		if not validate() then
-			return
+		if self.OnFileWritten then
+			ProtectedCall(self.OnFileWritten, self, errorOrPath, absolutePath)
 		end
-
-		LIB.RenderBufferToCanvas()
-		SLIGWOLF_ADDON:TimerOnce(screenDelayTimer, self.config.time.preview, capture)
 	end
 
-	local requestCopyToBuffer = function()
-		if not validate() then
-			return
-		end
-
-		LIB.RequestCopyToBuffer(copyCallback, renderBufferToCanvas)
-	end
-
-	local nextFrame = function()
-		if not validate() then
-			return
-		end
-
-		LIB.RequestDofRender(false, dofCallback, requestCopyToBuffer)
-	end
-
-	SLIGWOLF_ADDON:TimerNextFrame(self.config.time.preview, nextFrame)
-end
-
-function META:CaptureAndSave()
-	if not self:ValidateState() then
-		return false
-	end
-
-	local captureRequest = self.currentCaptureRequest
-	local path = captureRequest.path or ""
-
-	if path == "" then
-		self:Warn("CaptureAndSave: No path given.")
-		return false
-	end
-
-	local renderTarget = LIB.GetRenderTarget()
-
-	local viewW = renderTarget:Width()
-	local viewH = renderTarget:Height()
-
-	local iconsFolder = self.config.iconsFolder
-	local filename = iconsFolder .. "/" .. captureRequest.path
-
-	local data = nil
-
-	render.PushRenderTarget(renderTarget, 0, 0, viewW, viewH)
-		ProtectedCall(function()
-			data = render.Capture({
-				format = "png",
-				alpha = false,
-				x = 0,
-				y = 0,
-				w = viewW,
-				h = viewH,
-			})
-		end)
-	render.PopRenderTarget()
-
-	if not data then
-		self:Warn("CaptureAndSave: No data returned.")
-		return false
-	end
-
-	if data == "" then
-		self:Warn("CaptureAndSave: No data returned.")
-		return false
-	end
-
-	local absoluteFilename = LIBFile.GetAbsolutePath(filename, SLIGWOLF_ADDON)
-
-	local success = LIBFile.Write(filename, data, SLIGWOLF_ADDON)
-	if not success then
-		self:Warn("CaptureAndSave: Could not write too 'data/%s'.", absoluteFilename)
-		return false
-	end
-
-	if self.OnFileWritten then
-		ProtectedCall(self.OnFileWritten, self, filename, absoluteFilename)
-	end
-
-	return true
+	LIB.TakeScreenshot({
+		camera = captureRequest.camera,
+		index = index,
+		count = count,
+		ent = ent,
+		imagePath = self.config.iconsFolderAuto .. "/" .. captureRequest.path,
+		previewTime = self.config.time.preview,
+		validateCallback = validateCallback,
+		callback = callback,
+	})
 end
 
 function META:RemoveDelayTimer()

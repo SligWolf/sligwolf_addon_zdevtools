@@ -13,6 +13,7 @@ if not LIB then
 end
 
 local LIBEntities = SligWolf_Addons.Entities
+local LIBFile = SligWolf_Addons.File
 local LIBHook = SligWolf_Addons.Hook
 
 LIB.renderTarget = nil
@@ -684,6 +685,125 @@ function LIB.GetEntity()
 	return LIB.currentEntity
 end
 
+local function captureAndSave(path, callback)
+	path = tostring(path or "")
+
+	if path == "" then
+		callback(false, "No path given.")
+		return false
+	end
+
+	local renderTarget = LIB.GetRenderTarget()
+
+	local viewW = renderTarget:Width()
+	local viewH = renderTarget:Height()
+
+	local data = nil
+
+	render.PushRenderTarget(renderTarget, 0, 0, viewW, viewH)
+		ProtectedCall(function()
+			data = render.Capture({
+				format = "png",
+				alpha = false,
+				x = 0,
+				y = 0,
+				w = viewW,
+				h = viewH,
+			})
+		end)
+	render.PopRenderTarget()
+
+	if not data then
+		callback(false, "No data returned.")
+		return false
+	end
+
+	if data == "" then
+		callback(false, "No data returned.")
+		return false
+	end
+
+	local absolutePath = LIBFile.GetAbsolutePath(path, SLIGWOLF_ADDON)
+
+	local success = LIBFile.Write(path, data, SLIGWOLF_ADDON)
+	if not success then
+		local err = string.format("Could not write too 'data/%s'.", absolutePath)
+
+		callback(false, err)
+		return false
+	end
+
+	callback(true, path, absolutePath)
+	return true
+end
+
+function LIB.TakeScreenshot(parameter)
+	local camera = parameter.camera
+	local dof = camera.dof
+	local index = parameter.index
+	local count = parameter.count
+	local ent = parameter.ent
+	local imagePath = parameter.imagePath
+	local previewTime = parameter.previewTime or 0
+	local validateCallback = parameter.validateCallback
+	local callback = parameter.callback
+
+	LIB.SetCamera(camera)
+	LIB.SetSuperDof(dof)
+	LIB.SetProgressStats(index, count)
+	LIB.SetEntity(ent)
+
+	local timerAndCallbackName = "icongen_callback"
+
+	local validate = function()
+		if validateCallback and not validateCallback() then
+			return false
+		end
+
+		if LIB.IsUIOpen() then
+			callback(false, "Can not capture render target with menus open.")
+			return false
+		end
+
+		return true
+	end
+
+	local capture = function()
+		if not validate() then
+			return
+		end
+
+		captureAndSave(imagePath, callback)
+	end
+
+	local renderBufferToCanvas = function()
+		if not validate() then
+			return
+		end
+
+		LIB.RenderBufferToCanvas()
+		SLIGWOLF_ADDON:TimerOnce(timerAndCallbackName, previewTime, capture)
+	end
+
+	local requestCopyToBuffer = function()
+		if not validate() then
+			return
+		end
+
+		LIB.RequestCopyToBuffer(timerAndCallbackName, renderBufferToCanvas)
+	end
+
+	local nextFrame = function()
+		if not validate() then
+			return
+		end
+
+		LIB.RequestDofRender(false, timerAndCallbackName, requestCopyToBuffer)
+	end
+
+	SLIGWOLF_ADDON:TimerNextFrame(timerAndCallbackName, nextFrame)
+end
+
 function LIB.FindTargetEntityInView()
 	local view = LIB.GetView()
 	local pos = view.pos
@@ -733,7 +853,7 @@ function LIB.FindTargetEntityInView()
 	return nearestEnt
 end
 
-function LIB.EstimateViewWorkloadEntry()
+function LIB.GetViewWorkloadEntry()
 	local view = LIB.GetView()
 
 	local pos = view.pos
@@ -775,21 +895,26 @@ function LIB.EstimateViewWorkloadEntry()
 		map = game.GetMap(),
 		category = spawntable.SLIGWOLF_SkinCategory,
 		spawnname = spawnname,
+		addonname = addonname,
 		theme = defaults.theme,
+
+		entity = {
+			pos = ent:GetPos(),
+			ang = ent:GetAngles(),
+			title = title,
+			ent = ent,
+		},
+
 		camera = {
 			pos = pos,
 			ang = ang,
 			fov = fov,
 			dof = dof,
 		},
-		entity = {
-			pos = ent:GetPos(),
-			ang = ent:GetAngles(),
-			title = title,
-			addonname = addonname,
-			ent = ent,
-		},
 	}
+
+	local path = LIB.GetPathFromWorkloadEntry(workloadEntry)
+	workloadEntry.path = path
 
 	return workloadEntry
 end
@@ -870,7 +995,7 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 	local textX = margin
 	local textY = margin
 
-	local workloadEntry = LIB.EstimateViewWorkloadEntry()
+	local workloadEntry = LIB.GetViewWorkloadEntry()
 
 	do
 		g_lineBuffer[#g_lineBuffer + 1] = "Progress: "
@@ -1038,7 +1163,7 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 			local camera = workloadEntry.camera
 			local superDof = camera.dof
 
-			local addon = SligWolf_Addons.GetAddon(entity.addonname or "")
+			local addon = SligWolf_Addons.GetAddon(workloadEntry.addonname or "")
 
 			g_lineBuffer[#g_lineBuffer + 1] = "Map: "
 			g_lineBuffer[#g_lineBuffer + 1] = string.format("  %s", workloadEntry.map)

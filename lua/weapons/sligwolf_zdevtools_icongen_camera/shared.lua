@@ -60,14 +60,23 @@ function SWEP:SetupDataTables()
 	BaseClass.SetupDataTables(self)
 
 	self:AddNetworkRVar("Float", "Zoom")
+	self:AddNetworkRVar("Float", "ZoomRaw")
 end
 
 function SWEP:SetZoom(num)
 	self:SetNetworkRVar("Zoom", num)
 end
 
+function SWEP:SetZoomRaw(num)
+	self:SetNetworkRVar("ZoomRaw", num)
+end
+
 function SWEP:GetZoom()
 	return self:GetNetworkRVarNumber("Zoom", 0)
+end
+
+function SWEP:GetZoomRaw()
+	return self:GetNetworkRVarNumber("ZoomRaw", 0)
 end
 
 function SWEP:Initialize()
@@ -77,12 +86,15 @@ function SWEP:Initialize()
 	BaseClass.Initialize(self)
 end
 
-function SWEP:Reset()
+function SWEP:OnReset()
 	if SERVER then
-		self:AddClientCallForPredictionHook("Deploy")
-		self:AddClientCallForPredictionHook("Holster")
-
 		self:ResetZoom()
+
+		local owner = self:GetOwner()
+		if IsValid(owner) then
+			owner:SetNoTarget(false)
+		end
+
 		return
 	end
 
@@ -90,20 +102,8 @@ function SWEP:Reset()
 	self.holdHintAt = self.holdDelay - 0.15
 
 	self:ResetRender()
-end
 
-function SWEP:Reload()
-	self:ResetZoom()
-end
-
-function SWEP:ResetZoom()
-	local owner = self:GetOwner()
-
-	if IsValid(owner) and owner:IsPlayer() and not owner:IsBot() then
-		self:SetZoom(owner:GetInfoNum("fov_desired", 75))
-	else
-		self:SetZoom(75)
-	end
+	LIBIconGenerator.CloseDofOptions()
 end
 
 function SWEP:PrimaryAttack()
@@ -121,12 +121,25 @@ function SWEP:PrimaryAttack()
 	end
 
 	if SERVER and game.SinglePlayer() then
-		self:CallOnClient("TakeSnapshot")
+		local doScreenshot = owner:KeyDown(IN_SPEED)
+
+		if doScreenshot then
+			self:CallOnClient("TakeScreenshot")
+		else
+			self:CallOnClient("TakeSnapshot")
+		end
+
 		return
 	end
 
 	if CLIENT and IsFirstTimePredicted() then
-		self:TakeSnapshot()
+		local doScreenshot = owner:KeyDown(IN_SPEED)
+
+		if doScreenshot then
+			self:TakeScreenshot()
+		else
+			self:TakeSnapshot()
+		end
 	end
 end
 
@@ -134,12 +147,40 @@ function SWEP:SecondaryAttack()
 	-- see SWEP:HandleZoom()
 end
 
-function SWEP:Think()
+function SWEP:Reload()
+	self:ResetZoom()
+end
+
+function SWEP:OnDeploy()
+	if SERVER then
+		local owner = self:GetOwner()
+		if IsValid(owner) then
+			owner:SetNoTarget(true)
+		end
+	end
+
+	return true
+end
+
+function SWEP:FastThink()
 	self:HandleZoom()
 
 	if CLIENT then
 		self:HandlePanelInput()
 	end
+end
+
+function SWEP:ResetZoom()
+	local owner = self:GetOwner()
+
+	local zoom = 75
+
+	if IsValid(owner) and owner:IsPlayer() and not owner:IsBot() then
+		zoom = owner:GetInfoNum("fov_desired", 75)
+	end
+
+	self:SetZoomRaw(zoom)
+	self:SetZoom(zoom)
 end
 
 function SWEP:HandleZoom()
@@ -159,8 +200,24 @@ function SWEP:HandleZoom()
 		return
 	end
 
+	local snap = cmd:KeyDown(IN_SPEED)
+
+	local zoomRaw = self:GetZoomRaw()
+	local zoomChange = cmd:GetMouseY() * FrameTime() * 6.6
+
+	local newZoomRaw = zoomRaw + zoomChange
+	local newZoomSnapped = newZoomRaw
+
+	if snap then
+		newZoomSnapped = math.Round(newZoomSnapped / 5) * 5
+	end
+
+	newZoomRaw = math.Clamp(newZoomRaw, 0.1, 175)
+	newZoomSnapped = math.Clamp(newZoomSnapped, 0.1, 175)
+
 	-- Handles zooming
-	self:SetZoom(math.Clamp(self:GetZoom() + cmd:GetMouseY() * FrameTime() * 6.6, 0.1, 175))
+	self:SetZoomRaw(newZoomRaw)
+	self:SetZoom(newZoomSnapped)
 end
 
 function SWEP:TranslateFOV(current_fov)
@@ -179,44 +236,14 @@ function SWEP:DoShootEffect()
 	self.NextShootEffect = CurTime() + 0.4
 
 	local owner = self:GetOwner()
+
 	self:EmitSound(self.ShootSound)
 	self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 	owner:SetAnimation(PLAYER_ATTACK1)
-
-	if SERVER and not game.SinglePlayer() then
-		local vPos = owner:GetShootPos()
-		local vForward = owner:GetAimVector()
-
-		local trace = {}
-		trace.start = vPos
-		trace.endpos = vPos + vForward * 256
-		trace.filter = owner
-
-		local tr = util.TraceLine(trace)
-		local effectdata = EffectData()
-
-		effectdata:SetOrigin(tr.HitPos)
-		util.Effect("camera_flash", effectdata, true)
-	end
-end
-
-function SWEP:OnRemove()
-	if CLIENT then
-		self:ResetRender()
-		LIBIconGenerator.CloseDofOptions()
-	end
 end
 
 if SERVER then
 	return
-end
-
-function SWEP:DeployClient()
-	LIBIconGenerator.CloseDofOptions()
-end
-
-function SWEP:HolsterClient()
-	LIBIconGenerator.CloseDofOptions()
 end
 
 function SWEP:ResetRender()
@@ -272,22 +299,88 @@ function SWEP:HandlePanelInput()
 end
 
 function SWEP:TakeSnapshot()
-	local workloadEntry = LIBIconGenerator.EstimateViewWorkloadEntry()
+	local workloadEntry = LIBIconGenerator.GetViewWorkloadEntry()
 	if not workloadEntry then
-		self:EmitSound("Buttons.snd42")
-
 		local message = LIBPrint.FormatMessage("No SW Entity found to snapshot!")
+
 		LIBPrint.Notify(LIBPrint.NOTIFY_HINT, message, 3)
+		self:EmitSound("Buttons.snd42")
 		return
 	end
 
-	local title = workloadEntry.entity.title
+	local message = LIBPrint.FormatMessage("Printed snapshot of %s to console!", workloadEntry.entity.title)
 
-	self:EmitSound("NPC_CScanner.TakePhoto")
-	RunConsoleCommand("dev_sligwolf_zdevtools_icongen_snapshot")
+	LIBIconGenerator.PrintSnapshotToConsole(workloadEntry)
 
-	local message = LIBPrint.FormatMessage("Printed snapshot of '%s' to console!", title)
 	LIBPrint.Notify(LIBPrint.NOTIFY_GENERIC, message, 3)
+	self:EmitSound("NPC_CScanner.TakePhoto")
+end
+
+function SWEP:TakeScreenshot()
+	local workloadEntry = LIBIconGenerator.GetViewWorkloadEntry()
+	if not workloadEntry then
+		local message = LIBPrint.FormatMessage("No SW Entity found to screenshot!")
+
+		LIBPrint.Notify(LIBPrint.NOTIFY_HINT, message, 3)
+		self:EmitSound("Buttons.snd42")
+		return
+	end
+
+	local owner = self:GetOwner()
+
+	local validateCallback = function()
+		if not IsValid(self) then
+			return false
+		end
+
+		if not IsValid(owner) then
+			return false
+		end
+
+		if owner ~= self:GetOwner() then
+			return false
+		end
+
+		local activeWeapon = owner:GetActiveWeapon()
+		if activeWeapon ~= self then
+			return false
+		end
+
+		return true
+	end
+
+	local callback = function(success, errorOrPath, absolutePath)
+		if not success then
+			LIBPrint.Notify(LIBPrint.NOTIFY_ERROR, "Could not take screenshot!", 3)
+			LIBPrint.Warn("TakeScreenshot: %s", errorOrPath)
+
+			self:ResetRender()
+			return
+		end
+
+		local jsonPath = LIBIconGenerator.config.iconsFolderManuelJson .. "/" .. workloadEntry.path .. ".json"
+		LIBIconGenerator.SaveWorkloadEntry(jsonPath, workloadEntry)
+
+		local message = LIBPrint.FormatMessage("Took screenshot of %s!", workloadEntry.entity.title)
+
+		LIBPrint.Notify(LIBPrint.NOTIFY_GENERIC, message, 3)
+		LIBPrint.Print("Screenshot written to: %s", absolutePath)
+
+		self:EmitSound("NPC_CScanner.TakePhoto")
+
+		self:ResetRender()
+	end
+
+	LIBIconGenerator.TakeScreenshot({
+		camera = workloadEntry.camera,
+		index = 0,
+		count = 0,
+		ent = workloadEntry.entity.ent,
+		imagePath = LIBIconGenerator.config.iconsFolderManuel .. "/" .. workloadEntry.path,
+		previewTime = 0,
+		validateCallback = validateCallback,
+		callback = callback,
+	})
 end
 
 function SWEP:IsDoFButtonPressedPressed()

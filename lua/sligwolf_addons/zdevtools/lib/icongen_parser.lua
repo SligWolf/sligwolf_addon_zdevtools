@@ -13,8 +13,46 @@ if not LIB then
 	return
 end
 
+local LIBPrint = SligWolf_Addons.Print
+local LIBFile = SligWolf_Addons.File
+
 local g_trimPattern = "[%s%(%)%{%}%[%]%\"%\']"
 local g_seperatorPattern = "[%s%,%|%;]"
+
+function LIB.GetPathFromWorkloadEntry(workloadEntry)
+	if not workloadEntry then
+		return nil
+	end
+
+	local theme = workloadEntry.theme or ""
+	if theme == "" then
+		theme = "default"
+	end
+
+	local addonname = workloadEntry.addonname
+	local spawnname = workloadEntry.spawnname
+
+	local path = ""
+
+	if theme == "default" then
+		path = string.format(
+			"%s/%s.png",
+			addonname,
+			spawnname
+		)
+	else
+		path = string.format(
+			"%s/%s_%s.png",
+			addonname,
+			spawnname,
+			theme
+		)
+	end
+
+	path = string.lower(path)
+
+	return path
+end
 
 function LIB.ParseString(str)
 	str = tostring(str or "")
@@ -124,7 +162,7 @@ end
 function LIB.FormatVector(vec)
 	vec = LIB.ParseVector(vec)
 
-	local x = math.floor(vec.z * 1000) / 1000
+	local x = math.floor(vec.x * 1000) / 1000
 	local y = math.floor(vec.y * 1000) / 1000
 	local z = math.floor(vec.z * 1000) / 1000
 
@@ -169,21 +207,29 @@ end
 function LIB.FormatBool(bool)
 	bool = LIB.ParseBool(bool)
 
-	local str = bool and "false" or "true"
+	local str = bool and "true" or "false"
 	return str
 end
 
+-- Structural Syntax Elements
 local g_defaultColor = Color(220, 220, 255)
-local g_parenthesesColor = Color(204, 204, 193)
+local g_parenthesesColor = Color(218, 112, 214)
 local g_seperatorColor = Color(204, 204, 193)
 local g_commaColor = Color(204, 204, 193)
 local g_commentColor = Color(96, 153, 85)
-local g_keyColor = Color(197, 134, 182)
+
+-- Core JSON Types
+local g_keyColor = Color(144, 220, 254)
 local g_stringColor = Color(206, 145, 120)
-local g_vectorColor = Color(156, 220, 254)
-local g_angleColor = Color(220, 220, 170)
 local g_numberColor = Color(181, 206, 168)
 local g_boolColor = Color(86, 156, 214)
+
+-- Custom JSON Data Types (No Punctuation Conflicts)
+local g_vectorColor = Color(0, 227, 239)
+local g_angleColor = Color(245, 203, 92)
+
+local g_outputBuffer = {}
+local g_printToConsole = true
 
 local function outputLine(segments)
 	segments = segments or {}
@@ -197,10 +243,18 @@ local function outputLine(segments)
 			str = string.format(str, unpack(formatParams))
 		end
 
-		MsgC(color, str)
+		if g_printToConsole then
+			MsgC(color, str)
+		end
+
+		table.insert(g_outputBuffer, str)
 	end
 
-	MsgC(g_defaultColor, "\n")
+	if g_printToConsole then
+		MsgC(g_defaultColor, "\n")
+	end
+
+	table.insert(g_outputBuffer, "\n")
 end
 
 local function formatTab(tab)
@@ -438,7 +492,7 @@ local function outputObjectEnd(tab, comma)
 	outputLine(segments)
 end
 
-local function outputCommentine(tab, comment, ...)
+local function outputCommentLine(tab, comment, ...)
 	local segments = {}
 
 	table.insert(segments, {
@@ -455,21 +509,25 @@ local function outputCommentine(tab, comment, ...)
 	outputLine(segments)
 end
 
-function LIB.PrintSnapshotToConsole(workloadEntry)
+function LIB.FormatSnapshot(workloadEntry, outputToConsole)
 	if not workloadEntry then
 		return
 	end
+
+	g_printToConsole = outputToConsole or false
 
 	local camera = workloadEntry.camera
 	local entity = workloadEntry.entity
 	local dof = camera.dof
 
-	local addon = SligWolf_Addons.GetAddon(entity.addonname or "")
+	local addon = SligWolf_Addons.GetAddon(workloadEntry.addonname)
+
+	table.Empty(g_outputBuffer)
 
 	outputObjectStart()
 
-	outputCommentine(4, "%s (%s)", addon.NiceName, addon.Addonname)
-	outputCommentine(4, "%s", entity.title)
+	outputCommentLine(4, "%s (%s)", addon.NiceName, addon.Addonname)
+	outputCommentLine(4, "%s", entity.title)
 
 	outputLine()
 
@@ -505,6 +563,60 @@ function LIB.PrintSnapshotToConsole(workloadEntry)
 	outputObjectEnd(4)
 
 	outputObjectEnd()
+
+	local buffer = table.concat(g_outputBuffer)
+	table.Empty(g_outputBuffer)
+
+	return buffer
+end
+
+function LIB.PrintSnapshotToConsole(workloadEntry)
+	if not workloadEntry then
+		return
+	end
+
+	MsgC(g_defaultColor, "\n")
+
+	local buffer = LIB.FormatSnapshot(workloadEntry, true)
+
+	SetClipboardText(buffer)
+
+	MsgC(g_defaultColor, "\n")
+	MsgC(g_defaultColor, "Copied to clipboard!\n")
+	MsgC(g_defaultColor, "\n")
+end
+
+function LIB.FormatWorkloadEntry(workloadEntry)
+	return LIB.FormatSnapshot(workloadEntry, false)
+end
+
+function LIB.SaveWorkloadEntry(path, workloadEntry)
+	path = tostring(path or "")
+
+	if path == "" then
+		LIBPrint.Warn("SaveWorkloadEntry: No path given.")
+		return false
+	end
+
+	local data = LIB.FormatWorkloadEntry(workloadEntry)
+
+	if not data then
+		callback(false, "No data returned.")
+		return false
+	end
+
+	if data == "" then
+		callback(false, "No data returned.")
+		return false
+	end
+
+	local success = LIBFile.Write(path, data, SLIGWOLF_ADDON)
+	if not success then
+		LIBPrint.Warn("SaveWorkloadEntry: Could not write too 'data/%s'.", absoluteFilename)
+		return false
+	end
+
+	return true
 end
 
 return true

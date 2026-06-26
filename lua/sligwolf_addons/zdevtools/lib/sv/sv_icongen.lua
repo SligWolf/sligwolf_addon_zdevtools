@@ -106,7 +106,6 @@ function META:Lock()
 		ply:SetViewEntity(nil)
 
 		ply:SetNotSolid(true)
-		ply:SetNoTarget(true)
 		ply:SetNoDraw(true)
 
 		ply:SetMoveType(MOVETYPE_NONE)
@@ -131,7 +130,6 @@ function META:Unlock()
 		ply:SetNWBool("sligwolf_zdevtools_icongen_lock", false)
 
 		ply:SetNotSolid(false)
-		ply:SetNoTarget(false)
 		ply:SetNoDraw(false)
 
 		ply:SetMoveType(MOVETYPE_NOCLIP)
@@ -411,30 +409,14 @@ function META:AddWorkloadItem(workloadItem)
 
 		for _, theme in ipairs(themes) do
 			local newItem = table.Copy(newItemTemplate)
-			local path = nil
-
-			if theme == "default" then
-				path = string.format(
-					"%s/%s.png",
-					addonname,
-					spawnname
-				)
-			else
-				path = string.format(
-					"%s/%s_%s.png",
-					addonname,
-					spawnname,
-					theme
-				)
-			end
-
-			path = string.lower(path)
 
 			local id = #workload + 1
 
 			newItem.id = id
-			newItem.path = path
 			newItem.theme = theme
+
+			local path = LIB.GetPathFromWorkloadEntry(newItem)
+			newItem.path = path
 
 			if not self:CallWorkloadFilters(newItem) then
 				continue

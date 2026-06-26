@@ -16,6 +16,7 @@ local LIBConvar = SligWolf_Addons.Convar
 local LIBDebug = SligWolf_Addons.Debug
 local LIBTrace = SligWolf_Addons.Trace
 local LIBHook = SligWolf_Addons.Hook
+local LIBUtil = SligWolf_Addons.Util
 
 local PANEL = {}
 
@@ -234,6 +235,20 @@ function PANEL:Init()
 			self:DoSnapshot()
 		end
 
+		local screenshot = vgui.Create("DButton", panel)
+		screenshot:SetText("Screenshot")
+		screenshot:Dock(LEFT)
+		screenshot:SetSize(120, 20)
+		screenshot:DockMargin(0, 0, 8, 0)
+
+		screenshot.DoClick = function()
+			if not IsValid(self) then
+				return
+			end
+
+			self:DoScreenshot()
+		end
+
 		panel:Dock(BOTTOM)
 		panel:DockPadding(4, 4, 4, 4)
 		panel:DockMargin(0, 4, 0, 0)
@@ -281,6 +296,14 @@ function PANEL:DoSnapshot()
 
 	if IsValid(weapon) and weapon:GetClass() == LIB.config.cameraWeapon then
 		weapon:TakeSnapshot()
+	end
+end
+
+function PANEL:DoScreenshot()
+	local weapon = LocalPlayer():GetActiveWeapon()
+
+	if IsValid(weapon) and weapon:GetClass() == LIB.config.cameraWeapon then
+		weapon:TakeScreenshot()
 	end
 end
 
@@ -362,6 +385,43 @@ function LIB.GetSuperDofOptions()
 	}
 
 	return dof
+end
+
+function LIB.IsUIOpen()
+	if gui.IsGameUIVisible() then
+		return true
+	end
+
+	if LIBUtil.GameIsPaused() then
+		return true
+	end
+
+	if IsValid(LIB.DofOptionPanel) then
+		-- Exception: allow creating images with this panel open.
+		return false
+	end
+
+	local hovered = vgui.GetHoveredPanel()
+	local focus = vgui.GetKeyboardFocus()
+
+	if IsValid(hovered) then
+		return true
+	end
+
+	if IsValid(focus) then
+		return true
+	end
+
+	return false
+end
+
+function LIB.CloseMainMenu()
+	if not gui.IsGameUIVisible() then
+		return
+	end
+
+	-- Close the main menu when we start rendering
+	ProtectedCall(RunConsoleCommand, "gamemenucommand", "ResumeGame")
 end
 
 LIBHook.Add("GUIMousePressed", "Addon_ZDevTools_Icongen_SuperDOFOptions_MouseDown", function(mouse)

@@ -20,7 +20,10 @@ META.__index = META
 
 LIB.config = {
 	-- Output subfolder in data directory
-	iconsFolder = "icongen/icons",
+	iconsFolderAuto = "icongen/a-icons",
+	iconsFolderAutoJson = "icongen/a-icons-json",
+	iconsFolderManuel = "icongen/m-icons",
+	iconsFolderManuelJson = "icongen/m-icons",
 
 	-- Render target settings
 	rendertarget = {

@@ -58,10 +58,17 @@ function SWEP:Initialize()
 	self:SetHoldType("camera")
 end
 
-function SWEP:Reload()
+function SWEP:OnReset()
 	if SERVER then
-		self:Remove()
+		local owner = self:GetOwner()
+		if IsValid(owner) then
+			owner:SetNoTarget(false)
+		end
+
+		return
 	end
+
+	self:ResetRender()
 end
 
 function SWEP:PrimaryAttack()
@@ -72,26 +79,27 @@ function SWEP:SecondaryAttack()
 	-- do nothing
 end
 
+function SWEP:Reload()
+	if SERVER then
+		self:Remove()
+	end
+end
+
+function SWEP:OnDeploy()
+	BaseClass.OnDeploy(self)
+
+	if SERVER then
+		local owner = self:GetOwner()
+		if IsValid(owner) then
+			owner:SetNoTarget(true)
+		end
+	end
+
+	return true
+end
+
 function SWEP:ShouldDropOnDie()
 	return false
-end
-
-function SWEP:OnRemove()
-	if CLIENT then
-		self:ResetRender()
-	end
-end
-
-function SWEP:OnReloaded()
-	if CLIENT then
-		self:ResetRender()
-	end
-end
-
-function SWEP:Reset()
-	if CLIENT then
-		self:ResetRender()
-	end
 end
 
 if SERVER then
