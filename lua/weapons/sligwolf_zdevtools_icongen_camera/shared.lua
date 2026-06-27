@@ -154,6 +154,8 @@ function SWEP:Reload()
 end
 
 function SWEP:OnDeploy()
+	BaseClass.OnDeploy(self)
+
 	if SERVER then
 		local owner = self:GetOwner()
 		if IsValid(owner) then
@@ -165,6 +167,8 @@ function SWEP:OnDeploy()
 end
 
 function SWEP:FastThink()
+	BaseClass.FastThink(self)
+
 	self:HandleZoom()
 
 	if CLIENT then
