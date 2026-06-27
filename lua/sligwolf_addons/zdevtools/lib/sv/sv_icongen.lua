@@ -1100,7 +1100,7 @@ function META:SendCaptureRequest()
 		net.WriteString(self.currentCategory or "")
 		net.WriteString(self.currentSpawnname or "")
 		net.WriteString(self.currentTheme or "")
-		net.WriteEntity(ent)
+		net.WriteUInt(ent:EntIndex(), MAX_EDICT_BITS)
 
 		net.WriteString(self.currentPath or "")
 

@@ -1,0 +1,80 @@
+[
+    {
+        "map":       "gm_construct_flatgrass_v6-2",
+        "category":  "vehicle",
+        "spawnname": ["sligwolf_westernloco_wl13_loco_phx"],
+        "theme":     ["all"],
+
+        "entity": {
+            "pos":         "[11210.000, 5531.125, -416.438]",
+            "ang":         "{0.098, 179.989, 0.126}",
+            "spawnfrozen": true,
+            "wait":        0.000
+        },
+
+        "camera": {
+            "pos": "[10919.000, 5524.000, -248.000]",
+            "ang": "{18.000, 0.000, 0.000}",
+            "fov": 90.000,
+            "dof": {
+                "distance": 1024.000,
+                "blur":     0.500,
+                "passes":   12,
+                "steps":    24,
+                "shape":    0.500
+            }
+        }
+    },
+    {
+        "map":       "gm_construct_flatgrass_v6-2",
+        "category":  "weapon",
+        "spawnname": ["sligwolf_weapon_motorbike_mg34"],
+        "theme":     ["all"],
+
+        "entity": {
+            "pos":         "[9833.09, 4718.68, -288.25]",
+            "ang":         "{13.77, 7, -21.36}",
+            "spawnfrozen": true,
+            "wait":        0.000
+        },
+
+        "camera": {
+            "pos": "[9837.17, 4920.94, -252.80]",
+            "ang": "{10.12, -90.15, 0}",
+            "fov": 90.000,
+            "dof": {
+                "distance": 200,
+                "blur":     0.500,
+                "passes":   12,
+                "steps":    24,
+                "shape":    0.500
+            }
+        }
+    },
+    {
+        "map":       "gm_construct_flatgrass_v6-2",
+        "category":  "npc",
+        "spawnname": ["sligwolf_robotgen2_rebel_resistance"],
+        "theme":     ["default"],
+
+        "entity": {
+            "pos":         "[11804.375, 5480.500, -399.969]",
+            "ang":         "{0.000, 161.323, 0.000}",
+            "spawnfrozen": true,
+            "wait":        0.000
+        },
+
+        "camera": {
+            "pos": "[11767.797, 5498.081, -335.969]",
+            "ang": "{4.129, -31.310, 0.000}",
+            "fov": 50.000,
+            "dof": {
+                "distance": 29.680,
+                "blur":     0.500,
+                "passes":   30,
+                "steps":    30,
+                "shape":    0.500
+            }
+        }
+    }
+]

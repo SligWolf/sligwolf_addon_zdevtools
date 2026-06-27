@@ -14,11 +14,17 @@ if not LIB then
 end
 
 local LIBSkinsystem = SligWolf_Addons.Skinsystem
-local LIBPrint = SligWolf_Addons.Print
 local LIBFile = SligWolf_Addons.File
 
-local g_trimPattern = "[%s%(%)%{%}%[%]%\"%\']"
-local g_seperatorPattern = "[%s%,%|%;]"
+local g_trimPattern = "[%s%(%)%{%}%[%]%\"%\']*"
+local g_seperatorPattern = "[%s%,%|%;]+"
+
+local function normalizeThreePart(str)
+	str = string.match(str, "^" .. g_trimPattern .. "(.-)" .. g_trimPattern .. "$") or str
+	str = string.gsub(str, g_seperatorPattern, " ")
+
+	return str
+end
 
 function LIB.GetPathFromWorkloadEntry(workloadEntry)
 	if not workloadEntry then
@@ -55,7 +61,7 @@ function LIB.GetPathFromWorkloadEntry(workloadEntry)
 	return path
 end
 
-function LIB.ParseString(str)
+function LIB.SanitizeString(str)
 	str = tostring(str or "")
 	str = string.Trim(str)
 	str = string.lower(str)
@@ -63,8 +69,8 @@ function LIB.ParseString(str)
 	return str
 end
 
-function LIB.ParseTheme(str)
-	str = LIB.ParseString(str)
+function LIB.SanitizeTheme(str)
+	str = LIB.SanitizeString(str)
 
 	if str == "" then
 		str = LIBSkinsystem.THEME_DEFAULT
@@ -73,7 +79,45 @@ function LIB.ParseTheme(str)
 	return str
 end
 
-function LIB.ParseVector(stringOrAngleOrVector)
+function LIB.SanitizeStringList(strlist)
+	if not strlist then
+		return {}
+	end
+
+	if not istable(strlist) then
+		strlist = {strlist}
+	end
+
+	local result = {}
+
+	for _, str in ipairs(strlist) do
+		str = LIB.SanitizeString(str)
+		table.insert(result, str)
+	end
+
+	return result
+end
+
+function LIB.SanitizeThemeList(strlist)
+	if not strlist then
+		return {LIBSkinsystem.THEME_DEFAULT}
+	end
+
+	if not istable(strlist) then
+		strlist = {strlist}
+	end
+
+	local result = {}
+
+	for _, str in ipairs(strlist) do
+		str = LIB.SanitizeTheme(str)
+		table.insert(result, str)
+	end
+
+	return result
+end
+
+function LIB.SanitizeVector(stringOrAngleOrVector)
 	if not stringOrAngleOrVector or stringOrAngleOrVector == "" then
 		return Vector()
 	end
@@ -85,8 +129,7 @@ function LIB.ParseVector(stringOrAngleOrVector)
 	end
 
 	if isstring(stringOrAngleOrVector) then
-		stringOrAngleOrVector = string.Trim(stringOrAngleOrVector, g_trimPattern)
-		stringOrAngleOrVector = string.gsub(stringOrAngleOrVector, g_seperatorPattern, " ")
+		stringOrAngleOrVector = normalizeThreePart(stringOrAngleOrVector)
 		stringOrAngleOrVector = Vector(stringOrAngleOrVector)
 
 		return stringOrAngleOrVector
@@ -101,7 +144,7 @@ function LIB.ParseVector(stringOrAngleOrVector)
 	return Vector()
 end
 
-function LIB.ParseAngle(stringOrAngleOrVector)
+function LIB.SanitizeAngle(stringOrAngleOrVector)
 	if not stringOrAngleOrVector or stringOrAngleOrVector == "" then
 		return Angle()
 	end
@@ -114,8 +157,7 @@ function LIB.ParseAngle(stringOrAngleOrVector)
 	end
 
 	if isstring(stringOrAngleOrVector) then
-		stringOrAngleOrVector = string.Trim(stringOrAngleOrVector, g_trimPattern)
-		stringOrAngleOrVector = string.gsub(stringOrAngleOrVector, g_seperatorPattern, " ")
+		stringOrAngleOrVector = normalizeThreePart(stringOrAngleOrVector)
 		stringOrAngleOrVector = Angle(stringOrAngleOrVector)
 		stringOrAngleOrVector:Normalize()
 
@@ -132,7 +174,7 @@ function LIB.ParseAngle(stringOrAngleOrVector)
 	return Angle()
 end
 
-function LIB.ParseNumber(stringOrNumber)
+function LIB.SanitizeNumber(stringOrNumber)
 	if not stringOrNumber or stringOrNumber == "" then
 		return 0
 	end
@@ -151,8 +193,8 @@ function LIB.ParseNumber(stringOrNumber)
 	return 0
 end
 
-function LIB.ParseFov(stringOrNumber)
-	stringOrNumber = LIB.ParseNumber(stringOrNumber)
+function LIB.SanitizeFov(stringOrNumber)
+	stringOrNumber = LIB.SanitizeNumber(stringOrNumber)
 
 	if stringOrNumber == 0 then
 		stringOrNumber = 90
@@ -161,22 +203,22 @@ function LIB.ParseFov(stringOrNumber)
 	return math.Clamp(stringOrNumber, 0.1, 175)
 end
 
-function LIB.ParseBool(bool)
+function LIB.SanitizeBool(bool)
 	return tobool(bool)
 end
 
 function LIB.FormatString(str)
-	str = LIB.ParseString(str)
+	str = LIB.SanitizeString(str)
 	return str
 end
 
 function LIB.FormatTheme(str)
-	str = LIB.ParseTheme(str)
+	str = LIB.SanitizeTheme(str)
 	return str
 end
 
 function LIB.FormatVector(vec)
-	vec = LIB.ParseVector(vec)
+	vec = LIB.SanitizeVector(vec)
 
 	local x = math.floor(vec.x * 1000) / 1000
 	local y = math.floor(vec.y * 1000) / 1000
@@ -187,7 +229,7 @@ function LIB.FormatVector(vec)
 end
 
 function LIB.FormatAngle(ang)
-	ang = LIB.ParseAngle(ang)
+	ang = LIB.SanitizeAngle(ang)
 
 	local p = math.floor(ang.p * 1000) / 1000
 	local y = math.floor(ang.y * 1000) / 1000
@@ -198,7 +240,7 @@ function LIB.FormatAngle(ang)
 end
 
 function LIB.FormatNumber(num)
-	num = LIB.ParseNumber(num)
+	num = LIB.SanitizeNumber(num)
 	num = math.floor(num * 1000) / 1000
 
 	local str = string.format("%.3f", num)
@@ -206,7 +248,7 @@ function LIB.FormatNumber(num)
 end
 
 function LIB.FormatInteger(int)
-	int = LIB.ParseNumber(int)
+	int = LIB.SanitizeNumber(int)
 	int = math.floor(int)
 
 	local str = string.format("%i", int)
@@ -214,14 +256,14 @@ function LIB.FormatInteger(int)
 end
 
 function LIB.FormatFov(fov)
-	fov = LIB.ParseFov(fov)
+	fov = LIB.SanitizeFov(fov)
 
 	local str = string.format("%.3f", fov)
 	return str
 end
 
 function LIB.FormatBool(bool)
-	bool = LIB.ParseBool(bool)
+	bool = LIB.SanitizeBool(bool)
 
 	local str = bool and "true" or "false"
 	return str
@@ -554,6 +596,7 @@ function LIB.FormatSnapshot(workloadEntry, outputToConsole)
 
 	outputCommentLine(4, "%s (%s)", addon.NiceName, addon.Addonname)
 	outputCommentLine(4, "%s", entity.title)
+	outputCommentLine(4, "%s", os.date("%Y-%m-%d %H:%M:%S"))
 
 	outputLine()
 
@@ -616,11 +659,12 @@ function LIB.FormatWorkloadEntry(workloadEntry)
 	return LIB.FormatSnapshot(workloadEntry, false)
 end
 
-function LIB.SaveWorkloadEntry(path, workloadEntry)
+function LIB.SaveWorkloadEntry(path, workloadEntry, callback)
 	path = tostring(path or "")
+	callback = callback or function() end
 
 	if path == "" then
-		LIBPrint.Warn("SaveWorkloadEntry: No path given.")
+		callback(false, "No path given.")
 		return false
 	end
 
@@ -636,13 +680,112 @@ function LIB.SaveWorkloadEntry(path, workloadEntry)
 		return false
 	end
 
+	local absolutePath = LIBFile.GetAbsolutePath(path, SLIGWOLF_ADDON)
+
 	local success = LIBFile.Write(path, data, SLIGWOLF_ADDON)
 	if not success then
-		LIBPrint.Warn("SaveWorkloadEntry: Could not write too 'data/%s'.", absoluteFilename)
+		local err = string.format("Could not write too 'data/%s'.", absolutePath)
+		callback(false, err)
+
 		return false
 	end
 
+	callback(true, path, absolutePath)
 	return true
+end
+
+function LIB.SanitizeWorkloadEntry(workloadEntry)
+	local entity = workloadEntry.entity or {}
+	local camera = workloadEntry.camera or {}
+	local dof = camera.dof or {}
+
+	local spawnFrozen = entity.spawnFrozen
+	if spawnFrozen ~= nil then
+		spawnFrozen = LIB.SanitizeBool(spawnFrozen)
+	end
+
+	local dofDistance = LIB.SanitizeNumber(dof.distance)
+
+	if dofDistance > 0 then
+		dof = {
+			distance = dofDistance,
+			blur = dof.blur and LIB.SanitizeNumber(dof.blur),
+			passes = dof.passes and LIB.SanitizeNumber(dof.passes),
+			steps = dof.steps and LIB.SanitizeNumber(dof.steps),
+			shape = dof.shape and LIB.SanitizeNumber(dof.shape),
+		}
+	else
+		dof = nil
+	end
+
+	local result = {
+		map = LIB.SanitizeString(workloadEntry.map),
+		addonname = LIB.SanitizeString(workloadEntry.addonname),
+		category = LIB.SanitizeString(workloadEntry.category),
+		spawnname = LIB.SanitizeStringList(workloadEntry.spawnname),
+		theme = LIB.SanitizeThemeList(workloadEntry.theme),
+
+		entity = {
+			pos = LIB.SanitizeVector(entity.pos),
+			ang = LIB.SanitizeAngle(entity.ang),
+			spawnFrozen = spawnFrozen,
+			wait = entity.wait and LIB.SanitizeNumber(entity.wait),
+		},
+
+		camera = {
+			pos = LIB.SanitizeVector(camera.pos),
+			ang = LIB.SanitizeAngle(camera.ang),
+			fov = camera.fov and LIB.SanitizeFov(camera.fov),
+			dof = dof,
+		},
+	}
+
+	return result
+end
+
+function LIB.ReadWorkload(path, callback)
+	path = tostring(path or "")
+	callback = callback or function() end
+
+	if path == "" then
+		callback(false, "No path given.")
+		return false
+	end
+
+	local absolutePath = LIBFile.GetAbsolutePath(path, SLIGWOLF_ADDON, LIBFile.REALM_DATA_STATIC)
+	local json = LIBFile.Read(path, SLIGWOLF_ADDON, LIBFile.REALM_DATA_STATIC)
+
+	if not json or json == "" then
+		local err = string.format("Could not read from file '%s'.", absolutePath)
+		callback(false, err)
+
+		return false
+	end
+
+	local tmp = util.JSONToTable(json)
+	if not tmp then
+		local err = string.format("Invalid JSON from file '%s'.", absolutePath)
+		callback(false, err)
+
+		return false
+	end
+
+	local workload = {}
+
+	for _, workloadEntry in ipairs(tmp) do
+		workloadEntry = LIB.SanitizeWorkloadEntry(workloadEntry)
+		table.insert(workload, workloadEntry)
+	end
+
+	callback(true, workload, path, absolutePath)
+	return true
+end
+
+function LIB.ReadWorkloadForCurrentMap(callback)
+	local map = game.GetMap()
+	path = LIB.config.workloadFolder .. "/" .. map .. ".json"
+
+	return LIB.ReadWorkload(path, callback)
 end
 
 return true

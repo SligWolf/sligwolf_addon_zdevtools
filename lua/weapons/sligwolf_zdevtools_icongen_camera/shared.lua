@@ -56,6 +56,7 @@ local addon = SligWolf_Addons.GetAddon(addonName)
 
 local LIBIconGenerator = addon.IconGenerator
 local LIBPrint = SligWolf_Addons.Print
+local LIBTimer = SligWolf_Addons.Timer
 
 function SWEP:SetupDataTables()
 	BaseClass.SetupDataTables(self)
@@ -339,6 +340,13 @@ function SWEP:TakeScreenshot()
 		ent = workloadEntry.entity.ent,
 	}
 
+	local path = workloadEntry.path
+
+	path = string.GetFileFromFilename(path)
+	path = string.StripExtension(path)
+
+	path = string.format("%s_%s.png", path, os.date("%Y-%m-%d_%H-%M-%S"))
+
 	local validateCallback = function()
 		if not IsValid(self) then
 			return false
@@ -360,6 +368,12 @@ function SWEP:TakeScreenshot()
 		return true
 	end
 
+	local jsonCallback = function(success, errorOrPath, absolutePath)
+		if not success then
+			LIBPrint.Warn("SaveWorkloadEntry: %s", errorOrPath)
+		end
+	end
+
 	local callback = function(success, errorOrPath, absolutePath)
 		if not success then
 			LIBPrint.Notify(LIBPrint.NOTIFY_ERROR, "Could not take screenshot!", 3)
@@ -369,8 +383,8 @@ function SWEP:TakeScreenshot()
 			return
 		end
 
-		local jsonPath = LIBIconGenerator.config.iconsFolderManuelJson .. "/" .. workloadEntry.path .. ".json"
-		LIBIconGenerator.SaveWorkloadEntry(jsonPath, workloadEntry)
+		local jsonPath = LIBIconGenerator.config.iconsFolderManuelJson .. "/" .. path .. ".json"
+		LIBIconGenerator.SaveWorkloadEntry(jsonPath, workloadEntry, jsonCallback)
 
 		local message = LIBPrint.FormatMessage("Took screenshot of %s!", title)
 
@@ -387,7 +401,7 @@ function SWEP:TakeScreenshot()
 		index = 0,
 		count = 0,
 		entityData = entityData,
-		imagePath = LIBIconGenerator.config.iconsFolderManuel .. "/" .. workloadEntry.path,
+		imagePath = LIBIconGenerator.config.iconsFolderManuel .. "/" .. path,
 		previewTime = 0,
 		validateCallback = validateCallback,
 		callback = callback,

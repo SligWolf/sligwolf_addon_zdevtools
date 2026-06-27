@@ -28,7 +28,7 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 	local category = net.ReadString()
 	local spawnname = net.ReadString()
 	local theme = net.ReadString()
-	local ent = net.ReadEntity()
+	local entid = net.ReadUInt(MAX_EDICT_BITS)
 
 	local path = net.ReadString()
 
@@ -58,7 +58,7 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 			category = category,
 			spawnname = spawnname,
 			theme = theme,
-			ent = ent,
+			entid = entid,
 		},
 
 		camera = {
@@ -90,6 +90,8 @@ function META:ResetInternal()
 	self.currentCategory = nil
 	self.currentSpawnname = nil
 	self.currentTheme = nil
+
+	self.currentEntityId = nil
 	self.currentEntity = nil
 
 	self.entriesTotal = 0
@@ -97,9 +99,7 @@ function META:ResetInternal()
 	self.entriesDone = 0
 	self.entriesError = 0
 
-	self.screenDelayTimer = string.format("screendelay_%s", self.namespace)
-	self.dofCallback = string.format("dofcallback_%s", self.namespace)
-	self.copyCallback = string.format("copycallback_%s", self.namespace)
+	self.pollClientsideEntityTimer = string.format("poll_clientside_entity_timer_%s", self.namespace)
 end
 
 function META:Initialize()
@@ -128,7 +128,7 @@ function META:Start()
 end
 
 function META:DestroyInternal()
-	self:RemoveDelayTimer()
+	self:RemoveEntityTimer()
 
 	LIB.ResetCamera()
 	LIB.ResetSuperDof()
@@ -136,12 +136,10 @@ function META:DestroyInternal()
 	LIB.ResetEntityData()
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
-	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
-	LIB.RemoveRequestCopyToBufferCallback(self.copyCallback)
 end
 
 function META:CancelInternal()
-	self:RemoveDelayTimer()
+	self:RemoveEntityTimer()
 
 	LIB.ResetCamera()
 	LIB.ResetSuperDof()
@@ -149,8 +147,6 @@ function META:CancelInternal()
 	LIB.ResetEntityData()
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
-	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
-	LIB.RemoveRequestCopyToBufferCallback(self.copyCallback)
 end
 
 function META:ValidateEntity(ent)
@@ -176,6 +172,7 @@ function META:ValidateStateInternal()
 	end
 
 	if not self:ValidateEntity(self.currentEntity) then
+		self:SendCaptureDone(false)
 		return false
 	end
 
@@ -187,14 +184,15 @@ function META:HandleCaptureRequest(captureRequest)
 		return
 	end
 
-	self:RemoveDelayTimer()
+	self:RemoveEntityTimer()
 
 	if not self.isListening then
 		return
 	end
 
 	self.currentCaptureRequest = captureRequest
-	self.processSubId = captureRequest.processSubId
+	local processSubId = captureRequest.processSubId
+	self.processSubId = processSubId
 
 	local entity = captureRequest.entity
 	local index = captureRequest.index
@@ -208,17 +206,64 @@ function META:HandleCaptureRequest(captureRequest)
 	self.currentCategory = entity.category
 	self.currentSpawnname = entity.spawnname
 	self.currentTheme = entity.theme
-	self.currentEntity = entity.ent
 
-	if index == 1 then
-		self:ProcessStart()
+	self.currentEntityId = entity.entid
+	self.currentEntity = Entity(self.currentEntityId)
+
+	local doProcess = function()
+		if index == 1 then
+			self:ProcessStart()
+		end
+
+		if self.OnProgress then
+			ProtectedCall(self.OnProgress, self, index, count)
+		end
+
+		self:ShowPreviewAndCapture()
 	end
 
-	if self.OnProgress then
-		ProtectedCall(self.OnProgress, self, index, count)
-	end
+	SLIGWOLF_ADDON:TimerUntil(self.pollClientsideEntityTimer, 0, function(_, success)
+		if not IsValid(self) then
+			return true
+		end
 
-	self:ShowPreviewAndCapture()
+		if not success then
+			self:ValidateState()
+			return true
+		end
+
+		if self.processSubId ~= processSubId then
+			return true
+		end
+
+		-- Sometimes the entity does not exist on the client yet, so we need reevaluate the id until the entity appears.
+		self.currentEntity = Entity(self.currentEntityId)
+		if not IsValid(self.currentEntity) then
+			return false
+		end
+
+		if index > 1 then
+			doProcess()
+			return true
+		end
+
+		LIB.CloseMainMenu(function(closed)
+			if not self:ValidateState() then
+				return
+			end
+
+			if not closed then
+				self:Warn("HandleCaptureRequest: Could not close main menu.")
+				self:SendCaptureDone(false)
+
+				return
+			end
+
+			doProcess()
+		end)
+
+		return true
+	end, 0, 2)
 end
 
 function META:ProcessStart()
@@ -235,10 +280,6 @@ function META:ProcessStart()
 	LIB.ResetEntityData()
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
-	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
-	LIB.RemoveRequestCopyToBufferCallback(self.copyCallback)
-
-	LIB.CloseMainMenu()
 
 	if self.OnStart then
 		ProtectedCall(self.OnStart, self)
@@ -259,6 +300,8 @@ function META:ProcessEnd()
 	self.currentCategory = nil
 	self.currentSpawnname = nil
 	self.currentTheme = nil
+
+	self.currentEntityId = nil
 	self.currentEntity = nil
 
 	LIB.ResetCamera()
@@ -267,8 +310,6 @@ function META:ProcessEnd()
 	LIB.ResetEntityData()
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
-	LIB.RemoveRequestDofRenderCallback(self.dofCallback)
-	LIB.RemoveRequestCopyToBufferCallback(self.copyCallback)
 
 	if self.OnFinished then
 		ProtectedCall(self.OnFinished, self)
@@ -281,7 +322,7 @@ function META:ProcessEnd()
 end
 
 function META:SendCaptureDone(success)
-	if not self:ValidateState() then
+	if success and not self:ValidateState() then
 		return
 	end
 
@@ -358,9 +399,15 @@ function META:ShowPreviewAndCapture()
 		return true
 	end
 
+	local jsonCallback = function(success, errorOrPath, absolutePath)
+		if not success then
+			self:Warn("SaveWorkloadEntry: %s", errorOrPath)
+		end
+	end
+
 	local callback = function(success, errorOrPath, absolutePath)
 		if not success then
-			self:Warn("ShowPreviewAndCapture: %s", errorOrPath)
+			self:Warn("TakeScreenshot: %s", errorOrPath)
 			self:SendCaptureDone(false)
 			return
 		end
@@ -368,7 +415,7 @@ function META:ShowPreviewAndCapture()
 		local workloadEntry = LIB.GetViewWorkloadEntry()
 		if workloadEntry then
 			local jsonPath = self.config.iconsFolderAutoJson .. "/" .. path .. ".json"
-			LIB.SaveWorkloadEntry(jsonPath, workloadEntry)
+			LIB.SaveWorkloadEntry(jsonPath, workloadEntry, jsonCallback)
 		end
 
 		self:SendCaptureDone(true)
@@ -390,8 +437,8 @@ function META:ShowPreviewAndCapture()
 	})
 end
 
-function META:RemoveDelayTimer()
-	SLIGWOLF_ADDON:TimerRemove(self.screenDelayTimer)
+function META:RemoveEntityTimer()
+	SLIGWOLF_ADDON:TimerRemove(self.pollClientsideEntityTimer)
 end
 
 return true

@@ -31,6 +31,7 @@ local LIBHook = SligWolf_Addons.Hook
 
 local LIBIconGenerator = SLIGWOLF_ADDON.IconGenerator
 local LIBString = SligWolf_Addons.String
+local LIBPrint = SligWolf_Addons.Print
 local LIBTimer = SligWolf_Addons.Timer
 local LIBFile = SligWolf_Addons.File
 
@@ -66,39 +67,27 @@ end
 local g_iconGenerator = LIBIconGenerator.NewInstance("g_iconGenerator")
 
 g_iconGenerator.OnProgress = function(this, currentIndex, workloadCount)
-	if SERVER then
-		local addonname = this.currentAddonname or "?"
-		local category = this.currentCategory or "?"
-		local spawnname = this.currentSpawnname or "?"
-		local theme = this.currentTheme or "?"
+	local addonname = this.currentAddonname or "?"
+	local category = this.currentCategory or "?"
+	local spawnname = this.currentSpawnname or "?"
+	local theme = this.currentTheme or "?"
 
-		log("OnProgress: %05i / %05i | %s, %s, %s, %s",
-			currentIndex, workloadCount,
-			addonname, category, spawnname, theme
-		)
-	else
-		log("OnProgress: %05i / %05i",
-			currentIndex, workloadCount
-		)
-	end
+	log("OnProgress: %05i / %05i | %s, %s, %s, %s",
+		currentIndex, workloadCount,
+		addonname, category, spawnname, theme
+	)
 end
 
 g_iconGenerator.OnProgressDone = function(this, currentIndex, workloadCount)
-	if SERVER then
-		local addonname = this.currentAddonname or "?"
-		local category = this.currentCategory or "?"
-		local spawnname = this.currentSpawnname or "?"
-		local theme = this.currentTheme or "?"
+	local addonname = this.currentAddonname or "?"
+	local category = this.currentCategory or "?"
+	local spawnname = this.currentSpawnname or "?"
+	local theme = this.currentTheme or "?"
 
-		log("OnProgressDone: %05i / %05i | %s, %s, %s, %s",
-			currentIndex, workloadCount,
-			addonname, category, spawnname, theme
-		)
-	else
-		log("OnProgressDone: %05i / %05i",
-			currentIndex, workloadCount
-		)
-	end
+	log("OnProgressDone: %05i / %05i | %s, %s, %s, %s",
+		currentIndex, workloadCount,
+		addonname, category, spawnname, theme
+	)
 end
 
 g_iconGenerator.OnStart = function(this)
@@ -136,21 +125,19 @@ g_iconGenerator.OnCancel = function(this)
 end
 
 g_iconGenerator.OnSpawn = function(this, ent)
-	if SERVER then
-		local addonname = this.currentAddonname or "?"
-		local category = this.currentCategory or "?"
-		local spawnname = this.currentSpawnname or "?"
-		local theme = this.currentTheme or "?"
+	local addonname = this.currentAddonname or "?"
+	local category = this.currentCategory or "?"
+	local spawnname = this.currentSpawnname or "?"
+	local theme = this.currentTheme or "?"
 
-		log("OnSpawn: %s | %s, %s, %s, %s",
-			tostring(ent),
-			addonname, category, spawnname, theme
-		)
-	end
+	log("OnSpawn: %s | %s, %s, %s, %s",
+		tostring(ent),
+		addonname, category, spawnname, theme
+	)
 end
 
-g_iconGenerator.OnFileWritten = function(this, path, absoluteFilename)
-	log("OnFileWritten: 'data/%s'", absoluteFilename)
+g_iconGenerator.OnFileWritten = function(this, path, absolutePath)
+	log("OnFileWritten: 'data/%s'", absolutePath)
 end
 
 g_iconGenerator.OnReset = function(this)
@@ -186,148 +173,6 @@ if CLIENT then
 end
 
 if SERVER then
-	local workload = {
-		{
-			map = "gm_construct_flatgrass_v6-2",
-			category = LIBEntities.SPAWN_CATEGORY_VEHICLE,
-			spawnname = "sligwolf_westernloco_wl13_loco_phx",
-			theme = "all",
-			camera = {
-				pos = Vector(10919, 5524, -248),
-				ang = Angle(18, 0, 0),
-				fov = 90,
-				dof = {
-					distance = 1024,
-					blur = 0.5,
-					passes = 12,
-					steps = 24,
-					shape = 0.5,
-				}
-			},
-			entity = {
-				pos = Vector(11210, 5531.15, -416.32),
-				ang = Angle(0.1, 179.99, 0.13),
-			},
-		},
-		{
-			map = "gm_construct_flatgrass_v6-2",
-			category = LIBEntities.SPAWN_CATEGORY_WEAPON,
-			spawnname = "sligwolf_weapon_motorbike_mg34",
-			theme = "default",
-			camera = {
-				pos = Vector(9837.17, 4920.94, -252.80),
-				ang = Angle(10.12, -90.15, 0),
-				fov = 28.66,
-				dof = {
-					distance = 200,
-					blur = 0.5,
-					passes = 12,
-					steps = 24,
-					shape = 0.5,
-				}
-			},
-			entity = {
-				pos = Vector(9833.09, 4718.68, -288.25),
-				ang = Angle(13.77, 7, -21.36),
-			},
-		},
-		{
-			map = "gm_construct_flatgrass_v6-2",
-			category = LIBEntities.SPAWN_CATEGORY_NPC,
-			spawnname = "sligwolf_germancop_rebel",
-			theme = "default",
-			camera = {
-				pos = Vector(9859.69, 4820.43, -339.96),
-				ang = Angle(-0.71, -89.56, 0),
-				fov = 25.69,
-				dof = {
-					distance = 100,
-					blur = 0.5,
-					passes = 12,
-					steps = 24,
-					shape = 0.5,
-				}
-			},
-			entity = {
-				pos = Vector(9860.30, 4714, -399.96),
-				ang = Angle(0, 89.14, 0),
-			},
-		},
-		-- {
-		-- 	map = "gm_construct_flatgrass_v6-2",
-		-- 	category = LIBEntities.SPAWN_CATEGORY_VEHICLE,
-		-- 	spawnname = "sligwolf_bus_b13",
-		-- 	theme = "default",
-		-- 	camera = {
-		-- 		pos = Vector(9546.06, 6368.25, -242.6),
-		-- 		ang = Angle(24, 75, 0),
-		-- 		fov = 90,
-		-- 		dof = {
-		-- 			distance = 1024,
-		-- 			blur = 0.5,
-		-- 			passes = 12,
-		-- 			steps = 24,
-		-- 			shape = 0.5,
-		-- 		}
-		-- 	},
-		-- 	entity = {
-		-- 		pos = Vector(9591.06, 6662.25, -404.188),
-		-- 		ang = Angle(0.24, -119.55, -0.02),
-		-- 		spawnFrozen = false,
-		-- 		wait = 1,
-		-- 	},
-		-- },
-		-- {
-		-- 	map = "gm_construct_flatgrass_v6-2",
-		-- 	category = LIBEntities.SPAWN_CATEGORY_VEHICLE,
-		-- 	spawnname = {"sligwolf_bus_b25", "sligwolf_bus_b13"},
-		-- 	theme = "blue",
-		-- 	camera = {
-		-- 		pos = Vector(9546.06, 6368.25, -242.6),
-		-- 		ang = Angle(24, 75, 0),
-		-- 		fov = 90,
-		-- 		dof = {
-		-- 			distance = 1024,
-		-- 			blur = 0.5,
-		-- 			passes = 12,
-		-- 			steps = 24,
-		-- 			shape = 0.5,
-		-- 		}
-		-- 	},
-		-- 	entity = {
-		-- 		pos = Vector(9591.06, 6662.25, -403.6 + 100),
-		-- 		ang = Angle(0.24, -119.55, -0.02),
-		-- 		spawnFrozen = true,
-		-- 		wait = 0,
-		-- 	},
-		-- },
-
-		-- {
-		-- 	map = "gm_construct_flatgrass_v6-2",
-		-- 	category = LIBEntities.SPAWN_CATEGORY_VEHICLE,
-		-- 	spawnname = "sligwolf_bluex11",
-		-- 	theme = "all",
-		-- 	camera = {
-		-- 		pos = Vector(10728.534, 6324.922, -1.496),
-		-- 		ang = Angle(20.567, 140.653, 0.000),
-		-- 		fov = 15,
-		-- 		dof = {
-		-- 			distance = 1005.74,
-		-- 			blur = 0.5,
-		-- 			passes = 12,
-		-- 			steps = 24,
-		-- 			shape = 0.5,
-		-- 		}
-		-- 	},
-		-- 	entity = {
-		-- 		pos = Vector(9989.93, 6940.40, -404.50),
-		-- 		ang = Angle(0.13, -166.37, -2),
-		-- 		freeze = false,
-		-- 	},
-		-- },
-		-- Add more entries...
-	}
-
 	concommand.Add("dev_sligwolf_zdevtools_icongen_start", function(ply, cmd, args)
 		if not IsValid(g_iconGenerator) then
 			return
@@ -363,9 +208,17 @@ if SERVER then
 			end
 		end)
 
-		g_iconGenerator:AddWorkload(workload)
+		LIBIconGenerator.ReadWorkloadForCurrentMap(function(success, errorOrWorkload, path, absolutePath)
+			if not success then
+				LIBPrint.Warn("dev_sligwolf_zdevtools_icongen_start: %s", errorOrWorkload)
+				return
+			end
 
-		g_iconGenerator:Start()
+			LIBPrint.Print("dev_sligwolf_zdevtools_icongen_start: Workload loaded from file '%s'.", absolutePath)
+
+			g_iconGenerator:AddWorkload(errorOrWorkload)
+			g_iconGenerator:Start()
+		end)
 	end)
 
 	concommand.Add("dev_sligwolf_zdevtools_icongen_cancel", function(ply)

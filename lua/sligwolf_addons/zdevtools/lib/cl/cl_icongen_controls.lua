@@ -94,6 +94,7 @@ function PANEL:Init()
 		local distance = vgui.Create("DNumSlider", panel)
 		distance:SetMin(0)
 		distance:SetMax(LIB.config.limits.dof.distance)
+		distance:SetDecimals(3)
 		distance:SetText("Distance")
 		distance:Dock(TOP)
 		distance:SetDark(true)
@@ -415,13 +416,27 @@ function LIB.IsUIOpen()
 	return false
 end
 
-function LIB.CloseMainMenu()
+function LIB.CloseMainMenu(callback)
 	if not gui.IsGameUIVisible() then
 		return
 	end
 
 	-- Close the main menu when we start rendering
 	ProtectedCall(RunConsoleCommand, "gamemenucommand", "ResumeGame")
+
+	SLIGWOLF_ADDON:TimerUntil("Icongen_CloseMainMenu", 0, function(_, success)
+		if not success then
+			callback(false)
+			return true
+		end
+
+		if gui.IsGameUIVisible() then
+			return false
+		end
+
+		callback(true)
+		return true
+	end, 0, 2)
 end
 
 LIBHook.Add("GUIMousePressed", "Addon_ZDevTools_Icongen_SuperDOFOptions_MouseDown", function(mouse)

@@ -25,6 +25,7 @@ LIB.config = {
 	iconsFolderAutoJson = "icongen/a-icons-json",
 	iconsFolderManuel = "icongen/m-icons",
 	iconsFolderManuelJson = "icongen/m-icons",
+	workloadFolder = "icongen/workloads",
 
 	-- Render target settings
 	rendertarget = {

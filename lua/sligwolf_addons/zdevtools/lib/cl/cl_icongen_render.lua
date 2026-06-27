@@ -792,6 +792,8 @@ function LIB.TakeScreenshot(parameter)
 	local validateCallback = parameter.validateCallback
 	local callback = parameter.callback
 
+	callback = callback or function() end
+
 	LIB.SetCamera(camera)
 	LIB.SetSuperDof(dof)
 	LIB.SetProgressStats(index, count)
