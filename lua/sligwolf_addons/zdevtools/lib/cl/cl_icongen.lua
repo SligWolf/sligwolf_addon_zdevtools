@@ -191,6 +191,7 @@ function META:HandleCaptureRequest(captureRequest)
 	end
 
 	self.currentCaptureRequest = captureRequest
+
 	local processSubId = captureRequest.processSubId
 	self.processSubId = processSubId
 
@@ -249,6 +250,10 @@ function META:HandleCaptureRequest(captureRequest)
 
 		LIB.CloseMainMenu(function(closed)
 			if not self:ValidateState() then
+				return
+			end
+
+			if self.processSubId ~= processSubId then
 				return
 			end
 

@@ -911,7 +911,6 @@ function LIB.GetViewWorkloadEntry()
 
 	if not entityData then
 		local ent = LIB.FindTargetEntityInView()
-
 		if not IsValid(ent) then
 			return nil
 		end
