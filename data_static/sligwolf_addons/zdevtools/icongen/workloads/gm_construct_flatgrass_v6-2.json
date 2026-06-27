@@ -76,5 +76,35 @@
                 "shape":    0.500
             }
         }
-    }
+    },
+	{
+		// Motorbike (motorbike)
+		// BMW R75 Civil
+		// 2026-06-27 20:20:23
+
+		"map":       "gm_construct_flatgrass_v6-2",
+		"category":  "vehicle",
+		"spawnname": ["sligwolf_motorbike_bmwr75_civil"],
+		"theme":     ["default"],
+
+		"entity": {
+			"pos":         "[10529.896, 5617.949, -403.555]",
+			"ang":         "{0.142, 138.405, -0.017}",
+			"spawnfrozen": true,
+			"wait":        0.000
+		},
+
+		"camera": {
+			"pos": "[10394.188, 5600.389, -339.969]",
+			"ang": "{14.825, 6.296, 0.000}",
+			"fov": 75.000,
+			"dof": {
+				"distance": 126.699,
+				"blur":     0.500,
+				"passes":   12,
+				"steps":    24,
+				"shape":    0.500
+			}
+		}
+	}
 ]
