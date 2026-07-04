@@ -56,9 +56,10 @@ local LIBIconGenerator = addon.IconGenerator
 
 function SWEP:Initialize()
 	self:SetAddonID(addonName)
-	self:SetHoldType("camera")
 
 	BaseClass.Initialize(self)
+
+	self:SetHoldType("camera")
 end
 
 function SWEP:OnReset()
