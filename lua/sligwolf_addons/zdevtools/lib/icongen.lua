@@ -6,13 +6,12 @@ if not SLIGWOLF_ADDON then
 	return
 end
 
-local SLIGWOLF_ADDON = SLIGWOLF_ADDON
-
 local LIB = SLIGWOLF_ADDON.IconGenerator or {}
 SLIGWOLF_ADDON.IconGenerator = LIB
 
 local LIBSkinsystem = SligWolf_Addons.Skinsystem
 local LIBPrint = SligWolf_Addons.Print
+local LIBUtil = SligWolf_Addons.Util
 
 local META = LIB.meta or {}
 LIB.meta = META
@@ -26,6 +25,7 @@ LIB.config = {
 	iconsFolderManuel = "icongen/m-icons",
 	iconsFolderManuelJson = "icongen/m-icons",
 	workloadFolder = "icongen/workloads",
+	savegameFolder = "icongen/savegames",
 
 	-- Render target settings
 	rendertarget = {
@@ -37,6 +37,7 @@ LIB.config = {
 	time = {
 		timeoutTotal   = 25.0,  -- Max time to wait for an entity to be processed
 		timeoutEntity  = 2,     -- Max time to wait for an entity to be spawned
+		savegame = 2,     		-- Delay after savegame load
 		delay    = 0.05,        -- Delay between entities
 		preview  = 0.5,         -- How long to show preview on screen
 		start    = 1,           -- Delay first item
@@ -196,11 +197,7 @@ end
 function META:IsLocked()
 	local ply = self.player
 
-	if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
-		return false
-	end
-
-	if not ply:IsPlayer() then
+	if not LIBUtil.IsHostPlayer(ply) then
 		return false
 	end
 
@@ -255,7 +252,7 @@ function META:ValidateState()
 
 	local ply = self.player
 
-	if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
+	if not LIBUtil.IsHostPlayer(ply) then
 		self:Cancel()
 		return false
 	end

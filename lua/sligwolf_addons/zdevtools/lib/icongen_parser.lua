@@ -56,8 +56,7 @@ function LIB.GetPathFromWorkloadEntry(workloadEntry)
 		)
 	end
 
-	path = string.lower(path)
-
+	path = LIBFile.Join(path)
 	return path
 end
 
@@ -74,6 +73,16 @@ function LIB.SanitizeTheme(str)
 
 	if str == "" then
 		str = LIBSkinsystem.THEME_DEFAULT
+	end
+
+	return str
+end
+
+function LIB.SanitizeSavegame(str)
+	str = LIB.SanitizeString(str)
+
+	if str == "" then
+		str = "none"
 	end
 
 	return str
@@ -214,6 +223,11 @@ end
 
 function LIB.FormatTheme(str)
 	str = LIB.SanitizeTheme(str)
+	return str
+end
+
+function LIB.FormatSavegame(str)
+	str = LIB.SanitizeSavegame(str)
 	return str
 end
 
@@ -427,6 +441,16 @@ local function outputKeyValueStringLine(tab, key, space, value, comma)
 	outputKeyValueLine(tab, key, space, valueSegment, comma)
 end
 
+local function outputKeyValueSavegameLine(tab, key, space, value, comma)
+	local valueSegment = {
+		format = "\"%s\"",
+		formatParams = {LIB.FormatSavegame(value)},
+		color = g_stringColor,
+	}
+
+	outputKeyValueLine(tab, key, space, valueSegment, comma)
+end
+
 local function outputKeyValueStringListableLine(tab, key, space, value, comma)
 	local valueSegment = {
 		format = "\"%s\"",
@@ -601,6 +625,7 @@ function LIB.FormatSnapshot(workloadEntry, outputToConsole)
 	outputLine()
 
 	outputKeyValueStringLine        (4, "map", "      ", workloadEntry.map, true)
+	outputKeyValueSavegameLine      (4, "savegame", " ", workloadEntry.savegame, true)
 	outputKeyValueStringLine        (4, "category", " ", workloadEntry.category, true)
 	outputKeyValueStringListableLine(4, "spawnname", "", workloadEntry.spawnname, true)
 	outputKeyValueThemeListableLine (4, "theme", "    ", workloadEntry.theme, true)
@@ -720,6 +745,7 @@ function LIB.SanitizeWorkloadEntry(workloadEntry)
 
 	local result = {
 		map = LIB.SanitizeString(workloadEntry.map),
+		savegame = LIB.SanitizeSavegame(workloadEntry.savegame),
 		addonname = LIB.SanitizeString(workloadEntry.addonname),
 		category = LIB.SanitizeString(workloadEntry.category),
 		spawnname = LIB.SanitizeStringList(workloadEntry.spawnname),
@@ -783,7 +809,7 @@ end
 
 function LIB.ReadWorkloadForCurrentMap(callback)
 	local map = game.GetMap()
-	path = LIB.config.workloadFolder .. "/" .. map .. ".json"
+	path = LIBFile.Join(LIB.config.workloadFolder, map .. ".json")
 
 	return LIB.ReadWorkload(path, callback)
 end

@@ -6,18 +6,17 @@ if not SLIGWOLF_ADDON then
 	return
 end
 
-local SLIGWOLF_ADDON = SLIGWOLF_ADDON
-
 local LIB = SLIGWOLF_ADDON.IconGenerator
 if not LIB then
 	return
 end
 
 local LIBHook = SligWolf_Addons.Hook
+local LIBUtil = SligWolf_Addons.Util
 
 if SERVER then
 	local function freezePlayerMove(ply, cmd)
-		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
+		if not LIBUtil.IsHostPlayer(ply) then
 			return
 		end
 
@@ -41,7 +40,7 @@ if SERVER then
 	LIBHook.Add("StartCommand", "Addon_ZDevTools_Icongen_FreezePlayerMove", freezePlayerMove)
 
 	local function preventItemPickup(ply, item)
-		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
+		if not LIBUtil.IsHostPlayer(ply) then
 			return
 		end
 
@@ -70,7 +69,7 @@ if SERVER then
 end
 
 local function freezePlayerSwitchWeapon(ply, oldWeapon, newWeapon)
-	if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
+	if not LIBUtil.IsHostPlayer(ply) then
 		return
 	end
 
@@ -100,7 +99,7 @@ if CLIENT then
 		end
 
 		local ply = weapon:GetOwner()
-		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
+		if not LIBUtil.IsHostPlayer(ply) then
 			return
 		end
 
@@ -113,7 +112,6 @@ if CLIENT then
 
 	LIBHook.Add("HUDWeaponPickedUp", "Addon_ZDevTools_Icongen_HideWeaponPickedUp", hideWeaponPickedUp)
 end
-
 
 return true
 

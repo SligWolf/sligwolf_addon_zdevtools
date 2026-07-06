@@ -14,6 +14,7 @@ SLIGWOLF_ADDON:LuaInclude("lib/icongen_parser.lua")
 
 if SERVER then
 	SLIGWOLF_ADDON:LuaInclude("lib/sv/sv_icongen.lua")
+	SLIGWOLF_ADDON:LuaInclude("lib/sv/sv_icongen_savegame.lua")
 
 	SLIGWOLF_ADDON:AddCSLuaFile("lib/cl/cl_icongen.lua")
 	SLIGWOLF_ADDON:AddCSLuaFile("lib/cl/cl_icongen_render.lua")
@@ -26,7 +27,6 @@ if CLIENT then
 	SLIGWOLF_ADDON:LuaInclude("lib/cl/cl_icongen_controls.lua")
 end
 
-local LIBEntities = SligWolf_Addons.Entities
 local LIBHook = SligWolf_Addons.Hook
 
 local LIBIconGenerator = SLIGWOLF_ADDON.IconGenerator
@@ -34,6 +34,7 @@ local LIBString = SligWolf_Addons.String
 local LIBPrint = SligWolf_Addons.Print
 local LIBTimer = SligWolf_Addons.Timer
 local LIBFile = SligWolf_Addons.File
+local LIBUtil = SligWolf_Addons.Util
 
 local function log(format, ...)
 	local text = string.format(format, ...)
@@ -136,6 +137,15 @@ g_iconGenerator.OnSpawn = function(this, ent)
 	)
 end
 
+g_iconGenerator.OnLoadSavegame = function(this, path, absolutePath)
+	if not path then
+		log("OnLoadSavegame: none")
+		return
+	end
+
+	log("OnLoadSavegame: '%s'", absolutePath)
+end
+
 g_iconGenerator.OnFileWritten = function(this, path, absolutePath)
 	log("OnFileWritten: 'data/%s'", absolutePath)
 end
@@ -174,6 +184,10 @@ end
 
 if SERVER then
 	concommand.Add("dev_sligwolf_zdevtools_icongen_start", function(ply, cmd, args)
+		if not LIBUtil.IsHostPlayer(ply) then
+			return
+		end
+
 		if not IsValid(g_iconGenerator) then
 			return
 		end
@@ -222,11 +236,40 @@ if SERVER then
 	end)
 
 	concommand.Add("dev_sligwolf_zdevtools_icongen_cancel", function(ply)
+		if not LIBUtil.IsHostPlayer(ply) then
+			return
+		end
+
 		if not IsValid(g_iconGenerator) then
 			return
 		end
 
 		g_iconGenerator:Cancel()
+	end)
+
+	concommand.Add("dev_sligwolf_zdevtools_icongen_loadsave", function(ply, cmd, args)
+		if not LIBUtil.IsHostPlayer(ply) then
+			return
+		end
+
+		if IsValid(g_iconGenerator) then
+			g_iconGenerator:Cancel()
+		end
+
+		local savename = string.lower(string.Trim(tostring(args[1] or "")))
+
+		LIBIconGenerator.LoadSaveGame(savename, ply, function(success, errorOrPath, absolutePath)
+			if not success then
+				LIBPrint.Warn("dev_sligwolf_zdevtools_icongen_loadsave: %s", errorOrPath)
+				return
+			end
+
+			if not errorOrPath then
+				LIBPrint.Print("dev_sligwolf_zdevtools_icongen_loadsave: Map reset by 'none' savegame.")
+			else
+				LIBPrint.Print("dev_sligwolf_zdevtools_icongen_loadsave: Savegame loaded from file '%s'.", absolutePath)
+			end
+		end)
 	end)
 end
 

@@ -66,6 +66,8 @@ local function freezeEntity(ent)
 end
 
 function META:ResetInternal()
+	self.processSubId = nil
+
 	self.workload = nil
 	self.workloadByPath = nil
 	self.workloadCount = 0
@@ -78,6 +80,9 @@ function META:ResetInternal()
 	self.currentSpawnname = nil
 	self.currentTheme = nil
 	self.currentPath = nil
+
+	self.currentSavegame = nil
+	self.lastSavegame = nil
 
 	self.currentEntity = nil
 
@@ -284,6 +289,11 @@ function META:AddWorkloadItem(workloadItem)
 		themesTmp = {defaultsTheme}
 	end
 
+	local savegame = tostring(workloadItem.savegame or "")
+	if savegame == "" then
+		savegame = "none"
+	end
+
 	for _, spawnname in ipairs(spawnnames) do
 		spawnname = tostring(spawnname or "")
 
@@ -382,6 +392,7 @@ function META:AddWorkloadItem(workloadItem)
 		newItemTemplate.category = category
 		newItemTemplate.addonname = addonname
 		newItemTemplate.spawnparams = spawnparams
+		newItemTemplate.savegame = savegame
 
 		newItemTemplate.camera = {
 			pos = camera.pos or defaultsCamera.pos,
@@ -495,6 +506,7 @@ function META:ValidateWorkloadItem(item)
 	local spawnname = item.spawnname
 	local category = item.category
 	local addonname = item.addonname
+	local savegame = item.savegame
 
 	local id = item.id
 	local path = item.path
@@ -503,7 +515,7 @@ function META:ValidateWorkloadItem(item)
 
 	if map ~= loadedMap then
 		self:Warn(
-			"ValidateWorkloadItem: Unloaded map given, skipping. ('%s' != '%s') (ID: %i, Spawnname: '%s', Category: '%s')",
+			"ValidateWorkloadItem: Given map does not match, skipping. ('%s' != '%s') (ID: %i, Spawnname: '%s', Category: '%s')",
 			map,
 			loadedMap,
 			id,
@@ -535,6 +547,36 @@ function META:ValidateWorkloadItem(item)
 		)
 
 		return false
+	end
+
+	if savegame ~= "none" then
+		local saveMap = LIB.SaveGameMap(savegame)
+
+		if not saveMap then
+			self:Warn(
+				"ValidateWorkloadItem: Savegame '%s' does not exist, skipping. (ID: %i, Spawnname: '%s', Category: '%s')",
+				savegame,
+				id,
+				spawnname,
+				category
+			)
+
+			return false
+		end
+
+		if saveMap ~= loadedMap then
+			self:Warn(
+				"ValidateWorkloadItem: Savegame '%s' does not match map, skipping. ('%s' != '%s') (ID: %i, Spawnname: '%s', Category: '%s')",
+				savegame,
+				saveMap,
+				loadedMap,
+				id,
+				spawnname,
+				category
+			)
+
+			return false
+		end
 	end
 
 	if workloadByPath[path] then
@@ -605,11 +647,13 @@ function META:ProcessNextEntry()
 	end
 
 	self.currentEntry = currentEntry
+
 	self.currentAddonname = currentEntry.addonname
 	self.currentCategory = currentEntry.category
 	self.currentSpawnname = currentEntry.spawnname
 	self.currentTheme = currentEntry.theme
 	self.currentPath = currentEntry.path
+	self.currentSavegame = currentEntry.savegame
 
 	if index == 1 then
 		self:ProcessStart()
@@ -619,8 +663,10 @@ function META:ProcessNextEntry()
 		ProtectedCall(self.OnProgress, self, index, count)
 	end
 
-	self:MovePlayerToEntry()
-	self:SpawnEntityForEntry()
+	self:LoadSaveGame(function()
+		self:MovePlayerToEntry()
+		self:SpawnEntityForEntry()
+	end)
 end
 
 function META:ProcessNextEntryOnError()
@@ -654,6 +700,7 @@ end
 
 function META:ProcessEnd()
 	self.isProcessing = false
+	self.processSubId = nil
 
 	self.workload = nil
 	self.workloadCount = nil
@@ -666,6 +713,9 @@ function META:ProcessEnd()
 	self.currentSpawnname = nil
 	self.currentTheme = nil
 	self.currentPath = nil
+
+	self.currentSavegame = nil
+	self.lastSavegame = nil
 
 	self:ResetPlayerPosition()
 	self:Unlock()
@@ -744,6 +794,49 @@ function META:MovePlayerToCamera()
 	local playerPos = eyePos - viewOffset
 
 	self:MovePlayerToPosition(playerPos, playerAng)
+end
+
+function META:LoadSaveGame(callback)
+	if not self:ValidateState() then
+		return
+	end
+
+	local savegame = self.currentSavegame
+	local lastSavegame = self.lastSavegame
+	self.lastSavegame = savegame
+
+	if lastSavegame and lastSavegame == savegame then
+		callback()
+		return
+	end
+
+	local processSubId = self.processSubId
+
+	LIB.LoadSaveGame(savegame, function(success, errorOrPath, absolutePath)
+		if not IsValid(self) then
+			return
+		end
+
+		if processSubId ~= self.processSubId then
+			return
+		end
+
+		if not self:ValidateState() then
+			return
+		end
+
+		if not success then
+			self:Warn("LoadSaveGame: %s", errorOrPath)
+			self:Cancel()
+			return
+		end
+
+		if self.OnLoadSavegame then
+			ProtectedCall(self.OnLoadSavegame, self, errorOrPath, absolutePath)
+		end
+
+		callback()
+	end)
 end
 
 function META:ValidateEntity(ent)

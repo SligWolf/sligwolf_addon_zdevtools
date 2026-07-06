@@ -729,7 +729,7 @@ function LIB.GetEntityData()
 end
 
 local function captureAndSave(path, callback)
-	path = tostring(path or "")
+	path = LIBFile.Join(path)
 
 	if path == "" then
 		callback(false, "No path given.")
@@ -799,7 +799,7 @@ function LIB.TakeScreenshot(parameter)
 	LIB.SetProgressStats(index, count)
 	LIB.SetEntityData(entityData)
 
-	local timerAndCallbackName = "icongen_callback"
+	local timerAndCallbackName = "icongen_screenshot_callback"
 
 	local validate = function()
 		if validateCallback and not validateCallback() then

@@ -4,6 +4,7 @@
         "category":  "vehicle",
         "spawnname": ["sligwolf_westernloco_wl13_loco_phx"],
         "theme":     ["all"],
+        "savegame":  "test",
 
         "entity": {
             "pos":         "[11210.000, 5531.125, -416.438]",
@@ -30,6 +31,7 @@
         "category":  "weapon",
         "spawnname": ["sligwolf_weapon_motorbike_mg34"],
         "theme":     ["all"],
+        "savegame":  "none",
 
         "entity": {
             "pos":         "[9833.09, 4718.68, -288.25]",
@@ -56,6 +58,7 @@
         "category":  "npc",
         "spawnname": ["sligwolf_robotgen2_rebel_resistance"],
         "theme":     ["default"],
+        "savegame":  "none",
 
         "entity": {
             "pos":         "[11804.375, 5480.500, -399.969]",
@@ -86,6 +89,7 @@
 		"category":  "vehicle",
 		"spawnname": ["sligwolf_motorbike_bmwr75_civil"],
 		"theme":     ["default"],
+        "savegame":  "none",
 
 		"entity": {
 			"pos":         "[10529.896, 5617.949, -403.555]",
