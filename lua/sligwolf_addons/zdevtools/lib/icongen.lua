@@ -10,8 +10,8 @@ local LIB = SLIGWOLF_ADDON.IconGenerator or {}
 SLIGWOLF_ADDON.IconGenerator = LIB
 
 local LIBSkinsystem = SligWolf_Addons.Skinsystem
+local LIBPlayer = SligWolf_Addons.Player
 local LIBPrint = SligWolf_Addons.Print
-local LIBUtil = SligWolf_Addons.Util
 
 local META = LIB.meta or {}
 LIB.meta = META
@@ -197,7 +197,7 @@ end
 function META:IsLocked()
 	local ply = self.player
 
-	if not LIBUtil.IsHostPlayer(ply) then
+	if not LIBPlayer.IsHostPlayer(ply) then
 		return false
 	end
 
@@ -252,7 +252,7 @@ function META:ValidateState()
 
 	local ply = self.player
 
-	if not LIBUtil.IsHostPlayer(ply) then
+	if not LIBPlayer.IsHostPlayer(ply) then
 		self:Cancel()
 		return false
 	end

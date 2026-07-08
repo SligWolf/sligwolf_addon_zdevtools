@@ -125,6 +125,11 @@ function META:Lock()
 		ply:Give(lockWeapon)
 		ply:SelectWeapon(lockWeapon)
 
+		local wep = ply:GetWeapon(lockWeapon)
+		if IsValid(wep) then
+			wep:SetNoDraw(true)
+		end
+
 		ply:SetNWVector("sligwolf_zdevtools_icongen_lock_pos", ply:GetPos())
 		ply:SetNWAngle("sligwolf_zdevtools_icongen_lock_ang", ply:EyeAngles())
 		ply:SetNWBool("sligwolf_zdevtools_icongen_lock", true)
@@ -146,6 +151,12 @@ function META:Unlock()
 		ply:GodDisable()
 
 		local lockWeapon = LIB.config.lockWeapon
+
+		local wep = ply:GetWeapon(lockWeapon)
+		if IsValid(wep) then
+			wep:SetNoDraw(false)
+		end
+
 		ply:StripWeapon(lockWeapon)
 
 		local unlockWeapon = LIB.config.unlockWeapon
@@ -596,12 +607,14 @@ function META:DestroyInternal()
 	self:ResetPlayerPosition()
 	self:CleanupSpawn()
 	self:Unlock()
+	game.CleanUpMap()
 end
 
 function META:CancelInternal()
 	self:ResetPlayerPosition()
 	self:CleanupSpawn()
 	self:Unlock()
+	game.CleanUpMap()
 end
 
 function META:ValidateStateInternal()
@@ -719,6 +732,7 @@ function META:ProcessEnd()
 
 	self:ResetPlayerPosition()
 	self:Unlock()
+	game.CleanUpMap()
 
 	if self.OnFinished then
 		ProtectedCall(self.OnFinished, self)

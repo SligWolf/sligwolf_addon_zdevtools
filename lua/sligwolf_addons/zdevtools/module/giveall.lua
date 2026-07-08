@@ -8,8 +8,10 @@ end
 
 local SLIGWOLF_ADDON = SLIGWOLF_ADDON
 
+local LIBConvar = SligWolf_Addons.Convar
 local LIBTimer = SligWolf_Addons.Timer
 local LIBPrint = SligWolf_Addons.Print
+local LIBUtil = SligWolf_Addons.Util
 local LIBNet = SligWolf_Addons.Net
 
 local g_vanillaWeapons = {
@@ -171,7 +173,7 @@ end
 if SERVER then
 	LIBNet.AddNetworkString("zdevtools_giveall_call")
 
-	LIBNet.Receive("zdevtools_giveall_call", function(ply)
+	LIBNet.Receive("zdevtools_giveall_call", function(len, ply)
 		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
 			return
 		end
@@ -184,10 +186,6 @@ if SERVER then
 end
 
 local function giveAllCmd(ply, command, args)
-	if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
-		return
-	end
-
 	local modeId = 0
 
 	local mode = string.lower(string.Trim(tostring(args[1] or "")))
@@ -225,14 +223,13 @@ local function giveAllCmd(ply, command, args)
 	end
 end
 
-local helptext = "Give the player all weapons and/or ammo. Syntax: dev_sligwolf_zdevtools_giveall {weapons|ammo} [<ammo count>]"
-
-concommand.Add(
-	"dev_sligwolf_zdevtools_giveall",
-	giveAllCmd,
-	nil,
-	helptext
-)
+LIBConvar.AddCommand("dev_sligwolf_zdevtools_giveall", {
+	flags = bit.bor(FCVAR_GAMEDLL, FCVAR_CLIENTDLL, FCVAR_CLIENTCMD_CAN_EXECUTE),
+	role = SLIGWOLF_ADDON.ROLE_DEVELOPER_PLAYER,
+	callback = giveAllCmd,
+	help = "Give the player all weapons and/or ammo.",
+	helpSyntax = "{weapons|ammo} [<ammo count>]",
+})
 
 return true
 

@@ -17,61 +17,73 @@ local cvarFlags = bit.bor(FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_GAMEDLL)
 local cvEnabled = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_enabled", {
 	default = false,
 	flags = cvarFlags,
+	help = "Enable physics settings."
 })
 
 local cvMaxVelocity = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_maxvelocity", {
 	default = 4000,
 	flags = cvarFlags,
+	help = "Physics settings."
 })
 
 local cvMaxAngularVelocity = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_maxangularvelocity", {
 	default = 7272.7280273438,
 	flags = cvarFlags,
+	help = "Physics settings."
 })
 
 local cvGravityX = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_gravity_x", {
 	default = 0,
 	flags = cvarFlags,
+	help = "Physics settings."
 })
 
 local cvGravityY = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_gravity_y", {
 	default = 0,
 	flags = cvarFlags,
+	help = "Physics settings."
 })
 
 local cvGravityZ = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_gravity_z", {
 	default = 600,
 	flags = cvarFlags,
+	help = "Physics settings."
 })
 
 local cvCollisionsPerObjectPerTimestep = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_collisions_object_timestep", {
 	default = 10,
 	flags = cvarFlags,
+	help = "Physics settings."
 })
 
 local cvCollisionsPerTimestep = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_collisions_timestep", {
 	default = 50000,
 	flags = cvarFlags,
+	help = "Physics settings."
 })
 
 local cvMinFrictionMass = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_minfrictionmass", {
 	default = 10,
 	flags = cvarFlags,
+	help = "Physics settings."
 })
 
 local cvMaxFrictionMass = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_maxfrictionmass", {
 	default = 2500,
 	flags = cvarFlags,
+	help = "Physics settings."
 })
 
 local cvAirDensity = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_airdensity", {
 	default = 2,
 	flags = cvarFlags,
+	help = "Physics settings."
 })
 
 local cvTimeScale = LIBConvar.AddConvar("phys_sligwolf_zdevtools_custom_timescale", {
 	default = 1,
 	flags = cvarFlags,
+	help = "Physics settings."
 })
 
 local g_defaults = SLIGWOLF_ADDON.PhysDefaults or {}
@@ -207,10 +219,6 @@ LIBConvar.AddChangeCallback("phys_sligwolf_zdevtools_custom_airdensity", updateA
 LIBConvar.AddChangeCallback("phys_sligwolf_zdevtools_custom_timescale", updateTimeScale)
 
 local function printSettingsCmd(ply, command, args)
-	if not SLIGWOLF_ADDON:IsValidDeveloperPlayerForCmd(ply) then
-		return
-	end
-
 	local settings = {}
 
 	settings.airDensity = physenv.GetAirDensity()
@@ -221,13 +229,7 @@ local function printSettingsCmd(ply, command, args)
 	PrintTable(settings)
 end
 
-concommand.Add("phys_sligwolf_zdevtools_print_settings", printSettingsCmd)
-
-local function printDefaultCmd(ply, command, args)
-	if not SLIGWOLF_ADDON:IsValidDeveloperPlayerForCmd(ply) then
-		return
-	end
-
+local function printDefaultsCmd(ply, command, args)
 	if not buildDefaults() then
 		return
 	end
@@ -235,7 +237,19 @@ local function printDefaultCmd(ply, command, args)
 	PrintTable(g_defaults)
 end
 
-concommand.Add("phys_sligwolf_zdevtools_print_default", printDefaultCmd)
+LIBConvar.AddCommand("phys_sligwolf_zdevtools_print_settings", {
+	flags = bit.bor(FCVAR_DONTRECORD, FCVAR_GAMEDLL),
+	role = SLIGWOLF_ADDON.ROLE_DEVELOPER,
+	callback = printSettingsCmd,
+	help = "Print current physics settings.",
+})
+
+LIBConvar.AddCommand("phys_sligwolf_zdevtools_print_defaults", {
+	flags = bit.bor(FCVAR_DONTRECORD, FCVAR_GAMEDLL),
+	role = SLIGWOLF_ADDON.ROLE_DEVELOPER,
+	callback = printDefaultsCmd,
+	help = "Print default physics settings.",
+})
 
 return true
 

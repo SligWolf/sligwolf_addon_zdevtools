@@ -8,6 +8,7 @@ end
 
 local SLIGWOLF_ADDON = SLIGWOLF_ADDON
 
+local LIBConvar = SligWolf_Addons.Convar
 local LIBNet = SligWolf_Addons.Net
 
 local function restart()
@@ -17,17 +18,16 @@ end
 if SERVER then
 	LIBNet.AddNetworkString("zdevtools_restart_call")
 
-	LIBNet.Receive("zdevtools_restart_call", function(ply)
-		if SLIGWOLF_ADDON and not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then return end
+	LIBNet.Receive("zdevtools_restart_call", function(len, ply)
+		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
+			return
+		end
+
 		restart()
 	end)
 end
 
 local function restartCmd(ply, command, args)
-	if SLIGWOLF_ADDON and not SLIGWOLF_ADDON:IsValidDeveloperPlayerForCmd(ply) then
-		return
-	end
-
 	if SERVER then
 		restart()
 	else
@@ -36,18 +36,25 @@ local function restartCmd(ply, command, args)
 	end
 end
 
-local helptext = "Reloads the current map."
-local helptextAlias = "Reloads the current map. Alias of 'dev_sligwolf_zdevtools_restart_server'."
+local params = {
+	flags = bit.bor(FCVAR_GAMEDLL, FCVAR_CLIENTDLL, FCVAR_CLIENTCMD_CAN_EXECUTE),
+	role = SLIGWOLF_ADDON.ROLE_DEVELOPER,
+	callback = restartCmd,
+	help = "Reloads the current map.",
+}
 
-concommand.Add("dev_sligwolf_zdevtools_restart_server", restartCmd, nil, helptext)
+local paramsAlias = table.Copy(params)
+paramsAlias.help = "Reloads the current map. Alias of \x04'dev_sligwolf_zdevtools_restart_server'\x03.",
+
+LIBConvar.AddCommand("dev_sligwolf_zdevtools_restart_server", params)
 
 -- aliases for fast access
-concommand.Add("restart_server", restartCmd, nil, helptextAlias)
-concommand.Add("server_restart", restartCmd, nil, helptextAlias)
-concommand.Add("reload_server", restartCmd, nil, helptextAlias)
-concommand.Add("server_reload", restartCmd, nil, helptextAlias)
+LIBConvar.AddCommand("restart_server", paramsAlias)
+LIBConvar.AddCommand("server_restart", paramsAlias)
+LIBConvar.AddCommand("reload_server", paramsAlias)
+LIBConvar.AddCommand("server_reload", paramsAlias)
 
-concommand.Add("restart", restartCmd, nil, helptextAlias)
+LIBConvar.AddCommand("restart", paramsAlias)
 
 return true
 

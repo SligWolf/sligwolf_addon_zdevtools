@@ -30,6 +30,7 @@ end
 local LIBHook = SligWolf_Addons.Hook
 
 local LIBIconGenerator = SLIGWOLF_ADDON.IconGenerator
+local LIBConvar = SligWolf_Addons.Convar
 local LIBString = SligWolf_Addons.String
 local LIBPrint = SligWolf_Addons.Print
 local LIBTimer = SligWolf_Addons.Timer
@@ -183,94 +184,114 @@ if CLIENT then
 end
 
 if SERVER then
-	concommand.Add("dev_sligwolf_zdevtools_icongen_start", function(ply, cmd, args)
-		if not LIBUtil.IsHostPlayer(ply) then
-			return
-		end
+	LIBConvar.AddCommand("dev_sligwolf_zdevtools_icongen_start", {
+		flags = bit.bor(FCVAR_DONTRECORD, FCVAR_GAMEDLL),
+		role = LIBConvar.ROLE_HOST_PLAYER,
 
-		if not IsValid(g_iconGenerator) then
-			return
-		end
-
-		local spawnname = string.lower(string.Trim(tostring(args[1] or "")))
-		local theme = string.lower(string.Trim(tostring(args[2] or "")))
-
-		if spawnname == "" or spawnname == "all" then
-			spawnname = "*"
-		end
-
-		if theme == "" or theme == "all" then
-			theme = "*"
-		end
-
-		if theme == "all" then
-			theme = "*"
-		end
-
-		g_iconGenerator:Initialize(ply)
-
-		g_iconGenerator:AddWorkloadFilter("cmd_parameter_wildcard", function(item)
-			local itemSpawnname = string.lower(string.Trim(item.spawnname))
-			local itemTheme = string.lower(string.Trim(item.theme))
-
-			if not LIBString.WildcardMatch(itemSpawnname, spawnname) then
-				return false
-			end
-
-			if not LIBString.WildcardMatch(itemTheme, theme) then
-				return false
-			end
-		end)
-
-		LIBIconGenerator.ReadWorkloadForCurrentMap(function(success, errorOrWorkload, path, absolutePath)
-			if not success then
-				LIBPrint.Warn("dev_sligwolf_zdevtools_icongen_start: %s", errorOrWorkload)
+		callback = function(ply, cmd, args)
+			if not IsValid(g_iconGenerator) then
 				return
 			end
 
-			LIBPrint.Print("dev_sligwolf_zdevtools_icongen_start: Workload loaded from file '%s'.", absolutePath)
+			local spawnname = string.lower(string.Trim(tostring(args[1] or "")))
+			local themename = string.lower(string.Trim(tostring(args[2] or "")))
 
-			g_iconGenerator:AddWorkload(errorOrWorkload)
-			g_iconGenerator:Start()
-		end)
-	end)
+			if spawnname == "" or spawnname == "all" then
+				spawnname = "*"
+			end
 
-	concommand.Add("dev_sligwolf_zdevtools_icongen_cancel", function(ply)
-		if not LIBUtil.IsHostPlayer(ply) then
-			return
-		end
+			if themename == "" or themename == "all" then
+				themename = "*"
+			end
 
-		if not IsValid(g_iconGenerator) then
-			return
-		end
+			if themename == "all" then
+				themename = "*"
+			end
 
-		g_iconGenerator:Cancel()
-	end)
+			g_iconGenerator:Initialize(ply)
 
-	concommand.Add("dev_sligwolf_zdevtools_icongen_loadsave", function(ply, cmd, args)
-		if not LIBUtil.IsHostPlayer(ply) then
-			return
-		end
+			g_iconGenerator:AddWorkloadFilter("cmd_parameter_wildcard", function(item)
+				local itemSpawnname = string.lower(string.Trim(item.spawnname))
+				local itemTheme = string.lower(string.Trim(item.theme))
 
-		if IsValid(g_iconGenerator) then
+				if not LIBString.WildcardMatch(itemSpawnname, spawnname) then
+					return false
+				end
+
+				if not LIBString.WildcardMatch(itemTheme, themename) then
+					return false
+				end
+			end)
+
+			LIBIconGenerator.ReadWorkloadForCurrentMap(function(success, errorOrWorkload, path, absolutePath)
+				if not success then
+					LIBPrint.Warn(errorOrWorkload)
+					return
+				end
+
+				LIBPrint.Print("Workload loaded from file '%s'.", absolutePath)
+
+				g_iconGenerator:AddWorkload(errorOrWorkload)
+				g_iconGenerator:Start()
+			end)
+		end,
+
+		help = "Starts entity icon generator process.",
+		helpSyntax = "[<spawnname wildcard|*>] [<themename wildcard|*>]",
+	})
+
+	LIBConvar.AddCommand("dev_sligwolf_zdevtools_icongen_cancel", {
+		flags = bit.bor(FCVAR_DONTRECORD, FCVAR_GAMEDLL),
+		role = LIBConvar.ROLE_HOST_PLAYER,
+
+		callback = function(ply, cmd, args)
+			if not IsValid(g_iconGenerator) then
+				return
+			end
+
 			g_iconGenerator:Cancel()
-		end
+		end,
 
-		local savename = string.lower(string.Trim(tostring(args[1] or "")))
+		help = "Cancels entity icon generator process.",
+	})
 
-		LIBIconGenerator.LoadSaveGame(savename, ply, function(success, errorOrPath, absolutePath)
-			if not success then
-				LIBPrint.Warn("dev_sligwolf_zdevtools_icongen_loadsave: %s", errorOrPath)
+	LIBConvar.AddCommand("dev_sligwolf_zdevtools_icongen_loadsave", {
+		flags = bit.bor(FCVAR_DONTRECORD, FCVAR_GAMEDLL),
+		role = LIBConvar.ROLE_HOST_PLAYER,
+
+		callback = function(ply, cmd, args)
+			if not IsValid(g_iconGenerator) then
 				return
 			end
 
-			if not errorOrPath then
-				LIBPrint.Print("dev_sligwolf_zdevtools_icongen_loadsave: Map reset by 'none' savegame.")
-			else
-				LIBPrint.Print("dev_sligwolf_zdevtools_icongen_loadsave: Savegame loaded from file '%s'.", absolutePath)
+			local savename = string.lower(string.Trim(tostring(args[1] or "")))
+
+			if savename == "" then
+				LIBPrint.Print("Please enter valid savename or 'none'.")
+				return
 			end
-		end)
-	end)
+
+			if IsValid(g_iconGenerator) then
+				g_iconGenerator:Cancel()
+			end
+
+			LIBIconGenerator.LoadSaveGame(savename, function(success, errorOrPath, absolutePath)
+				if not success then
+					LIBPrint.Warn(errorOrPath)
+					return
+				end
+
+				if not errorOrPath then
+					LIBPrint.Print("Map reset by 'none' savegame.")
+				else
+					LIBPrint.Print("Savegame loaded from file '%s'.", absolutePath)
+				end
+			end)
+		end,
+
+		help = "Loads a save game as like as the entity icon generator would. useful for review and testing.",
+		helpSyntax = "{none|<savename>}",
+	})
 end
 
 return true

@@ -41,7 +41,7 @@ end
 
 SLIGWOLF_ADDON.Author = "Grocel"
 SLIGWOLF_ADDON.NiceName = "ZDevTools"
-SLIGWOLF_ADDON.Version = "1.0.0"
+SLIGWOLF_ADDON.Version = "1.1.0"
 
 -- Modules
 SLIGWOLF_ADDON:LuaInclude("module/developer.lua")

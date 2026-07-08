@@ -8,9 +8,12 @@ end
 
 local SLIGWOLF_ADDON = SLIGWOLF_ADDON
 
+SLIGWOLF_ADDON.ROLE_DEVELOPER = "developer"
+SLIGWOLF_ADDON.ROLE_DEVELOPER_PLAYER = "developer_player"
+
 local LIBConvar = SligWolf_Addons.Convar
-local LIBDebug = SligWolf_Addons.Debug
-local LIBUtil = SligWolf_Addons.Util
+local LIBPlayer = SligWolf_Addons.Player
+local LIBPrint = SligWolf_Addons.Print
 local LIBHook = SligWolf_Addons.Hook
 
 local cvarFlags = bit.bor(FCVAR_GAMEDLL, FCVAR_REPLICATED, FCVAR_DONTRECORD)
@@ -18,13 +21,14 @@ local cvarFlags = bit.bor(FCVAR_GAMEDLL, FCVAR_REPLICATED, FCVAR_DONTRECORD)
 LIBConvar.AddConvar("dev_sligwolf_zdevtools_developers_enabled", {
 	default = false,
 	flags = cvarFlags,
-	help = "(DANGEROUS, do not use in production!) Enable sv_sligwolf_zdevtools_developers. See 'help sv_sligwolf_zdevtools_developers'. This is not saved. 0 = Disabled, 1 = Enabled, Default: 0",
+	help = "\x06(DANGEROUS, do not use in production!)\x03 Enables \x04'sv_sligwolf_zdevtools_developers'\x03. See \x04'help sv_sligwolf_zdevtools_developers'\x03. This is not saved to config.",
 })
 
 LIBConvar.AddConvar("dev_sligwolf_zdevtools_developers", {
 	default = "",
 	flags = cvarFlags,
-	help = "(DANGEROUS, do not use in production!) Space separated list of player names to be considered as 'SW Addons'-developer (Can run server code, via Luapad!). This is usefull for '-multirun' session testing. This is not saved. Default: (empty)",
+	help = "\x06(DANGEROUS, do not use in production!)\x03 Space separated list of player names to be considered as 'SW Addons'-developer. \x06(Can run server code, via Luapad!)\x03 This is useful for \x04'-multirun'\x03 session testing. This is not saved to config.",
+	helpSyntax = "[<playername 1>] [<playername 2>] ... [<playername N>]",
 })
 
 SLIGWOLF_ADDON.Developer = nil
@@ -45,6 +49,30 @@ LIBConvar.AddChangeCallback("dev_sligwolf_zdevtools_developers", function(value)
 	table.CopyFromTo(value, SLIGWOLF_ADDON.DeveloperNames)
 end)
 
+LIBConvar.AddCommandRole(SLIGWOLF_ADDON.ROLE_DEVELOPER, {
+	title = "Developer only",
+	callback = function(ply, cmd, args)
+		if not SLIGWOLF_ADDON:IsValidDeveloperPlayerForCmd(ply) then
+			LIBPrint.PrintForPlayer(ply, "This is developer only.")
+			return false
+		end
+
+		return true
+	end,
+})
+
+LIBConvar.AddCommandRole(SLIGWOLF_ADDON.ROLE_DEVELOPER_PLAYER, {
+	title = "Developer player only",
+	callback = function(ply, cmd, args)
+		if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
+			LIBPrint.PrintForPlayer(ply, "This is developer player only.")
+			return false
+		end
+
+		return true
+	end,
+})
+
 -- Matches player names to their name variations when they are joined as a -multirun session.
 local function matchPlayerNameMultirunVariations(playerName, searchName)
 	playerName = string.lower(string.Trim(playerName))
@@ -59,15 +87,17 @@ local function matchPlayerNameMultirunVariations(playerName, searchName)
 	end
 
 	local escapedSearch = string.PatternSafe(searchName)
-	local pattern = "^" .. escapedSearch .. "%s*%(?%d*%)?$"
+	local pattern = "^%(?%d*%)?%s*" .. escapedSearch .. "%s*%(?%d*%)?$"
 
 	-- Using steam id does not work for multirun instances, so match the player's nicknames.
 	-- Matches player names and their multirun variations, case-insensitive. Example for SligWolf:
 	--  SligWolf,
 	--	SligWolf(1),
-	--	SligWolf(2),
 	--	SligWolf (1),
-	--	SligWolf (2)
+	--	(1)SligWolf,
+	--	(1) SligWolf,
+	--	(1)SligWolf(1),
+	--	(1) SligWolf (1),
 
 	if string.match(playerName, pattern) then
 		return true
@@ -78,11 +108,15 @@ end
 
 -- Check if the player is a developer.
 function SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply)
+	if CLIENT and ply == nil then
+		ply = LocalPlayer()
+	end
+
 	if not IsValid(ply) then
 		return false
 	end
 
-	if LIBDebug.IsValidDebugPlayer(ply) then
+	if LIBPlayer.IsHostPlayer(ply) then
 		return true
 	end
 
@@ -115,7 +149,7 @@ function SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply)
 end
 
 function SLIGWOLF_ADDON:IsValidDeveloperPlayerForCmd(ply)
-	if LIBUtil.IsAdminForCMD(ply) then
+	if LIBPlayer.IsAdminForCMD(ply) then
 		return true
 	end
 
@@ -126,27 +160,33 @@ function SLIGWOLF_ADDON:IsValidDeveloperPlayerForCmd(ply)
 	return false
 end
 
+local g_developerPlayer = nil
+
 -- Gets the first a developer player.
 function SLIGWOLF_ADDON:GetFirstDeveloperPlayer()
-	if self:IsValidDeveloperPlayer(self.Developer) then
-		return self.Developer
+	if g_developerPlayer and self:IsValidDeveloperPlayer(g_developerPlayer) then
+		return g_developerPlayer
 	end
 
-	self.Developer = nil
+	g_developerPlayer = nil
 
-	local debugPly = LIBDebug.GetDebugPlayer()
-	if self:IsValidDeveloperPlayer(debugPly) then
-		self.Developer = debugPly
-		return debugPly
+	local hostPly = LIBPlayer.GetHostPlayer()
+	if hostPly and self:IsValidDeveloperPlayer(hostPly) then
+		g_developerPlayer = hostPly
+		return hostPly
 	end
 
 	for _, ply in player.Iterator() do
+		if not ply then
+			continue
+		end
+
 		if not self:IsValidDeveloperPlayer(ply) then
 			continue
 		end
 
-		self.Developer = ply
-		return self.Developer
+		g_developerPlayer = ply
+		return g_developerPlayer
 	end
 
 	return nil

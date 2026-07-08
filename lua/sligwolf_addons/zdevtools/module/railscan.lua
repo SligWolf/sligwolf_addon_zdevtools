@@ -8,6 +8,7 @@ end
 
 local LIBRailscan = SligWolf_Addons.Railscan
 local LIBConvar = SligWolf_Addons.Convar
+local LIBPlayer = SligWolf_Addons.Player
 local LIBDebug = SligWolf_Addons.Debug
 local LIBTrace = SligWolf_Addons.Trace
 local LIBRail = SligWolf_Addons.Rail
@@ -18,7 +19,7 @@ local cvarFlags = bit.bor(FCVAR_GAMEDLL, FCVAR_REPLICATED, FCVAR_ARCHIVE, FCVAR_
 LIBConvar.AddConvar("dev_sligwolf_zdevtools_railscan_enabled", {
 	default = false,
 	flags = cvarFlags,
-	help = "Enable Railscan test output, requires 'developer 1' or above. 0 = Disabled, 1 = Enabled, Default: 0",
+	help = "Enable Railscan test output, requires \x04'developer 1'\x03 or above.",
 })
 
 local LIB = SLIGWOLF_ADDON.RailscanTest or {}
@@ -32,7 +33,7 @@ local function railScanThinkTest()
 		return
 	end
 
-	local ply = LIBDebug.GetDebugPlayer()
+	local ply = LIBPlayer.GetHostPlayer()
 	if not IsValid(ply) then
 		return
 	end

@@ -7,12 +7,11 @@ end
 
 local SLIGWOLF_ADDON = SLIGWOLF_ADDON
 
+local LIBConvar = SligWolf_Addons.Convar
 local LIBPrint = SligWolf_Addons.Print
 local LIBHook = SligWolf_Addons.Hook
 
 local function setSpawnpoint(ply, command, args)
-	if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then return end
-
 	local plyTable = ply:SligWolf_GetTable()
 
 	plyTable.devSpawnPoint = ply:GetPos()
@@ -23,10 +22,6 @@ local function setSpawnpoint(ply, command, args)
 end
 
 local function removeSpawnpoint(ply, command, args)
-	if not SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
-		return
-	end
-
 	local plyTable = ply:SligWolf_GetTable()
 
 	if not plyTable.devSpawnPoint and not plyTable.devSpawnAngle then
@@ -41,10 +36,6 @@ local function removeSpawnpoint(ply, command, args)
 end
 
 local function removeAllSpawnpoints(ply, command, args)
-	if not SLIGWOLF_ADDON:IsValidDeveloperPlayerForCmd(ply) then
-		return
-	end
-
 	for _, v in player.Iterator() do
 		removeSpawnpoint(v)
 	end
@@ -75,9 +66,26 @@ local function playerSpawnOnSpawnpoint(ply)
 	ply:SetEyeAngles(devSpawnAngle)
 end
 
-concommand.Add("dev_sligwolf_zdevtools_spawnpoint_set", setSpawnpoint)
-concommand.Add("dev_sligwolf_zdevtools_spawnpoint_remove", removeSpawnpoint)
-concommand.Add("dev_sligwolf_zdevtools_spawnpoint_remove_all", removeAllSpawnpoints)
+LIBConvar.AddCommand("dev_sligwolf_zdevtools_spawnpoint_set", {
+	flags = bit.bor(FCVAR_GAMEDLL),
+	role = SLIGWOLF_ADDON.ROLE_DEVELOPER_PLAYER,
+	callback = setSpawnpoint,
+	help = "Set the spawnpoint to current player position.",
+})
+
+LIBConvar.AddCommand("dev_sligwolf_zdevtools_spawnpoint_remove", {
+	flags = bit.bor(FCVAR_GAMEDLL),
+	role = SLIGWOLF_ADDON.ROLE_DEVELOPER_PLAYER,
+	callback = removeSpawnpoint,
+	help = "Remove spawnpoint.",
+})
+
+LIBConvar.AddCommand("dev_sligwolf_zdevtools_spawnpoint_remove_all", {
+	flags = bit.bor(FCVAR_GAMEDLL),
+	role = SLIGWOLF_ADDON.ROLE_DEVELOPER,
+	callback = removeAllSpawnpoints,
+	help = "Remove all spawnpoints.",
+})
 
 LIBHook.Add("PlayerSpawn", "Addon_ZDevTools_Spawnpoint_Spawn", playerSpawnOnSpawnpoint)
 

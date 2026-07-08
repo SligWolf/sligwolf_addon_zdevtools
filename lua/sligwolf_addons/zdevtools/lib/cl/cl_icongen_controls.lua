@@ -26,6 +26,7 @@ local cvDistance = LIBConvar.AddClientConvar("dev_sligwolf_zdevtools_icongen_dof
 	max = LIB.config.limits.dof.distance,
 	shouldsave = true,
 	userinfo = false,
+	help = "Icongen, DoF distance.",
 })
 
 local cvBlur = LIBConvar.AddClientConvar("dev_sligwolf_zdevtools_icongen_dof_blur", {
@@ -34,6 +35,7 @@ local cvBlur = LIBConvar.AddClientConvar("dev_sligwolf_zdevtools_icongen_dof_blu
 	max = LIB.config.limits.dof.blur,
 	shouldsave = true,
 	userinfo = false,
+	help = "Icongen, DoF blur.",
 })
 
 local cvPasses = LIBConvar.AddClientConvar("dev_sligwolf_zdevtools_icongen_dof_passes", {
@@ -42,6 +44,7 @@ local cvPasses = LIBConvar.AddClientConvar("dev_sligwolf_zdevtools_icongen_dof_p
 	max = LIB.config.limits.dof.passes,
 	shouldsave = true,
 	userinfo = false,
+	help = "Icongen, DoF passes.",
 })
 
 local cvSteps = LIBConvar.AddClientConvar("dev_sligwolf_zdevtools_icongen_dof_steps", {
@@ -50,6 +53,7 @@ local cvSteps = LIBConvar.AddClientConvar("dev_sligwolf_zdevtools_icongen_dof_st
 	max = LIB.config.limits.dof.steps,
 	shouldsave = true,
 	userinfo = false,
+	help = "Icongen, DoF steps.",
 })
 
 local cvShape = LIBConvar.AddClientConvar("dev_sligwolf_zdevtools_icongen_dof_shape", {
@@ -58,6 +62,7 @@ local cvShape = LIBConvar.AddClientConvar("dev_sligwolf_zdevtools_icongen_dof_sh
 	max = LIB.config.limits.dof.shape,
 	shouldsave = true,
 	userinfo = false,
+	help = "Icongen, DoF shape.",
 })
 
 function PANEL:Init()

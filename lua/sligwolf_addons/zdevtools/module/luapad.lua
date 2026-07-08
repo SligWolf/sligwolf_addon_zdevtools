@@ -28,10 +28,8 @@ LIBHook.Add("LuapadCanRunCL", "Addon_ZDevTools_Luapad_Developer", luapadDevelope
 -- _G.sw.lib        | SligWolf_Addons
 -- _G.sw.const      | SligWolf_Addons.CONSTANTS
 -- _G.sw.debug      | SligWolf_Addons.Debug
--- _G.sw.base       | SligWolf_Addons.BASE_ADDON
--- _G.sw.dev        | SligWolf_Addons.DEV_ADDON
--- _G.sw.debugger   | First debugger player. SligWolf_Addons.Debug.GetDebugPlayer()
--- _G.sw.developer  | First developer player. SligWolf_Addons.DEV_ADDON:GetFirstDeveloperPlayer()
+-- _G.sw.dev        | First developer player. SligWolf_Addons.DEV_ADDON:GetFirstDeveloperPlayer()
+-- _G.sw.host       | Host player. SligWolf_Addons.Player.GetHostPlayer()
 -- _G.sw.fbplayer   | First player, hosts/admins prioritized. SligWolf_Addons.Util:GetFailbackPlayer()
 -- _G.sw.addon      | Addon of _G.this.
 -- _G.sw.addonname  | Addonname of _G.this.
@@ -53,40 +51,35 @@ local function luapadEnvironment(ply, env)
 		return
 	end
 
-	local baseAddon = lib.BASE_ADDON
-	if not baseAddon then
-		return
-	end
-
-	local libUtil = lib.Util
-	if not libUtil then
-		return
-	end
-
+	local addonDev = lib.DEV_ADDON
+	local libPlayer = lib.Player
 	local libEntities = lib.Entities
-	if not libEntities then
-		return
+
+	local dev = nil
+	local host = nil
+	local fbplayer = nil
+
+	if addonDev then
+		dev = addonDev:GetFirstDeveloperPlayer()
 	end
 
-	local devAddon = lib.DEV_ADDON
-	local developer = devAddon and devAddon:GetFirstDeveloperPlayer()
-	local debugger = libDebug.GetDebugPlayer()
-	local fbplayer = libUtil:GetFailbackPlayer()
+	if libPlayer then
+		host = libPlayer.GetHostPlayer()
+		fbplayer = libPlayer.GetFailbackPlayer()
+	end
 
 	local sw = {}
 	sw.lib = lib
 
 	sw.const = libConstants
 	sw.debug = libDebug
-	sw.base = baseAddon
-	sw.dev = devAddon
 
-	if IsValid(debugger) then
-		sw.debugger = debugger
+	if IsValid(dev) then
+		sw.dev = dev
 	end
 
-	if IsValid(developer) then
-		sw.developer = developer
+	if IsValid(host) then
+		sw.host = host
 	end
 
 	if IsValid(fbplayer) then
@@ -94,11 +87,14 @@ local function luapadEnvironment(ply, env)
 	end
 
 	local ent = env.this
-	if IsValid(ent) then
-		local sp = libEntities.GetSuperParent(ent)
 
-		if IsValid(sp) then
-			sw.sp = sp
+	if IsValid(ent) then
+		if libEntities then
+			local sp = libEntities.GetSuperParent(ent)
+
+			if IsValid(sp) then
+				sw.sp = sp
+			end
 		end
 
 		local addon = lib.GetAddonFromEntity(ent)

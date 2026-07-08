@@ -11,36 +11,12 @@ if not LIB then
 	return
 end
 
+local LIBPlayer = SligWolf_Addons.Player
 local LIBHook = SligWolf_Addons.Hook
-local LIBUtil = SligWolf_Addons.Util
 
 if SERVER then
-	local function freezePlayerMove(ply, cmd)
-		if not LIBUtil.IsHostPlayer(ply) then
-			return
-		end
-
-		if not ply:GetNWBool("sligwolf_zdevtools_icongen_lock", false) then
-			return
-		end
-
-		local targetAngles = ply:GetNWAngle("sligwolf_zdevtools_icongen_lock_ang", Angle())
-		cmd:SetViewAngles(targetAngles)
-
-		local vecBlank = Vector()
-		local targetPos = ply:GetNWVector("sligwolf_zdevtools_icongen_lock_pos", vecBlank)
-
-		if targetPos ~= vecBlank then
-			ply:SetPos(targetPos)
-		end
-
-		cmd:SetButtons(0)
-	end
-
-	LIBHook.Add("StartCommand", "Addon_ZDevTools_Icongen_FreezePlayerMove", freezePlayerMove)
-
 	local function preventItemPickup(ply, item)
-		if not LIBUtil.IsHostPlayer(ply) then
+		if not LIBPlayer.IsHostPlayer(ply) then
 			return
 		end
 
@@ -68,8 +44,32 @@ if SERVER then
 	LIBHook.Add("PlayerCanPickupWeapon", "Addon_ZDevTools_Icongen_PreventItemPickup", preventItemPickup)
 end
 
+local function freezePlayerMove(ply, cmd)
+	if not LIBPlayer.IsHostPlayer(ply) then
+		return
+	end
+
+	if not ply:GetNWBool("sligwolf_zdevtools_icongen_lock", false) then
+		return
+	end
+
+	local targetAngles = ply:GetNWAngle("sligwolf_zdevtools_icongen_lock_ang", Angle())
+	cmd:SetViewAngles(targetAngles)
+
+	local vecBlank = Vector()
+	local targetPos = ply:GetNWVector("sligwolf_zdevtools_icongen_lock_pos", vecBlank)
+
+	if targetPos ~= vecBlank then
+		ply:SetPos(targetPos)
+	end
+
+	cmd:SetButtons(0)
+end
+
+LIBHook.Add("StartCommand", "Addon_ZDevTools_Icongen_FreezePlayerMove", freezePlayerMove)
+
 local function freezePlayerSwitchWeapon(ply, oldWeapon, newWeapon)
-	if not LIBUtil.IsHostPlayer(ply) then
+	if not LIBPlayer.IsHostPlayer(ply) then
 		return
 	end
 
@@ -99,7 +99,7 @@ if CLIENT then
 		end
 
 		local ply = weapon:GetOwner()
-		if not LIBUtil.IsHostPlayer(ply) then
+		if not LIBPlayer.IsHostPlayer(ply) then
 			return
 		end
 

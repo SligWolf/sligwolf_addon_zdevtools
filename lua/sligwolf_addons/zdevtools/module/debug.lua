@@ -8,10 +8,11 @@ end
 
 local SLIGWOLF_ADDON = SLIGWOLF_ADDON
 
-local LIBHook = SligWolf_Addons.Hook
-local LIBDebug = SligWolf_Addons.Debug
 local LIBConvar = SligWolf_Addons.Convar
+local LIBPlayer = SligWolf_Addons.Player
+local LIBDebug = SligWolf_Addons.Debug
 local LIBPrint = SligWolf_Addons.Print
+local LIBHook = SligWolf_Addons.Hook
 
 function SLIGWOLF_ADDON:IsDebugKeyDown(ply, key)
 	if not IsValid(ply) then
@@ -106,7 +107,7 @@ if SERVER then
 	end
 
 	LIBHook.Add("KeyPress", "Addon_ZDevTools_Debug_ModeSwitch", function(ply, key)
-		if not LIBDebug.IsValidDebugPlayer(ply) then
+		if not LIBPlayer.IsHostPlayer(ply) then
 			return
 		end
 
@@ -131,61 +132,62 @@ if SERVER then
 		end
 	end)
 
-	local helptext = "Show SW-Names of all SligWolf Addons entities for 60 secounds. This requires 'developer 1' or above. Params: all, console"
-	local cvarFlags = bit.bor(FCVAR_GAMEDLL, FCVAR_DONTRECORD)
+	LIBConvar.AddCommand("dev_sligwolf_zdevtools_show_entity_names", {
+		flags = bit.bor(FCVAR_DONTRECORD, FCVAR_GAMEDLL),
+		role = SLIGWOLF_ADDON.ROLE_DEVELOPER_PLAYER,
 
-	concommand.Add("dev_sligwolf_zdevtools_show_entity_names", function(ply, cmd, args)
-		if not SLIGWOLF_ADDON:IsValidDeveloperPlayerForCmd(ply) then
-			return
-		end
-
-		if not LIBDebug.IsDeveloper() then
-			return
-		end
-
-		local all = false
-		local console = false
-
-		for _, arg in ipairs(args) do
-			arg = string.lower(arg or "")
-
-			if arg == "all" then
-				all = true
-				continue
+		callback = function(ply, cmd, args)
+			if not LIBDebug.IsDeveloper() then
+				return
 			end
 
-			if arg == "console" then
-				console = true
-				continue
+			local all = false
+			local console = false
+
+			for _, arg in ipairs(args) do
+				arg = string.lower(arg or "")
+
+				if arg == "all" then
+					all = true
+					continue
+				end
+
+				if arg == "console" then
+					console = true
+					continue
+				end
 			end
-		end
 
-		local nextFrameFunc = function()
-			local entities = {}
+			local nextFrameFunc = function()
+				local entities = {}
 
-			if all then
-				entities = ents.GetAll()
-			else
-				local tr = LIBTrace.PlayerAimTrace(ply, 5000)
-				if tr and IsValid(tr.Entity) then
-					entities = LIBEntities.GetSystemEntities(tr.Entity)
+				if all then
+					entities = ents.GetAll()
+				else
+					local tr = LIBTrace.PlayerAimTrace(ply, 5000)
+					if tr and IsValid(tr.Entity) then
+						entities = LIBEntities.GetSystemEntities(tr.Entity)
+					end
+				end
+
+				if console then
+					LIBDebug.PrintEntityNames(entities)
+				else
+					LIBDebug.ShowEntityNames(entities, console)
 				end
 			end
 
 			if console then
-				LIBDebug.PrintEntityNames(entities)
+				nextFrameFunc()
 			else
-				LIBDebug.ShowEntityNames(entities, console)
+				-- Call in next frame, as debugoverlay.* function are not rendered when triggered by concommand callbacks.
+				SLIGWOLF_ADDON:TimerNextFrame("Debug_ShowEntityNames", nextFrameFunc)
 			end
-		end
+		end,
 
-		if console then
-			nextFrameFunc()
-		else
-			-- Call in next frame, as debugoverlay.* function are not rendered when triggered by concommand callbacks.
-			SLIGWOLF_ADDON:TimerNextFrame("Debug_ShowEntityNames", nextFrameFunc)
-		end
-	end, nil, helptext, cvarFlags)
+		help = "Show SW-Names of all SligWolf Addons entities for 60 secounds. This requires \x04'developer 1'\x03 or above.",
+		helpSyntax = "[all] [console]",
+	})
 end
 
 return true
