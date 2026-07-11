@@ -443,7 +443,7 @@ function META:AddWorkloadItem(workloadItem)
 			newItem.id = id
 			newItem.theme = theme
 
-			local path = LIB.GetPathFromWorkloadEntry(newItem)
+			local path = LIB.GetFilenameFromWorkloadEntry(newItem)
 			newItem.path = path
 
 			if not self:CallWorkloadFilters(newItem) then

@@ -14,6 +14,7 @@ if not LIB then
 end
 
 local LIBSkinsystem = SligWolf_Addons.Skinsystem
+local LIBSpawnmenu = SligWolf_Addons.Spawnmenu
 local LIBFile = SligWolf_Addons.File
 
 local g_trimPattern = "[%s%(%)%{%}%[%]%\"%\']*"
@@ -26,38 +27,20 @@ local function normalizeThreePart(str)
 	return str
 end
 
-function LIB.GetPathFromWorkloadEntry(workloadEntry)
+function LIB.GetFilenameFromWorkloadEntry(workloadEntry)
 	if not workloadEntry then
 		return nil
 	end
 
-	local theme = workloadEntry.theme or ""
-	if theme == "" then
-		theme = LIBSkinsystem.THEME_DEFAULT
-	end
-
-	local addonname = workloadEntry.addonname
+	local themename = workloadEntry.theme
 	local spawnname = workloadEntry.spawnname
 
-	local path = ""
-
-	if theme == LIBSkinsystem.THEME_DEFAULT then
-		path = string.format(
-			"%s/%s.png",
-			addonname,
-			spawnname
-		)
-	else
-		path = string.format(
-			"%s/%s_%s.png",
-			addonname,
-			spawnname,
-			theme
-		)
+	local filename = LIBSpawnmenu.GetIconFilename(spawnname, themename)
+	if not filename then
+		return nil
 	end
 
-	path = LIBFile.Join(path)
-	return path
+	return filename
 end
 
 function LIB.SanitizeString(str)

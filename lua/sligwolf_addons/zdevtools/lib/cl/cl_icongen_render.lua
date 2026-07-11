@@ -975,7 +975,7 @@ function LIB.GetViewWorkloadEntry()
 		},
 	}
 
-	local path = LIB.GetPathFromWorkloadEntry(workloadEntry)
+	local path = LIB.GetFilenameFromWorkloadEntry(workloadEntry)
 	workloadEntry.path = path
 
 	return workloadEntry
