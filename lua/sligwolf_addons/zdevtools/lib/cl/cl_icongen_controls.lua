@@ -423,7 +423,8 @@ end
 
 function LIB.CloseMainMenu(callback)
 	if not gui.IsGameUIVisible() then
-		return
+		callback(true)
+		return true
 	end
 
 	-- Close the main menu when we start rendering
