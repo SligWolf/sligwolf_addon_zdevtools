@@ -8,6 +8,7 @@ end
 
 local SLIGWOLF_ADDON = SLIGWOLF_ADDON
 
+local LIBEntities = SligWolf_Addons.Entities
 local LIBConvar = SligWolf_Addons.Convar
 local LIBPlayer = SligWolf_Addons.Player
 local LIBDebug = SligWolf_Addons.Debug
