@@ -12,6 +12,7 @@ local LIBConvar = SligWolf_Addons.Convar
 local LIBPlayer = SligWolf_Addons.Player
 local LIBDebug = SligWolf_Addons.Debug
 local LIBPrint = SligWolf_Addons.Print
+local LIBTrace = SligWolf_Addons.Trace
 local LIBHook = SligWolf_Addons.Hook
 
 function SLIGWOLF_ADDON:IsDebugKeyDown(ply, key)
