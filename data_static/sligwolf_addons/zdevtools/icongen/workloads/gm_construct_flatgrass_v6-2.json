@@ -3420,7 +3420,7 @@
     "map":       "gm_construct_flatgrass_v6-2",
     "savegame":  "gm_construct_flatgrass_v6-2_minitrains",
     "category":  "vehicle",
-    "spawnname": ["sligwolf_minitrains_wagon_coach_ice_passenger"],
+    "spawnname": ["sligwolf_minitrains_wagon_coach_express_passenger"],
     "theme":     ["all"],
 
     "entity": {
