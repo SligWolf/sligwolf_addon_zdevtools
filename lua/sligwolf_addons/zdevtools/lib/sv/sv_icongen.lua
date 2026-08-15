@@ -12,7 +12,7 @@ if not LIB then
 	return
 end
 
-local LIBSkinsystem = SligWolf_Addons.Skinsystem
+local LIBThemesystem = SligWolf_Addons.Themesystem
 local LIBEntities = SligWolf_Addons.Entities
 local LIBSourceIO = SligWolf_Addons.SourceIO
 local LIBPosition = SligWolf_Addons.Position
@@ -333,7 +333,7 @@ function META:AddWorkloadItem(workloadItem)
 		local themeNapName = nil
 
 		if addon then
-			themeCategoryName, themeNapName = addon:SkinGetCategoryAndMapNameFromSpawntable(spawntable)
+			themeCategoryName, themeNapName = addon:ThemeGetCategoryAndMapNameFromSpawntable(spawntable)
 		end
 
 		local themes = {}
@@ -348,9 +348,9 @@ function META:AddWorkloadItem(workloadItem)
 				end
 
 				themename = tostring(themename or "")
-				themename = addon:SkinNormalizeThemeName(themeCategoryName, themename)
+				themename = addon:ThemeNormalizeName(themeCategoryName, themename)
 
-				local themeconfig = addon:SkinGetThemeConfig(themeCategoryName, themename, false)
+				local themeconfig = addon:ThemeGetConfig(themeCategoryName, themename, false)
 				if not themeconfig then
 					continue
 				end
@@ -364,7 +364,7 @@ function META:AddWorkloadItem(workloadItem)
 				end
 
 				if themename == "" or themeconfig.isDefault then
-					themename = LIBSkinsystem.THEME_DEFAULT
+					themename = LIBThemesystem.THEME_DEFAULT
 				end
 
 				table.insert(themes, themename)
@@ -373,7 +373,7 @@ function META:AddWorkloadItem(workloadItem)
 			if getall then
 				table.Empty(themes)
 
-				local themeConfigs = addon:SkinGetThemeConfigs(themeCategoryName)
+				local themeConfigs = addon:ThemeGetConfigs(themeCategoryName)
 
 				for _, themeconfig in ipairs(themeConfigs) do
 					if themeconfig.isRandom then
@@ -386,7 +386,7 @@ function META:AddWorkloadItem(workloadItem)
 
 					local themename = themeconfig.name
 					if themename == "" or themeconfig.isDefault then
-						themename = LIBSkinsystem.THEME_DEFAULT
+						themename = LIBThemesystem.THEME_DEFAULT
 					end
 
 					table.insert(themes, themename)
@@ -432,7 +432,7 @@ function META:AddWorkloadItem(workloadItem)
 		}
 
 		if table.IsEmpty(themes) then
-			themes = {LIBSkinsystem.THEME_DEFAULT}
+			themes = {LIBThemesystem.THEME_DEFAULT}
 		end
 
 		for _, theme in ipairs(themes) do
@@ -607,7 +607,10 @@ function META:DestroyInternal()
 	self:ResetPlayerPosition()
 	self:CleanupSpawn()
 	self:Unlock()
-	game.CleanUpMap()
+
+	if self.isProcessing then
+		game.CleanUpMap()
+	end
 end
 
 function META:CancelInternal()
@@ -1089,9 +1092,9 @@ function META:HandleSpawnedEntity(ent, spawnname)
 		freezeEntity(ent)
 	end
 
-	local themeName = addon:SkinNormalizeThemeName(self.currentCategory, self.currentTheme)
+	local themeName = addon:ThemeNormalizeName(self.currentCategory, self.currentTheme)
 	if themeName then
-		addon:SkinApplyThemeByName(ent, themeName)
+		addon:ThemeApplyByName(ent, themeName)
 	end
 
 	self:MoveEntityToPosition(entPos, entAng, function()

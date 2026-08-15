@@ -13,7 +13,7 @@ if not LIB then
 	return
 end
 
-local LIBSkinsystem = SligWolf_Addons.Skinsystem
+local LIBThemesystem = SligWolf_Addons.Themesystem
 local LIBSpawnmenu = SligWolf_Addons.Spawnmenu
 local LIBFile = SligWolf_Addons.File
 
@@ -55,7 +55,7 @@ function LIB.SanitizeTheme(str)
 	str = LIB.SanitizeString(str)
 
 	if str == "" then
-		str = LIBSkinsystem.THEME_DEFAULT
+		str = LIBThemesystem.THEME_DEFAULT
 	end
 
 	return str
@@ -92,7 +92,7 @@ end
 
 function LIB.SanitizeThemeList(strlist)
 	if not strlist then
-		return {LIBSkinsystem.THEME_DEFAULT}
+		return {LIBThemesystem.THEME_DEFAULT}
 	end
 
 	if not istable(strlist) then

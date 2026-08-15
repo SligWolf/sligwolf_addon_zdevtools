@@ -12,7 +12,7 @@ if not LIB then
 	return
 end
 
-local LIBSkinsystem = SligWolf_Addons.Skinsystem
+local LIBThemesystem = SligWolf_Addons.Themesystem
 local LIBEntities = SligWolf_Addons.Entities
 local LIBFile = SligWolf_Addons.File
 local LIBHook = SligWolf_Addons.Hook
@@ -929,7 +929,7 @@ function LIB.GetViewWorkloadEntry()
 
 		entityData = {
 			addonname = addonname,
-			category = spawntable.SLIGWOLF_SkinCategory,
+			category = spawntable.SLIGWOLF_ThemeCategory,
 			spawnname = spawnname,
 			theme = LIB.config.defaults.theme,
 			ent = ent,
@@ -948,7 +948,7 @@ function LIB.GetViewWorkloadEntry()
 	end
 
 	if theme == "" then
-		theme = LIBSkinsystem.THEME_DEFAULT
+		theme = LIBThemesystem.THEME_DEFAULT
 	end
 
 	local title = spawntable.PrintName or spawntable.Name or spawnname

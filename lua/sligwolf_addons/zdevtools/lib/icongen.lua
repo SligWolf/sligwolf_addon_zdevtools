@@ -9,7 +9,7 @@ end
 local LIB = SLIGWOLF_ADDON.IconGenerator or {}
 SLIGWOLF_ADDON.IconGenerator = LIB
 
-local LIBSkinsystem = SligWolf_Addons.Skinsystem
+local LIBThemesystem = SligWolf_Addons.Themesystem
 local LIBPlayer = SligWolf_Addons.Player
 local LIBPrint = SligWolf_Addons.Print
 
@@ -44,7 +44,7 @@ LIB.config = {
 	},
 
 	defaults = {
-		theme = LIBSkinsystem.THEME_DEFAULT,
+		theme = LIBThemesystem.THEME_DEFAULT,
 		camera = {
 			pos = Vector(),
 			ang = Angle(),
