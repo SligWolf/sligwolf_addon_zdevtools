@@ -5125,7 +5125,7 @@
     "map":       "gm_construct_flatgrass_v6-2",
     "savegame":  "none",
     "category":  "vehicle",
-    "spawnname": ["sligwolf_jeeps_race_classic"],
+    "spawnname": ["sligwolf_jeeps_race_noble"],
     "theme":     ["all"],
 
     "entity": {
