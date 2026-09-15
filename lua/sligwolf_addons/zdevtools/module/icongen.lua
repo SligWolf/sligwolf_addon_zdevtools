@@ -35,7 +35,6 @@ local LIBString = SligWolf_Addons.String
 local LIBPrint = SligWolf_Addons.Print
 local LIBTimer = SligWolf_Addons.Timer
 local LIBFile = SligWolf_Addons.File
-local LIBUtil = SligWolf_Addons.Util
 
 local function log(format, ...)
 	local text = string.format(format, ...)

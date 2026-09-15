@@ -607,18 +607,19 @@ function LIB.FormatSnapshot(workloadEntry, outputToConsole)
 
 	outputLine()
 
-	outputKeyValueStringLine        (4, "map", "      ", workloadEntry.map, true)
-	outputKeyValueSavegameLine      (4, "savegame", " ", workloadEntry.savegame, true)
-	outputKeyValueStringLine        (4, "category", " ", workloadEntry.category, true)
-	outputKeyValueStringListableLine(4, "spawnname", "", workloadEntry.spawnname, true)
-	outputKeyValueThemeListableLine (4, "theme", "    ", workloadEntry.theme, true)
+	outputKeyValueStringLine        (4, "map", "        ", workloadEntry.map, true)
+	outputKeyValueSavegameLine      (4, "savegame", "   ", workloadEntry.savegame, true)
+	outputKeyValueStringLine        (4, "category", "   ", workloadEntry.category, true)
+	outputKeyValueStringListableLine(4, "spawnname", "  ", workloadEntry.spawnname, true)
+	outputKeyValueStringListableLine(4, "spawnparams", "", workloadEntry.spawnparams, true)
+	outputKeyValueThemeListableLine (4, "theme", "      ", workloadEntry.theme, true)
 
 	outputLine()
 
 	outputObjectStart(4, "entity")
 	outputKeyValueVectorLine(8, "pos", "        ", entity.pos, true)
 	outputKeyValueAngleLine (8, "ang", "        ", entity.ang, true)
-	outputKeyValueBoolLine  (8, "spawnFrozen", "", true, true)
+	outputKeyValueBoolLine  (8, "spawnfrozen", "", true, true)
 	outputKeyValueNumberLine(8, "wait", "       ", 0)
 	outputObjectEnd(4, true)
 
@@ -707,9 +708,9 @@ function LIB.SanitizeWorkloadEntry(workloadEntry)
 	local camera = workloadEntry.camera or {}
 	local dof = camera.dof or {}
 
-	local spawnFrozen = entity.spawnFrozen
-	if spawnFrozen ~= nil then
-		spawnFrozen = LIB.SanitizeBool(spawnFrozen)
+	local spawnfrozen = entity.spawnfrozen
+	if spawnfrozen ~= nil then
+		spawnfrozen = LIB.SanitizeBool(spawnfrozen)
 	end
 
 	local dofDistance = LIB.SanitizeNumber(dof.distance)
@@ -732,12 +733,13 @@ function LIB.SanitizeWorkloadEntry(workloadEntry)
 		addonname = LIB.SanitizeString(workloadEntry.addonname),
 		category = LIB.SanitizeString(workloadEntry.category),
 		spawnname = LIB.SanitizeStringList(workloadEntry.spawnname),
+		spawnparams = LIB.SanitizeStringList(workloadEntry.spawnparams),
 		theme = LIB.SanitizeThemeList(workloadEntry.theme),
 
 		entity = {
 			pos = LIB.SanitizeVector(entity.pos),
 			ang = LIB.SanitizeAngle(entity.ang),
-			spawnFrozen = spawnFrozen,
+			spawnfrozen = spawnfrozen,
 			wait = entity.wait and LIB.SanitizeNumber(entity.wait),
 		},
 

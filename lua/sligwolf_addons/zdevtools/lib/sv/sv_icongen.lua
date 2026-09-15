@@ -284,8 +284,6 @@ function META:AddWorkloadItem(workloadItem)
 		spawnparams = {spawnparams}
 	end
 
-	spawnparams = LIBUtil.DeduplicateTable(spawnparams)
-
 	local themesTmp = workloadItem.theme or defaultsTheme
 	if not istable(themesTmp) then
 		themesTmp = {themesTmp}
@@ -418,17 +416,17 @@ function META:AddWorkloadItem(workloadItem)
 			},
 		}
 
-		local spawnFrozen = entity.spawnFrozen
+		local spawnfrozen = entity.spawnfrozen
 
-		if spawnFrozen == nil then
-			spawnFrozen = defaultsEntity.spawnFrozen
+		if spawnfrozen == nil then
+			spawnfrozen = defaultsEntity.spawnfrozen
 		end
 
 		newItemTemplate.entity = {
 			pos = entity.pos or defaultsEntity.pos,
 			ang = entity.ang or defaultsEntity.ang,
 			wait = math.Clamp(entity.wait or defaultsEntity.wait, 0, 10),
-			spawnFrozen = spawnFrozen,
+			spawnfrozen = spawnfrozen,
 		}
 
 		if table.IsEmpty(themes) then
@@ -922,7 +920,10 @@ function META:SpawnEntityForEntry()
 		return
 	end
 
-	local cmd = string.format("%s \"%s\"", spawncommand, entry.spawnname)
+	local cmd = {}
+
+	cmd[#cmd + 1] = spawncommand
+	cmd[#cmd + 1] = string.format("\"%s\"", entry.spawnname)
 
 	for _, spawnparam in ipairs(entry.spawnparams) do
 		spawnparam = tostring(spawnparam or "")
@@ -930,8 +931,10 @@ function META:SpawnEntityForEntry()
 			continue
 		end
 
-		cmd = string.format("%s \"%s\"", spawncommand, spawnparam)
+		cmd[#cmd + 1] = string.format("\"%s\"", spawnparam)
 	end
+
+	cmd = table.concat(cmd, " ")
 
 	-- Run the spawn command
 	ply:ConCommand(cmd)
@@ -1077,7 +1080,7 @@ function META:HandleSpawnedEntity(ent, spawnname)
 
 	local entPos = entry.entity.pos
 	local entAng = entry.entity.ang
-	local entSpawnFrozen = entry.entity.spawnFrozen
+	local entSpawnfrozen = entry.entity.spawnfrozen
 
 	local addon = SligWolf_Addons.GetAddon(addonname)
 	if not addon then
@@ -1088,7 +1091,7 @@ function META:HandleSpawnedEntity(ent, spawnname)
 
 	LIBSourceIO.SetSpawnedByScript(ent, true)
 
-	if entSpawnFrozen then
+	if entSpawnfrozen then
 		freezeEntity(ent)
 	end
 
@@ -1124,7 +1127,7 @@ function META:WaitForEntityReady(callback)
 	local waitTicksLeft = 10
 
 	local entry = self.currentEntry
-	local entSpawnFrozen = entry.entity.spawnFrozen
+	local entSpawnfrozen = entry.entity.spawnfrozen
 	local entWait = entry.entity.wait
 
 	SLIGWOLF_ADDON:TimerUntil(self.readyTimer, 0, function(_, success)
@@ -1157,7 +1160,7 @@ function META:WaitForEntityReady(callback)
 			return false
 		end
 
-		if entSpawnFrozen then
+		if entSpawnfrozen then
 			freezeEntity(ent)
 		end
 
