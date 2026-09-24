@@ -8,7 +8,7 @@ if not SLIGWOLF_BASECHECK then
 end
 
 SLIGWOLF_BASECHECK.Addonname = "zdevtools"
-SLIGWOLF_BASECHECK.RequiredBaseApiVersion = "2.0.2"
+SLIGWOLF_BASECHECK.RequiredBaseApiVersion = "2.0.3"
 
 if not SLIGWOLF_BASECHECK.CheckBaseAddonExist() then
 	return
@@ -41,11 +41,12 @@ end
 
 SLIGWOLF_ADDON.Author = "Grocel"
 SLIGWOLF_ADDON.NiceName = "ZDevTools"
-SLIGWOLF_ADDON.Version = "1.2.2"
+SLIGWOLF_ADDON.Version = "1.3.0"
 
 -- Modules
 SLIGWOLF_ADDON:LuaInclude("module/developer.lua")
 SLIGWOLF_ADDON:LuaInclude("module/luapad.lua")
+SLIGWOLF_ADDON:LuaInclude("module/gprofiler.lua")
 SLIGWOLF_ADDON:LuaInclude("module/debug.lua")
 SLIGWOLF_ADDON:LuaInclude("module/restart.lua")
 SLIGWOLF_ADDON:LuaInclude("module/railscan.lua")

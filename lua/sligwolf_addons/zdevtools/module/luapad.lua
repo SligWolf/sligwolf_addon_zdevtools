@@ -12,14 +12,14 @@ local LIBHook = SligWolf_Addons.Hook
 
 -- Docs on: https://github.com/wrefgtzweve/luapad
 
-local function luapadDeveloper(ply)
+local function permissionLuapadDeveloper(ply)
 	if SLIGWOLF_ADDON:IsValidDeveloperPlayer(ply) then
 		return true
 	end
 end
 
-LIBHook.Add("LuapadCanRunSV", "Addon_ZDevTools_Luapad_Developer", luapadDeveloper)
-LIBHook.Add("LuapadCanRunCL", "Addon_ZDevTools_Luapad_Developer", luapadDeveloper)
+LIBHook.Add("LuapadCanRunSV", "Addon_ZDevTools_Luapad_Developer", permissionLuapadDeveloper)
+LIBHook.Add("LuapadCanRunCL", "Addon_ZDevTools_Luapad_Developer", permissionLuapadDeveloper)
 
 
 -- Available custom globals in the Luapad environment:
