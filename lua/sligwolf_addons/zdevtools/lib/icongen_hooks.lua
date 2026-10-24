@@ -53,20 +53,33 @@ local function freezePlayerMove(ply, cmd)
 		return
 	end
 
-	local targetAngles = ply:GetNWAngle("sligwolf_zdevtools_icongen_lock_ang", Angle())
-	cmd:SetViewAngles(targetAngles)
+	cmd:ClearButtons()
+	cmd:ClearMovement()
 
-	local vecBlank = Vector()
-	local targetPos = ply:GetNWVector("sligwolf_zdevtools_icongen_lock_pos", vecBlank)
-
-	if targetPos ~= vecBlank then
-		ply:SetPos(targetPos)
-	end
-
-	cmd:SetButtons(0)
+	cmd:SetMouseX(0)
+	cmd:SetMouseY(0)
 end
 
 LIBHook.Add("StartCommand", "Addon_ZDevTools_Icongen_FreezePlayerMove", freezePlayerMove)
+
+local function freezePlayerMouse(cmd, x, y, ang)
+	local ply = LocalPlayer()
+
+	if not LIBPlayer.IsHostPlayer(ply) then
+		return
+	end
+
+	if not ply:GetNWBool("sligwolf_zdevtools_icongen_lock", false) then
+		return
+	end
+
+	cmd:SetMouseX(0)
+	cmd:SetMouseY(0)
+
+	return true
+end
+
+LIBHook.Add("InputMouseApply", "Addon_ZDevTools_Icongen_freezePlayerMouse", freezePlayerMouse)
 
 local function freezePlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 	if not LIBPlayer.IsHostPlayer(ply) then

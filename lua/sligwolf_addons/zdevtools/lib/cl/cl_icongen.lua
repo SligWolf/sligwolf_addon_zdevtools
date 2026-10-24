@@ -21,8 +21,12 @@ local META = LIB.meta
 LIBNet.Receive("zdevtools_icongen_start", function(len)
 	local name = net.ReadString()
 	local processSubId = net.ReadUInt(32)
-	local index = net.ReadUInt(16)
-	local count = net.ReadUInt(16)
+	local spawnMode = net.ReadBool()
+	local startIndex = net.ReadUInt(16)
+	local currentIndex = net.ReadUInt(16)
+	local currentIndexRelative = net.ReadUInt(16)
+	local workloadTotalLength = net.ReadUInt(16)
+	local workloadLengthRelative = net.ReadUInt(16)
 
 	local addonname = net.ReadString()
 	local category = net.ReadString()
@@ -49,9 +53,14 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 
 	local captureRequest = {
 		processSubId = processSubId,
-		index = index,
-		count = count,
+		currentIndex = currentIndex,
+		currentIndexRelative = currentIndexRelative,
+		workloadTotalLength = workloadTotalLength,
+		workloadLengthRelative = workloadLengthRelative,
 		path = path,
+
+		startIndex = startIndex,
+		spawnMode = spawnMode,
 
 		entity = {
 			addonname = addonname,
@@ -82,8 +91,13 @@ function META:ResetInternal()
 	self.currentCaptureRequest = nil
 	self.processSubId = nil
 
+	self.spawnMode = false
+	self.startIndex = 0
+
 	self.currentIndex = 0
-	self.workloadCount = nil
+	self.currentIndexRelative = 0
+	self.workloadTotalLength = 0
+	self.workloadLengthRelative = 0
 	self.currentPath = nil
 
 	self.currentAddonname = nil
@@ -196,11 +210,19 @@ function META:HandleCaptureRequest(captureRequest)
 	self.processSubId = processSubId
 
 	local entity = captureRequest.entity
-	local index = captureRequest.index
-	local count = captureRequest.count
+	local currentIndex = captureRequest.currentIndex
+	local currentIndexRelative = captureRequest.currentIndexRelative
+	local workloadTotalLength = captureRequest.workloadTotalLength
+	local workloadLengthRelative = captureRequest.workloadLengthRelative
 
-	self.currentIndex = index
-	self.workloadCount = count
+	self.spawnMode = captureRequest.spawnMode
+	self.startIndex = captureRequest.startIndex
+
+	self.currentIndex = currentIndex
+	self.currentIndexRelative = currentIndexRelative
+	self.workloadTotalLength = workloadTotalLength
+	self.workloadLengthRelative = workloadLengthRelative
+
 	self.currentPath = captureRequest.path
 
 	self.currentAddonname = entity.addonname
@@ -212,12 +234,16 @@ function META:HandleCaptureRequest(captureRequest)
 	self.currentEntity = Entity(self.currentEntityId)
 
 	local doProcess = function()
-		if index == 1 then
+		if currentIndexRelative <= 1 then
 			self:ProcessStart()
 		end
 
 		if self.OnProgress then
-			ProtectedCall(self.OnProgress, self, index, count)
+			ProtectedCall(
+				self.OnProgress, self,
+				currentIndexRelative, workloadLengthRelative,
+				currentIndex, workloadTotalLength
+			)
 		end
 
 		self:ShowPreviewAndCapture()
@@ -243,7 +269,7 @@ function META:HandleCaptureRequest(captureRequest)
 			return false
 		end
 
-		if index > 1 then
+		if currentIndexRelative > 1 then
 			doProcess()
 			return true
 		end
@@ -274,7 +300,7 @@ end
 function META:ProcessStart()
 	self.isProcessing = true
 
-	self.entriesTotal = self.workloadCount
+	self.entriesTotal = self.workloadLengthRelative
 	self.entriesRun = 0
 	self.entriesDone = 0
 	self.entriesError = 0
@@ -297,8 +323,13 @@ function META:ProcessEnd()
 	self.currentCaptureRequest = nil
 	self.processSubId = nil
 
+	self.spawnMode = false
+	self.startIndex = 0
+
 	self.currentIndex = 0
-	self.workloadCount = nil
+	self.currentIndexRelative = 0
+	self.workloadTotalLength = 0
+	self.workloadLengthRelative = 0
 	self.currentPath = nil
 
 	self.currentAddonname = nil
@@ -333,8 +364,10 @@ function META:SendCaptureDone(success)
 
 	local name = self.name
 	local processSubId = self.processSubId
-	local index = self.currentIndex
-	local count = self.workloadCount
+	local currentIndex = self.currentIndex
+	local currentIndexRelative = self.currentIndexRelative
+	local workloadTotalLength = self.workloadTotalLength
+	local workloadLengthRelative = self.workloadLengthRelative
 
 	if not success then
 		self.entriesRun = math.min(self.entriesRun + 1, self.entriesTotal)
@@ -355,10 +388,14 @@ function META:SendCaptureDone(success)
 	self.entriesDone = math.min(self.entriesDone + 1, self.entriesTotal)
 
 	if self.OnProgressDone then
-		ProtectedCall(self.OnProgressDone, self, index, count)
+		ProtectedCall(
+			self.OnProgressDone, self,
+			currentIndexRelative, workloadLengthRelative,
+			currentIndex, workloadTotalLength
+		)
 	end
 
-	if index >= count then
+	if currentIndexRelative >= workloadLengthRelative then
 		self:ProcessEnd()
 	end
 
@@ -376,8 +413,9 @@ function META:ShowPreviewAndCapture()
 
 	local processSubId = self.processSubId
 	local captureRequest = self.currentCaptureRequest
-	local index = self.currentIndex
-	local count = self.workloadCount
+	local currentIndex = self.currentIndex
+	local currentIndexRelative = self.currentIndexRelative
+	local workloadLengthRelative = self.workloadLengthRelative
 	local path = self.currentPath
 
 	local entityData = {
@@ -387,6 +425,11 @@ function META:ShowPreviewAndCapture()
 		theme = self.currentTheme,
 		ent = self.currentEntity,
 	}
+
+	if self:IsSpawnMode() then
+		self:SendCaptureDone(true)
+		return
+	end
 
 	local validateCallback = function()
 		if not IsValid(self) then
@@ -432,8 +475,9 @@ function META:ShowPreviewAndCapture()
 
 	LIB.TakeScreenshot({
 		camera = captureRequest.camera,
-		index = index,
-		count = count,
+		index = currentIndexRelative,
+		count = workloadLengthRelative,
+		number = currentIndex,
 		entityData = entityData,
 		imagePath = self.config.iconsFolderAuto .. "/" .. path,
 		previewTime = self.config.time.preview,

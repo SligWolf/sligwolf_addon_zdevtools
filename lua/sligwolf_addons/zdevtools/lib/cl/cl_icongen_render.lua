@@ -650,7 +650,7 @@ function LIB.ResetSuperDof()
 	LIB.currentSuperDof = nil
 end
 
-function LIB.SetProgressStats(index, count)
+function LIB.SetProgressStats(index, count, number)
 	if not index or not count then
 		LIB.ResetProgress()
 		return
@@ -658,15 +658,17 @@ function LIB.SetProgressStats(index, count)
 
 	LIB.currentIndex = index
 	LIB.currentCount = count
+	LIB.currentNumber = number
 end
 
 function LIB.GetProgressStats()
-	return LIB.currentIndex, LIB.currentCount
+	return LIB.currentIndex, LIB.currentCount, LIB.currentNumber
 end
 
 function LIB.ResetProgressStats()
 	LIB.currentIndex = nil
 	LIB.currentCount = nil
+	LIB.currentNumber = nil
 end
 
 function LIB.SetEntityData(entityData)
@@ -785,6 +787,7 @@ function LIB.TakeScreenshot(parameter)
 	local dof = camera.dof
 	local index = parameter.index
 	local count = parameter.count
+	local number = parameter.number
 	local entityData = parameter.entityData
 	local imagePath = parameter.imagePath
 	local previewTime = parameter.previewTime or 0
@@ -796,7 +799,7 @@ function LIB.TakeScreenshot(parameter)
 
 	LIB.SetCamera(camera)
 	LIB.SetSuperDof(dof)
-	LIB.SetProgressStats(index, count)
+	LIB.SetProgressStats(index, count, number)
 	LIB.SetEntityData(entityData)
 
 	local timerAndCallbackName = "icongen_screenshot_callback"
@@ -1034,10 +1037,11 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 	surface.DrawRect(0, topEdgeY, leftEdgeX, newH)
 	surface.DrawRect(rightEdgeX, topEdgeY, bufferW - rightEdgeX, newH)
 
-	local index, count = LIB.GetProgressStats()
+	local index, count, number = LIB.GetProgressStats()
 
 	index = index or 0
 	count = count or 0
+	number = number or 0
 
 	count = math.max(count, 0)
 	index = math.Clamp(index, 0, count)
@@ -1067,12 +1071,13 @@ function LIB.DrawPreviewScreenStats(renderTargetMaterial, bufferRenderTargetMate
 		if count <= 0 then
 			index = 0
 			count = 0
+			number = 0
 			percent = 0
 		else
 			percent = math.Round(index / count * 100, 2)
 		end
 
-		g_lineBuffer[#g_lineBuffer + 1] = string.format("  Total: %i / %i  %6.2f%%", index, count, percent)
+		g_lineBuffer[#g_lineBuffer + 1] = string.format("  Total: %i / %i  %6.2f%%    (idx %i)", index, count, percent, number)
 		g_lineBuffer[#g_lineBuffer + 1] = string.format("  DoF:   %.2f%%", dofPercent or 0)
 
 		textX = margin

@@ -67,26 +67,26 @@ end
 
 local g_iconGenerator = LIBIconGenerator.NewInstance("g_iconGenerator")
 
-g_iconGenerator.OnProgress = function(this, currentIndex, workloadCount)
+g_iconGenerator.OnProgress = function(this, currentIndexRelative, workloadLengthRelative, currentIndex, workloadTotalLength)
 	local addonname = this.currentAddonname or "?"
 	local category = this.currentCategory or "?"
 	local spawnname = this.currentSpawnname or "?"
 	local theme = this.currentTheme or "?"
 
-	log("OnProgress: %05i / %05i | %s, %s, %s, %s",
-		currentIndex, workloadCount,
+	log("OnProgress: %05i / %05i   (idx %i of %i) | %s, %s, %s, %s",
+		currentIndexRelative, workloadLengthRelative, currentIndex, workloadTotalLength,
 		addonname, category, spawnname, theme
 	)
 end
 
-g_iconGenerator.OnProgressDone = function(this, currentIndex, workloadCount)
+g_iconGenerator.OnProgressDone = function(this, currentIndexRelative, workloadLengthRelative, currentIndex, workloadTotalLength)
 	local addonname = this.currentAddonname or "?"
 	local category = this.currentCategory or "?"
 	local spawnname = this.currentSpawnname or "?"
 	local theme = this.currentTheme or "?"
 
-	log("OnProgressDone: %05i / %05i | %s, %s, %s, %s",
-		currentIndex, workloadCount,
+	log("OnProgressDone: %05i / %05i   (idx %i of %i) | %s, %s, %s, %s",
+		currentIndexRelative, workloadLengthRelative, currentIndex, workloadTotalLength,
 		addonname, category, spawnname, theme
 	)
 end
@@ -183,63 +183,85 @@ if CLIENT then
 end
 
 if SERVER then
+	local function RunIconGeneratorCmd(ply, cmd, args, spawnMode)
+		if not IsValid(g_iconGenerator) then
+			return
+		end
+
+		local spawnname = string.lower(string.Trim(tostring(args[1] or "")))
+		local themename = string.lower(string.Trim(tostring(args[2] or "")))
+		local startIndex = string.lower(string.Trim(tostring(args[3] or "")))
+		local maxItems = string.lower(string.Trim(tostring(args[4] or "")))
+
+		if spawnname == "" or spawnname == "all" then
+			spawnname = "*"
+		end
+
+		if themename == "" or themename == "all" then
+			themename = "*"
+		end
+
+		if themename == "all" then
+			themename = "*"
+		end
+
+		startIndex = math.max(tonumber(startIndex or 0) or 0, 1)
+		maxItems = math.max(tonumber(maxItems or 0) or 0, 0)
+
+		g_iconGenerator:Initialize(ply, spawnMode)
+
+		g_iconGenerator:AddWorkloadFilter("cmd_parameter_wildcard", function(item)
+			local itemSpawnname = string.lower(string.Trim(item.spawnname))
+			local itemTheme = string.lower(string.Trim(item.theme))
+
+			if not LIBString.WildcardMatch(itemSpawnname, spawnname) then
+				return false
+			end
+
+			if not LIBString.WildcardMatch(itemTheme, themename) then
+				return false
+			end
+		end)
+
+		LIBIconGenerator.ReadWorkloadForCurrentMap(function(success, errorOrWorkload, path, absolutePath)
+			if not success then
+				LIBPrint.Warn(errorOrWorkload)
+				return
+			end
+
+			LIBPrint.Print("Workload loaded from file '%s'.", absolutePath)
+
+			g_iconGenerator:AddWorkload(errorOrWorkload)
+			g_iconGenerator:Start(startIndex, maxItems)
+		end)
+	end
+
+
 	LIBConvar.AddCommand("dev_sligwolf_zdevtools_icongen_start", {
 		flags = bit.bor(FCVAR_DONTRECORD, FCVAR_GAMEDLL),
 		role = LIBConvar.ROLE_HOST_PLAYER,
 
 		callback = function(ply, cmd, args)
-			if not IsValid(g_iconGenerator) then
-				return
-			end
-
-			local spawnname = string.lower(string.Trim(tostring(args[1] or "")))
-			local themename = string.lower(string.Trim(tostring(args[2] or "")))
-
-			if spawnname == "" or spawnname == "all" then
-				spawnname = "*"
-			end
-
-			if themename == "" or themename == "all" then
-				themename = "*"
-			end
-
-			if themename == "all" then
-				themename = "*"
-			end
-
-			g_iconGenerator:Initialize(ply)
-
-			g_iconGenerator:AddWorkloadFilter("cmd_parameter_wildcard", function(item)
-				local itemSpawnname = string.lower(string.Trim(item.spawnname))
-				local itemTheme = string.lower(string.Trim(item.theme))
-
-				if not LIBString.WildcardMatch(itemSpawnname, spawnname) then
-					return false
-				end
-
-				if not LIBString.WildcardMatch(itemTheme, themename) then
-					return false
-				end
-			end)
-
-			LIBIconGenerator.ReadWorkloadForCurrentMap(function(success, errorOrWorkload, path, absolutePath)
-				if not success then
-					LIBPrint.Warn(errorOrWorkload)
-					return
-				end
-
-				LIBPrint.Print("Workload loaded from file '%s'.", absolutePath)
-
-				g_iconGenerator:AddWorkload(errorOrWorkload)
-				g_iconGenerator:Start()
-			end)
+			RunIconGeneratorCmd(ply, cmd, args, false)
 		end,
 
-		help = "Starts entity icon generator process.",
-		helpSyntax = "[<spawnname wildcard|*>] [<themename wildcard|*>]",
+		help = "Starts entity icon generator process. Cleans up map.",
+		helpSyntax = "[<spawnname wildcard|*>] [<themename wildcard|*>] [<start index>] [<max items>]",
 	})
 
-	LIBConvar.AddCommand("dev_sligwolf_zdevtools_icongen_cancel", {
+	LIBConvar.AddCommand("dev_sligwolf_zdevtools_icongen_spawn", {
+		flags = bit.bor(FCVAR_DONTRECORD, FCVAR_GAMEDLL),
+		role = LIBConvar.ROLE_HOST_PLAYER,
+
+		callback = function(ply, cmd, args)
+			RunIconGeneratorCmd(ply, cmd, args, true)
+		end,
+
+		help = "Spawns a single entity icon generator setup. Cleans up map.",
+		helpSyntax = "[<spawnname wildcard|*>] [<themename wildcard|*>] [<start index>]",
+	})
+
+	LIBConvar.AddCommand("dev_sligwolf_zdevtools_icongen_cleanup", {
 		flags = bit.bor(FCVAR_DONTRECORD, FCVAR_GAMEDLL),
 		role = LIBConvar.ROLE_HOST_PLAYER,
 
@@ -249,9 +271,10 @@ if SERVER then
 			end
 
 			g_iconGenerator:Cancel()
+			game.CleanUpMap()
 		end,
 
-		help = "Cancels entity icon generator process.",
+		help = "Cancels entity icon generator process and cleans up map.",
 	})
 
 	LIBConvar.AddCommand("dev_sligwolf_zdevtools_icongen_loadsave", {

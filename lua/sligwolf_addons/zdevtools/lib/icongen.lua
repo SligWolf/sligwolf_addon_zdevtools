@@ -37,6 +37,7 @@ LIB.config = {
 	time = {
 		timeoutTotal   = 25.0,  -- Max time to wait for an entity to be processed
 		timeoutEntity  = 2,     -- Max time to wait for an entity to be spawned
+		timeoutPlayer  = 1,     -- Delay player position
 		savegame = 2,     		-- Delay after savegame load
 		delay    = 0.05,        -- Delay between entities
 		preview  = 0.5,         -- How long to show preview on screen
@@ -215,6 +216,10 @@ function META:IsLocked()
 	end
 
 	return true
+end
+
+function META:IsSpawnMode()
+	return self.spawnMode or false
 end
 
 function META:Reset()

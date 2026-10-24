@@ -70,9 +70,12 @@ function META:ResetInternal()
 
 	self.workload = nil
 	self.workloadByPath = nil
-	self.workloadCount = 0
+	self.workloadTotalLength = 0
+	self.workloadLengthRelative = 0
 
+	self.startIndex = 0
 	self.currentIndex = 0
+	self.currentIndexRelative = 0
 	self.currentEntry = nil
 
 	self.currentAddonname = nil
@@ -130,8 +133,6 @@ function META:Lock()
 			wep:SetNoDraw(true)
 		end
 
-		ply:SetNWVector("sligwolf_zdevtools_icongen_lock_pos", ply:GetPos())
-		ply:SetNWAngle("sligwolf_zdevtools_icongen_lock_ang", ply:EyeAngles())
 		ply:SetNWBool("sligwolf_zdevtools_icongen_lock", true)
 	end
 
@@ -143,6 +144,10 @@ function META:Unlock()
 
 	if IsValid(ply) then
 		ply:SetNWBool("sligwolf_zdevtools_icongen_lock", false)
+
+		ply:ExitVehicle()
+		ply:ExitLadder()
+		ply:SetViewEntity(nil)
 
 		ply:SetNotSolid(false)
 		ply:SetNoDraw(false)
@@ -167,7 +172,7 @@ function META:Unlock()
 	self:RemoveControlHook()
 end
 
-function META:Initialize(ply)
+function META:Initialize(ply, spawnmode)
 	if not IsValid(ply) or not ply:IsPlayer() then
 		LIBPrint.Error("No player provided.")
 		return
@@ -182,21 +187,24 @@ function META:Initialize(ply)
 	self.workloadByPath = {}
 
 	self.player = ply
+	self.startIndex = 0
 	self.currentIndex = 0
+	self.currentIndexRelative = 0
+	self.spawnMode = spawnmode or false
 
 	self.isProcessing = false
 end
 
-function META:Start()
+function META:Start(startIndex, workloadLengthRelative)
 	local ply = self.player
 
 	if not IsValid(ply) or not ply:IsPlayer() then
-		LIBPrint.Error("No player given, call Initialize(player) first.")
+		LIBPrint.Error("No player given, call Initialize() first.")
 		return
 	end
 
 	if not self.workload then
-		LIBPrint.Error("No workload given, call Initialize(player) first.")
+		LIBPrint.Error("No workload given, call Initialize() first.")
 		return
 	end
 
@@ -205,10 +213,30 @@ function META:Start()
 		return
 	end
 
-	self.workloadCount = #self.workload
+	local workloadTotalLength = #self.workload
+
+	startIndex = math.Clamp(startIndex or 0, 1, workloadTotalLength)
+
+	if self:IsSpawnMode() then
+		workloadLengthRelative = 1
+	else
+		workloadLengthRelative = workloadLengthRelative or 0
+
+		if workloadLengthRelative <= 0 then
+			workloadLengthRelative = workloadTotalLength
+		end
+
+		workloadLengthRelative = math.min(workloadLengthRelative or 0, workloadTotalLength - (startIndex - 1))
+	end
 
 	self.isProcessing = true
-	self.currentIndex = 0
+
+	self.startIndex = startIndex
+	self.workloadLengthRelative = workloadLengthRelative
+	self.workloadTotalLength = workloadTotalLength
+
+	self.currentIndexRelative = 0
+	self.currentIndex = startIndex - 1
 
 	LIB.processId = LIB.processId + 1
 	self.processId = LIB.processId
@@ -602,9 +630,10 @@ function META:ValidateWorkloadItem(item)
 end
 
 function META:DestroyInternal()
-	self:ResetPlayerPosition()
 	self:CleanupSpawn()
 	self:Unlock()
+
+	self:ResetPlayerPosition()
 
 	if self.isProcessing then
 		game.CleanUpMap()
@@ -612,9 +641,11 @@ function META:DestroyInternal()
 end
 
 function META:CancelInternal()
-	self:ResetPlayerPosition()
 	self:CleanupSpawn()
 	self:Unlock()
+
+	self:ResetPlayerPosition()
+
 	game.CleanUpMap()
 end
 
@@ -638,23 +669,27 @@ function META:ProcessNextEntry()
 	self.processSubId = LIB.processSubId
 
 	local workload = self.workload
-	local count = self.workloadCount
+	local workloadTotalLength = self.workloadTotalLength
+	local workloadLengthRelative = self.workloadLengthRelative
 
 	self.currentIndex = self.currentIndex + 1
-	local index = self.currentIndex
+	local currentIndex = self.currentIndex
 
-	if count <= 0 then
+	self.currentIndexRelative = self.currentIndexRelative + 1
+	local currentIndexRelative = self.currentIndexRelative
+
+	if workloadTotalLength <= 0 or workloadLengthRelative <= 0 then
 		self:ProcessStart()
 		self:ProcessEnd()
 		return
 	end
 
-	if index > count then
+	if currentIndex > workloadTotalLength or currentIndexRelative > workloadLengthRelative then
 		self:ProcessEnd()
 		return
 	end
 
-	local currentEntry = workload[index]
+	local currentEntry = workload[currentIndex]
 	if not currentEntry then
 		self:ProcessEnd()
 		return
@@ -669,17 +704,22 @@ function META:ProcessNextEntry()
 	self.currentPath = currentEntry.path
 	self.currentSavegame = currentEntry.savegame
 
-	if index == 1 then
+	if currentIndexRelative <= 1 then
 		self:ProcessStart()
 	end
 
 	if self.OnProgress then
-		ProtectedCall(self.OnProgress, self, index, count)
+		ProtectedCall(
+			self.OnProgress, self,
+			currentIndexRelative, workloadLengthRelative,
+			currentIndex, workloadTotalLength
+		)
 	end
 
 	self:LoadSaveGame(function()
-		self:MovePlayerToEntry()
-		self:SpawnEntityForEntry()
+		self:MovePlayerToEntry(function()
+			self:SpawnEntityForEntry()
+		end)
 	end)
 end
 
@@ -699,10 +739,10 @@ function META:ProcessStart()
 
 	local ply = self.player
 
-	self.originalPos = ply:GetPos()
-	self.originalAng = ply:EyeAngles()
+	self.originalPos = LIBPosition.GetPlayerPos(ply)
+	self.originalAng = LIBPosition.GetPlayerEyeAngles(ply)
 
-	self.entriesTotal = self.workloadCount
+	self.entriesTotal = self.workloadLengthRelative
 	self.entriesRun = 0
 	self.entriesDone = 0
 	self.entriesError = 0
@@ -717,9 +757,12 @@ function META:ProcessEnd()
 	self.processSubId = nil
 
 	self.workload = nil
-	self.workloadCount = nil
+	self.workloadTotalLength = 0
+	self.workloadLengthRelative = 0
 
+	self.startIndex = 0
 	self.currentIndex = 0
+	self.currentIndexRelative = 0
 	self.currentEntry = nil
 
 	self.currentAddonname = nil
@@ -731,9 +774,15 @@ function META:ProcessEnd()
 	self.currentSavegame = nil
 	self.lastSavegame = nil
 
-	self:ResetPlayerPosition()
+	if not self:IsSpawnMode() then
+		self:ResetPlayerPosition()
+		game.CleanUpMap()
+	end
+
 	self:Unlock()
-	game.CleanUpMap()
+
+	self.originalPos = nil
+	self.originalAng = nil
 
 	if self.OnFinished then
 		ProtectedCall(self.OnFinished, self)
@@ -745,29 +794,31 @@ function META:ProcessEnd()
 	self.entriesError = 0
 end
 
-function META:ResetPlayerPosition()
+function META:ResetPlayerPosition(callback)
 	if self.originalPos and self.originalAng then
-		self:MovePlayerToPosition(self.originalPos, self.originalAng)
+		self:MovePlayerToPosition(self.originalPos, self.originalAng, callback)
 	end
 
 	self.originalPos = nil
 	self.originalAng = nil
 end
 
-function META:MovePlayerToPosition(playerPos, playerAng)
-	if not IsValid(self.player) then
+function META:MovePlayerToPosition(playerPos, playerAng, callback)
+	local ply = self.player
+
+	if not IsValid(ply) then
 		return
 	end
 
-	local ply = self.player
-
-	ply:SetNWVector("sligwolf_zdevtools_icongen_lock_pos", playerPos)
-	ply:SetNWAngle("sligwolf_zdevtools_icongen_lock_ang", playerAng)
 	ply:SetPos(playerPos)
 	ply:SetEyeAngles(playerAng)
+
+	if callback then
+		SLIGWOLF_ADDON:TimerNextFrame(self.playerTimer, callback)
+	end
 end
 
-function META:MovePlayerToEntry()
+function META:MovePlayerToEntry(callback)
 	if not self:ValidateState() then
 		return
 	end
@@ -790,10 +841,10 @@ function META:MovePlayerToEntry()
 	local viewOffset = ply:GetCurrentViewOffset()
 	local playerPos = eyePos - viewOffset
 
-	self:MovePlayerToPosition(playerPos, playerAng)
+	self:MovePlayerToPosition(playerPos, playerAng, callback)
 end
 
-function META:MovePlayerToCamera()
+function META:MovePlayerToCamera(callback)
 	if not self:ValidateState() then
 		return
 	end
@@ -808,7 +859,7 @@ function META:MovePlayerToCamera()
 	local viewOffset = ply:GetCurrentViewOffset()
 	local playerPos = eyePos - viewOffset
 
-	self:MovePlayerToPosition(playerPos, playerAng)
+	self:MovePlayerToPosition(playerPos, playerAng, callback)
 end
 
 function META:LoadSaveGame(callback)
@@ -1101,10 +1152,10 @@ function META:HandleSpawnedEntity(ent, spawnname)
 	end
 
 	self:MoveEntityToPosition(entPos, entAng, function()
-		self:MovePlayerToCamera()
-
-		self:WaitForEntityReady(function()
-			self:SendCaptureRequest()
+		self:MovePlayerToCamera(function()
+			self:WaitForEntityReady(function()
+				self:SendCaptureRequest()
+			end)
 		end)
 	end)
 end
@@ -1206,8 +1257,12 @@ function META:SendCaptureRequest()
 	LIBNet.Start("zdevtools_icongen_start")
 		net.WriteString(self.name)
 		net.WriteUInt(self.processSubId, 32)
+		net.WriteBool(self.spawnMode)
+		net.WriteUInt(self.startIndex, 16)
 		net.WriteUInt(self.currentIndex, 16)
-		net.WriteUInt(self.workloadCount, 16)
+		net.WriteUInt(self.currentIndexRelative, 16)
+		net.WriteUInt(self.workloadTotalLength, 16)
+		net.WriteUInt(self.workloadLengthRelative, 16)
 
 		net.WriteString(self.currentAddonname or "")
 		net.WriteString(self.currentCategory or "")
@@ -1256,19 +1311,29 @@ function META:HandleCaptureDone(captureResponce)
 		return
 	end
 
-	self:CleanupSpawn()
+	local isSpawnMode = self:IsSpawnMode()
 
-	local index = self.currentIndex
-	local count = self.workloadCount
+	if not isSpawnMode then
+		self:CleanupSpawn()
+	end
+
+	local currentIndex = self.currentIndex
+	local currentIndexRelative = self.currentIndexRelative
+	local workloadTotalLength = self.workloadTotalLength
+	local workloadLengthRelative = self.workloadLengthRelative
 
 	self.entriesRun = math.min(self.entriesRun + 1, self.entriesTotal)
 	self.entriesDone = math.min(self.entriesDone + 1, self.entriesTotal)
 
 	if self.OnProgressDone then
-		ProtectedCall(self.OnProgressDone, self, index, count)
+		ProtectedCall(
+			self.OnProgressDone, self,
+			currentIndexRelative, workloadLengthRelative,
+			currentIndex, workloadTotalLength
+		)
 	end
 
-	if index >= count then
+	if currentIndexRelative >= workloadLengthRelative then
 		self:ProcessEnd()
 		return
 	end
