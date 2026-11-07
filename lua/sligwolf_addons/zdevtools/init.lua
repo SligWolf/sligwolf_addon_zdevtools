@@ -8,7 +8,7 @@ if not SLIGWOLF_BASECHECK then
 end
 
 SLIGWOLF_BASECHECK.Addonname = "zdevtools"
-SLIGWOLF_BASECHECK.RequiredBaseApiVersion = "2.0.4"
+SLIGWOLF_BASECHECK.RequiredBaseApiVersion = "2.0.6"
 
 if not SLIGWOLF_BASECHECK.CheckBaseAddonExist() then
 	return

@@ -10,3 +10,6 @@
 AddCSLuaFile()
 include("sligwolf_addons/zdevtools/init.lua")
 
+-- Static global to check developer's install. Only for pre sw-base loaded code.
+SligWolf_Addons_ZDevTools = true
+
