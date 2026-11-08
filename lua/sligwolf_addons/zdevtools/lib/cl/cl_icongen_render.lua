@@ -14,7 +14,9 @@ end
 
 local LIBThemesystem = SligWolf_Addons.Themesystem
 local LIBEntities = SligWolf_Addons.Entities
+local LIBDebug = SligWolf_Addons.Debug
 local LIBFile = SligWolf_Addons.File
+local LIBUtil = SligWolf_Addons.Util
 local LIBHook = SligWolf_Addons.Hook
 
 LIB.renderTarget = nil
@@ -41,11 +43,17 @@ LIB.currentIndex = nil
 LIB.currentCount = nil
 LIB.currentCamera = nil
 LIB.currentSuperDof = nil
+LIB.currentLights = nil
+LIB.currentLightsDirty = nil
 
 if IsValid(LIB.previewContentIcon) then
 	LIB.previewContentIcon:Remove()
 	LIB.previewContentIcon = nil
 end
+
+LIBHook.Add("PostCleanupMap", "Addon_ZDevTools_Icongen_ResetLights", function()
+	LIB.ResetLights()
+end)
 
 LIBHook.Add("OnScreenSizeChanged", "Addon_ZDevTools_Icongen_ScreenResized", function()
 	LIB.renderTarget = nil
@@ -148,6 +156,85 @@ LIBHook.Add("RenderScene", "Addon_ZDevTools_Icongen_SuperDof", function(pos, ang
 		renderDofRequest.renderNow = false
 	end
 end, 20000)
+
+local g_tmpDebugColor = Color(0, 0, 0)
+
+LIBHook.Add("Think", "Addon_ZDevTools_Icongen_LightUpdate", function()
+	local lights = LIB.GetLights()
+
+	if not lights then
+		return
+	end
+
+	local maxlights = LIB.config.limits.lights
+
+	local idSpace = LIB.config.lights.idSpace
+	local defaultSize = LIB.config.lights.defaultSize
+	local defaultBrightness = LIB.config.lights.defaultBrightness
+	local decay = LIB.config.lights.decay
+	local dietime = LIB.config.lights.dietime
+
+	local count = 0
+
+	for i, light in ipairs(lights) do
+		local id = idSpace + count
+
+		local pos = light.pos
+		if not pos then
+			continue
+		end
+
+		local size = light.size or defaultSize
+		if size <= 0 then
+			continue
+		end
+
+		local dynLightObj = DynamicLight(id)
+		if not dynLightObj then
+			continue
+		end
+
+		local brightness = light.brightness or defaultBrightness
+
+		local r, g, b
+		r = math.Clamp(light.r, 0, 255)
+		g = math.Clamp(light.g, 0, 255)
+		b = math.Clamp(light.b, 0, 255)
+
+		dynLightObj.pos = pos
+		dynLightObj.size = size
+		dynLightObj.brightness = brightness
+
+		dynLightObj.r = r
+		dynLightObj.g = g
+		dynLightObj.b = b
+
+		dynLightObj.decay = decay
+		dynLightObj.dietime = CurTime() + dietime
+
+		if LIBDebug.IsDeveloper() then
+			g_tmpDebugColor.r = r
+			g_tmpDebugColor.g = g
+			g_tmpDebugColor.b = b
+
+			LIBDebug.SetLifetime(dietime)
+
+			LIBDebug.Cross(pos, 4, g_tmpDebugColor)
+			LIBDebug.Box(pos, 1, g_tmpDebugColor)
+
+			local text = string.format("DynamicLight[%i], size: %i, brightness: %i", id, size, brightness)
+			LIBDebug.EntityTextAtPosition(pos, text)
+
+			LIBDebug.ResetLifetime()
+		end
+
+		count = count + 1
+
+		if count >= maxlights then
+			break
+		end
+	end
+end)
 
 function LIB.GetRenderTarget()
 	if LIB.renderTarget then
@@ -650,6 +737,48 @@ function LIB.ResetSuperDof()
 	LIB.currentSuperDof = nil
 end
 
+function LIB.SetLights(lights)
+	local lightCount = lights and #lights or 0
+	if lightCount <= 0 then
+		LIB.ResetEntityData()
+		return
+	end
+
+	if not LIBUtil.CompareObjectLists(lights, LIB.currentLights) then
+		LIB.currentLightsDirty = true
+	end
+
+	LIB.currentLights = lights
+end
+
+function LIB.ResetLights()
+	local oldLights = LIB.currentLights
+
+	if oldLights and #oldLights > 0 then
+		LIB.currentLightsDirty = true
+	end
+
+	LIB.currentLights = nil
+end
+
+function LIB.GetLights()
+	local lights = LIB.currentLights
+
+	if not lights then
+		return nil
+	end
+
+	if #lights <= 0 then
+		return nil
+	end
+
+	return lights
+end
+
+function LIB.IsDirtyLights()
+	return LIB.currentLightsDirty
+end
+
 function LIB.SetProgressStats(index, count, number)
 	if not index or not count then
 		LIB.ResetProgress()
@@ -842,7 +971,9 @@ function LIB.TakeScreenshot(parameter)
 		LIB.RequestCopyToBuffer(timerAndCallbackName, renderBufferToCanvas)
 	end
 
-	local nextFrame = function()
+	local waitForLights = function()
+		LIB.currentLightsDirty = nil
+
 		if not validate() then
 			return
 		end
@@ -850,7 +981,8 @@ function LIB.TakeScreenshot(parameter)
 		LIB.RequestDofRender(false, timerAndCallbackName, requestCopyToBuffer)
 	end
 
-	SLIGWOLF_ADDON:TimerNextFrame(timerAndCallbackName, nextFrame)
+	local dirtyLightsDelay = LIB.IsDirtyLights() and LIB.config.time.light or 0
+	SLIGWOLF_ADDON:TimerOnce(timerAndCallbackName, dirtyLightsDelay, waitForLights)
 end
 
 function LIB.FindTargetEntityInView()

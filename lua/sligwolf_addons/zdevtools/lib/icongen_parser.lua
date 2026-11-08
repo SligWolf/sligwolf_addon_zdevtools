@@ -109,6 +109,48 @@ function LIB.SanitizeThemeList(strlist)
 	return result
 end
 
+function LIB.SanitizeLights(lights)
+	local result = {}
+
+	if not lights then
+		return result
+	end
+
+	if not table.IsSequential(lights) then
+		lights = {lights}
+	end
+
+	local defaultSize = LIB.config.lights.defaultSize
+	local defaultBrightness = LIB.config.lights.defaultBrightness
+
+	for i, light in ipairs(lights) do
+		local pos = light.pos
+		if not pos then
+			continue
+		end
+
+		local size = light.size and LIB.SanitizeNumber(light.size) or defaultSize
+		if size <= 0 then
+			continue
+		end
+
+		local brightness = light.brightness and LIB.SanitizeNumber(light.brightness) or defaultBrightness
+
+		local resultItem = {
+			pos = LIB.SanitizeVector(pos),
+			brightness = brightness,
+			size = size,
+			r = math.Clamp(LIB.SanitizeNumber(light.r), 0, 255),
+			g = math.Clamp(LIB.SanitizeNumber(light.g), 0, 255),
+			b = math.Clamp(LIB.SanitizeNumber(light.b), 0, 255),
+		}
+
+		table.insert(result, resultItem)
+	end
+
+	return result
+end
+
 function LIB.SanitizeVector(stringOrAngleOrVector)
 	if not stringOrAngleOrVector or stringOrAngleOrVector == "" then
 		return Vector()
@@ -567,6 +609,62 @@ local function outputObjectEnd(tab, comma)
 	outputLine(segments)
 end
 
+local function outputListStart(tab, key)
+	local segments = {}
+
+	if tab then
+		table.insert(segments, {
+			format = formatTab(tab),
+			color = g_defaultColor,
+		})
+	end
+
+	if key then
+		table.insert(segments, {
+			format = "\"%s\"",
+			formatParams = {LIB.FormatString(key)},
+			color = g_keyColor,
+		})
+
+		table.insert(segments, {
+			format = ": ",
+			color = g_seperatorColor,
+		})
+	end
+
+	table.insert(segments, {
+		format = "[",
+		color = g_parenthesesColor,
+	})
+
+	outputLine(segments)
+end
+
+local function outputListEnd(tab, comma)
+	local segments = {}
+
+	if tab then
+		table.insert(segments, {
+			format = formatTab(tab),
+			color = g_defaultColor,
+		})
+	end
+
+	table.insert(segments, {
+		format = "]",
+		color = g_parenthesesColor,
+	})
+
+	if comma then
+		table.insert(segments, {
+			format = ",",
+			color = g_commaColor,
+		})
+	end
+
+	outputLine(segments)
+end
+
 local function outputCommentLine(tab, comment, ...)
 	local segments = {}
 
@@ -638,7 +736,23 @@ function LIB.FormatSnapshot(workloadEntry, outputToConsole)
 		outputKeyValueNumberLine (12, "shape", "   ", dof.shape)
 		outputObjectEnd(8)
 	end
-	outputObjectEnd(4)
+	outputObjectEnd(4, true)
+
+	outputLine()
+
+	local defaultSize = LIB.config.lights.defaultSize
+	local defaultBrightness = LIB.config.lights.defaultBrightness
+
+	outputListStart(4, "lights")
+	outputObjectStart(8)
+	outputCommentLine(12, "\"pos\": \"%s\",", LIB.FormatVector(Vector()))
+	outputCommentLine(12, "\"size\": %s,", LIB.FormatInteger(defaultSize))
+	outputCommentLine(12, "\"brightness\": %s,", LIB.FormatNumber(defaultBrightness))
+	outputCommentLine(12, "\"r\": 255,")
+	outputCommentLine(12, "\"g\": 255,")
+	outputCommentLine(12, "\"b\": 255")
+	outputObjectEnd(8)
+	outputListEnd(4)
 
 	outputObjectEnd()
 
@@ -706,6 +820,7 @@ end
 function LIB.SanitizeWorkloadEntry(workloadEntry)
 	local entity = workloadEntry.entity or {}
 	local camera = workloadEntry.camera or {}
+	local lights = workloadEntry.lights or {}
 	local dof = camera.dof or {}
 
 	local spawnfrozen = entity.spawnfrozen
@@ -749,6 +864,8 @@ function LIB.SanitizeWorkloadEntry(workloadEntry)
 			fov = camera.fov and LIB.SanitizeFov(camera.fov),
 			dof = dof,
 		},
+
+		lights = LIB.SanitizeLights(lights),
 	}
 
 	return result

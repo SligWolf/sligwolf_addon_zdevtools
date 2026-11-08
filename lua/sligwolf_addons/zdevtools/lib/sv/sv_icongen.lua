@@ -271,6 +271,10 @@ function META:AddWorkloadItem(workloadItem)
 	local maxDofSteps = LIB.config.limits.dof.steps
 	local maxDofShape = LIB.config.limits.dof.shape
 
+	local defaultLightSize = LIB.config.lights.defaultSize
+	local defaultLightBrightness = LIB.config.lights.defaultBrightness
+	local maxLights = LIB.config.limits.lights
+
 	local workload = self.workload
 	local workloadByPath = self.workloadByPath
 
@@ -321,6 +325,7 @@ function META:AddWorkloadItem(workloadItem)
 	local dof = camera.dof or {}
 
 	local entity = workloadItem.entity or {}
+	local lights = workloadItem.lights or {}
 
 	if table.IsEmpty(themesTmp) then
 		themesTmp = {defaultsTheme}
@@ -456,6 +461,39 @@ function META:AddWorkloadItem(workloadItem)
 			wait = math.Clamp(entity.wait or defaultsEntity.wait, 0, 10),
 			spawnfrozen = spawnfrozen,
 		}
+
+		local newItemTemplateLights = {}
+
+		for i, light in ipairs(lights) do
+			local pos = light.pos
+			if not pos then
+				continue
+			end
+
+			local size = light.size or defaultLightSize
+			if size <= 0 then
+				continue
+			end
+
+			local brightness = light.brightness or defaultLightBrightness
+
+			local newLight = {
+				pos = pos,
+				brightness = brightness,
+				size = size,
+				r = math.Clamp(light.r, 0, 255),
+				g = math.Clamp(light.g, 0, 255),
+				b = math.Clamp(light.b, 0, 255),
+			}
+
+			table.insert(newItemTemplateLights, newLight)
+
+			if #newItemTemplateLights >= maxLights then
+				break
+			end
+		end
+
+		newItemTemplate.lights = newItemTemplateLights
 
 		if table.IsEmpty(themes) then
 			themes = {LIBThemesystem.THEME_DEFAULT}
@@ -774,12 +812,25 @@ function META:ProcessEnd()
 	self.currentSavegame = nil
 	self.lastSavegame = nil
 
-	if not self:IsSpawnMode() then
+	local isSpawnMode = self:IsSpawnMode() 
+
+	if not isSpawnMode then
 		self:ResetPlayerPosition()
 		game.CleanUpMap()
 	end
 
 	self:Unlock()
+
+	if isSpawnMode then
+		-- Give the camera for faster iteration and adjustments during development.
+
+		local ply = self.player
+		if IsValid(ply) then
+			local cameraWeapon = LIB.config.cameraWeapon
+			ply:Give(cameraWeapon)
+			ply:SelectWeapon(cameraWeapon)
+		end
+	end
 
 	self.originalPos = nil
 	self.originalAng = nil
@@ -1254,6 +1305,9 @@ function META:SendCaptureRequest()
 	local camera = entry.camera
 	local dof = camera.dof
 
+	local lights = entry.lights
+	local lightCount = math.Clamp(#lights, 0, LIB.config.limits.lights)
+
 	LIBNet.Start("zdevtools_icongen_start")
 		net.WriteString(self.name)
 		net.WriteUInt(self.processSubId, 32)
@@ -1281,6 +1335,19 @@ function META:SendCaptureRequest()
 		net.WriteUInt(dof.passes, 8)
 		net.WriteUInt(dof.steps, 8)
 		net.WriteFloat(dof.shape)
+
+		net.WriteUInt(lightCount, 2)
+
+		for i = 1, lightCount do
+			local light = lights[i]
+
+			net.WriteVector(light.pos)
+			net.WriteUInt(light.size, 16)
+			net.WriteFloat(light.brightness)
+			net.WriteUInt(light.r, 8)
+			net.WriteUInt(light.g, 8)
+			net.WriteUInt(light.b, 8)
+		end
 	LIBNet.Send(self.player)
 end
 

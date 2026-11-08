@@ -20,6 +20,12 @@ local META = LIB.meta
 
 LIBNet.Receive("zdevtools_icongen_start", function(len)
 	local name = net.ReadString()
+
+	local instance = LIB.GetInstance(name)
+	if not IsValid(instance) then
+		return
+	end
+
 	local processSubId = net.ReadUInt(32)
 	local spawnMode = net.ReadBool()
 	local startIndex = net.ReadUInt(16)
@@ -46,9 +52,20 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 	local steps = net.ReadUInt(8)
 	local shape = net.ReadFloat()
 
-	local instance = LIB.GetInstance(name)
-	if not IsValid(instance) then
-		return
+	local lightCount = math.Clamp(net.ReadUInt(2), 0, LIB.config.limits.lights)
+	local lights = {}
+
+	for i = 1, lightCount do
+		local light = {
+			pos = net.ReadVector(),
+			size = net.ReadUInt(16),
+			brightness = net.ReadFloat(),
+			r = net.ReadUInt(8),
+			g = net.ReadUInt(8),
+			b = net.ReadUInt(8),
+		}
+
+		table.insert(lights, light)
 	end
 
 	local captureRequest = {
@@ -82,6 +99,8 @@ LIBNet.Receive("zdevtools_icongen_start", function(len)
 				shape = shape,
 			},
 		},
+
+		lights = lights,
 	}
 
 	instance:HandleCaptureRequest(captureRequest)
@@ -148,6 +167,7 @@ function META:DestroyInternal()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
 	LIB.ResetEntityData()
+	LIB.ResetLights()
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
 end
@@ -159,6 +179,7 @@ function META:CancelInternal()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
 	LIB.ResetEntityData()
+	LIB.ResetLights()
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
 end
@@ -214,6 +235,7 @@ function META:HandleCaptureRequest(captureRequest)
 	local currentIndexRelative = captureRequest.currentIndexRelative
 	local workloadTotalLength = captureRequest.workloadTotalLength
 	local workloadLengthRelative = captureRequest.workloadLengthRelative
+	local lights = captureRequest.lights
 
 	self.spawnMode = captureRequest.spawnMode
 	self.startIndex = captureRequest.startIndex
@@ -237,6 +259,8 @@ function META:HandleCaptureRequest(captureRequest)
 		if currentIndexRelative <= 1 then
 			self:ProcessStart()
 		end
+
+		LIB.SetLights(lights)
 
 		if self.OnProgress then
 			ProtectedCall(
@@ -309,6 +333,7 @@ function META:ProcessStart()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
 	LIB.ResetEntityData()
+	LIB.ResetLights()
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
 
@@ -322,6 +347,8 @@ function META:ProcessEnd()
 
 	self.currentCaptureRequest = nil
 	self.processSubId = nil
+
+	local isSpawnMode = self:IsSpawnMode()
 
 	self.spawnMode = false
 	self.startIndex = 0
@@ -344,6 +371,11 @@ function META:ProcessEnd()
 	LIB.ResetSuperDof()
 	LIB.ResetProgressStats()
 	LIB.ResetEntityData()
+
+	if not isSpawnMode then
+		LIB.ResetLights()
+	end
+
 	LIB.ClearBuffer()
 	LIB.ClearCanvas()
 

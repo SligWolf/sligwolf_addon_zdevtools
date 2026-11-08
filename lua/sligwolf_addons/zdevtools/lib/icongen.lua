@@ -35,13 +35,13 @@ LIB.config = {
 
 	-- Timer settings (seconds)
 	time = {
-		timeoutTotal   = 25.0,  -- Max time to wait for an entity to be processed
-		timeoutEntity  = 2,     -- Max time to wait for an entity to be spawned
-		timeoutPlayer  = 1,     -- Delay player position
-		savegame = 2,     		-- Delay after savegame load
-		delay    = 0.05,        -- Delay between entities
-		preview  = 0.5,         -- How long to show preview on screen
-		start    = 1,           -- Delay first item
+		timeoutTotal   = 25.00,  -- Max time to wait for an entity to be processed
+		timeoutEntity  =  2.00,  -- Max time to wait for an entity to be spawned
+		savegame       =  2.00,  -- Delay after savegame load
+		delay          =  0.05,  -- Delay between entities
+		preview        =  0.50,  -- How long to show preview on screen
+		light          =  0.50,  -- Delay on light change
+		start          =  1.00,  -- Delay first item
 	},
 
 	defaults = {
@@ -73,7 +73,17 @@ LIB.config = {
 			passes = 64,
 			steps = 64,
 			shape = 1,
-		}
+		},
+
+		lights = 4,
+	},
+
+	lights = {
+		decay = 0,
+		dietime = 0.1,
+		defaultSize = 1000,
+		defaultBrightness = 1,
+		idSpace = 3570,
 	},
 
 	lockWeapon = "sligwolf_zdevtools_icongen_camera_locked",

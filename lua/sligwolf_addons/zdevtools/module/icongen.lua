@@ -108,6 +108,12 @@ g_iconGenerator.OnFinished = function(this)
 		entriesDone,
 		entriesError
 	)
+
+	if CLIENT then
+		SLIGWOLF_ADDON:TimerOnce("IconGen_OnFinishedSound", 0.1, function()
+			surface.PlaySound("eli_lab.elevator_ding")
+		end)
+	end
 end
 
 g_iconGenerator.OnCancel = function(this)
