@@ -812,7 +812,7 @@ function META:ProcessEnd()
 	self.currentSavegame = nil
 	self.lastSavegame = nil
 
-	local isSpawnMode = self:IsSpawnMode() 
+	local isSpawnMode = self:IsSpawnMode()
 
 	if not isSpawnMode then
 		self:ResetPlayerPosition()
