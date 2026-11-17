@@ -3,14 +3,15 @@
 // VEHICLES //
 
 {
-	// Automatic Train (automatictrain)
-	// Metropod AMT - PHX
-	// 2026-08-06 16:00:23
+	// Automatic Train
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_automatictrain_metropod_phx"],
+	"spawnname": [
+		"sligwolf_automatictrain_metropod_phx",
+		"sligwolf_automatictrain_sanfran_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -34,45 +35,13 @@
 	}
 },
 {
-	// Automatic Train (automatictrain)
-	// San Francisco AMT - PHX
-	// 2026-08-06 16:01:20
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_automatictrain_sanfran_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.111, 5929.919, -415.277]",
-		"ang":         "{0.120, 0.263, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.006, 6369.588, -172.778]",
-		"ang": "{21.408, -58.064, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 477.962,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Automatic Train (automatictrain)
-	// Station Double Bench
-	// 2026-08-06 16:03:51
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_automatictrain_station_double"],
+	"spawnname": [
+		"sligwolf_automatictrain_station_single",
+		"sligwolf_automatictrain_station_double"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -96,40 +65,7 @@
 	}
 },
 {
-	// Automatic Train (automatictrain)
-	// Station Single Bench
-	// 2026-08-06 16:03:51
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_automatictrain_station_single"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.784, 5719.176, -403.391]",
-		"ang":         "{0.000, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10982.165, 6368.559, -173.590]",
-		"ang": "{18.412, -60.565, 0.000}",
-		"fov": 65.000,
-		"dof": {
-			"distance": 477.962,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
 	// Blue-X12 (bluex12)
-	// MK-15 Blue-X12 - PHX
-	// 2026-08-06 16:09:25
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -158,10 +94,6 @@
 	}
 },
 {
-	// Blue-X12 (bluex12)
-	// MK-14 Blue-X12 - PHX
-	// 2026-08-06 16:10:18
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -189,10 +121,6 @@
 	}
 },
 {
-	// Blue-X12 (bluex12)
-	// MK-14 Blue-X12 Bogie - PHX
-	// 2026-08-06 16:11:10
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -221,8 +149,6 @@
 },
 {
 	// Cranetrain (cranetrain)
-	// CA-14 Train - PHX
-	// 2026-08-06 16:17:37
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -251,45 +177,13 @@
 	}
 },
 {
-	// Cranetrain (cranetrain)
-	// Crane - Hook
-	// 2026-08-06 16:19:30
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_cranetrain_crane_hook"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11438.556, 5986.875, -403.602]",
-		"ang":         "{0.000, 0.054, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.167, 6370.024, -173.590]",
-		"ang": "{14.353, -39.528, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 477.962,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Cranetrain (cranetrain)
-	// Crane - Magnet
-	// 2026-08-06 16:20:16
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_cranetrain_crane_magnet"],
+	"spawnname": [
+		"sligwolf_cranetrain_crane_hook",
+		"sligwolf_cranetrain_crane_magnet"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -314,8 +208,6 @@
 },
 {
 	// Diesel EMD (dieselemd)
-	// SD-40-2 EMD - PHX
-	// 2026-08-06 16:21:54
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -344,10 +236,6 @@
 	}
 },
 {
-	// Diesel EMD (dieselemd)
-	// SD-40-2 EMD Bogie - PHX
-	// 2026-08-06 16:22:38
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -375,10 +263,6 @@
 	}
 },
 {
-	// Diesel EMD (dieselemd)
-	// SD-40-2 EMD Bogie - PHX
-	// 2026-08-06 16:23:21
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -407,8 +291,6 @@
 },
 {
 	// Diesel Henschel (dieselhenschel)
-	// DH-440 Henschel - PHX
-	// 2026-08-06 16:24:17
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -437,14 +319,13 @@
 	}
 },
 {
-	// Diesel Henschel (dieselhenschel)
-	// DH-440 Boxcar Slide - PHX
-	// 2026-08-06 16:25:39
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_dieselhenschel_dh440_wagon_box_slide_phx"],
+	"spawnname": [
+		"sligwolf_dieselhenschel_dh440_wagon_box_slide_phx",
+		"sligwolf_dieselhenschel_dh440_wagon_box_garage_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -468,41 +349,6 @@
 	}
 },
 {
-	// Diesel Henschel (dieselhenschel)
-	// DH-440 Boxcar Garage - PHX
-	// 2026-08-06 16:26:26
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_dieselhenschel_dh440_wagon_box_garage_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.601, 5988.742, -416.273]",
-		"ang":         "{0.082, -0.006, 0.027}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.089, 6370.038, -173.590]",
-		"ang": "{23.206, -54.963, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 374.721,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Diesel Henschel (dieselhenschel)
-	// DH-440 Car Transporter - PHX
-	// 2026-08-06 16:27:27
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -531,8 +377,6 @@
 },
 {
 	// Diesel Ludmilla (dieselludmilla)
-	// BR-130 Ludmilla - PHX
-	// 2026-08-06 16:29:05
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -561,10 +405,6 @@
 	}
 },
 {
-	// Diesel Ludmilla (dieselludmilla)
-	// BR-130 Ludmilla Bogie - PHX
-	// 2026-08-06 16:29:39
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -593,13 +433,14 @@
 },
 {
 	// Green-T7 (greent7)
-	// Green-T7-S - PHX
-	// 2026-08-06 16:30:37
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_greent7_train_short_phx"],
+	"spawnname": [
+		"sligwolf_greent7_train_short_phx",
+		"sligwolf_greent7_train_short_wfc_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -623,45 +464,13 @@
 	}
 },
 {
-	// Green-T7 (greent7)
-	// Green-T7-S (Front Coupler) - PHX
-	// 2026-08-06 16:31:11
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_greent7_train_short_wfc_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.673, 5963.315, -417.061]",
-		"ang":         "{0.087, 0.000, 0.043}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.676, 6370.004, -173.590]",
-		"ang": "{21.267, -58.509, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 374.721,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Green-T7 (greent7)
-	// Green-T7-L - PHX
-	// 2026-08-06 16:32:01
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_greent7_train_long_phx"],
+	"spawnname": [
+		"sligwolf_greent7_train_long_phx",
+		"sligwolf_greent7_train_long_wfc_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -685,41 +494,6 @@
 	}
 },
 {
-	// Green-T7 (greent7)
-	// Green-T7-L (Front Coupler) - PHX
-	// 2026-08-06 16:32:45
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_greent7_train_long_wfc_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.322, 5938.889, -418.928]",
-		"ang":         "{0.104, 0.071, 0.016}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.286, 6370.556, -173.590]",
-		"ang": "{21.440, -58.466, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 374.721,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Green-T7 (greent7)
-	// Green-T7 Wagon S - PHX
-	// 2026-08-06 16:33:25
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -747,10 +521,6 @@
 	}
 },
 {
-	// Green-T7 (greent7)
-	// Green-T7 Wagon L - PHX
-	// 2026-08-06 16:34:04
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -778,10 +548,6 @@
 	}
 },
 {
-	// Green-T7 (greent7)
-	// Green-T7 Wagon Bogie - PHX
-	// 2026-08-06 16:34:36
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -810,13 +576,15 @@
 },
 {
 	// Metro Train (metrotrain)
-	// BR 483 Front - PHX
-	// 2026-08-06 16:36:39
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_metrotrain_br483_front_phx"],
+	"spawnname": [
+		"sligwolf_metrotrain_br483_front_phx",
+		"sligwolf_metrotrain_br483_middle_phx",
+		"sligwolf_metrotrain_br483_back_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -840,72 +608,6 @@
 	}
 },
 {
-	// Metro Train (metrotrain)
-	// BR 483 Middle - PHX
-	// 2026-08-06 16:37:17
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_metrotrain_br483_middle_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11208.554, 5482.174, -416.701]",
-		"ang":         "{0.076, -0.171, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.610, 6369.445, -173.590]",
-		"ang": "{26.440, -49.862, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Metro Train (metrotrain)
-	// BR 483 Rear - PHX
-	// 2026-08-06 16:37:58
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_metrotrain_br483_back_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.500, 5461.455, -416.776]",
-		"ang":         "{0.120, 0.142, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.296, 6369.667, -173.590]",
-		"ang": "{24.806, -53.591, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Metro Train (metrotrain)
-	// BR 483 Bogie - PHX
-	// 2026-08-06 16:38:35
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -934,13 +636,26 @@
 },
 {
 	// Train Cars (wagons)
-	// TC-25 Passenger S - PHX
-	// 2026-08-06 16:58:44
+	// S - PHX
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_pass_small_phx"],
+	"spawnname": [
+		"sligwolf_wagons_tc25_pass_small_phx",
+		"sligwolf_wagons_tc25_box_small_phx",
+		"sligwolf_wagons_tc25_gondola_small_phx",
+		"sligwolf_wagons_tc25_flat_small_phx",
+		"sligwolf_wagons_tc25_flat_small_spike_phx",
+		"sligwolf_wagons_tc25_flat_small_tub_phx",
+		"sligwolf_wagons_tc25_tank_small_phx",
+		"sligwolf_wagons_tc25_car_small_phx",
+		"sligwolf_wagons_tc25_hopper_small_phx",
+		"sligwolf_wagons_tc25_tipper_small_phx",
+		"sligwolf_wagons_tc25_caboose_small_a_phx",
+		"sligwolf_wagons_tc25_caboose_small_b_phx",
+		"sligwolf_wagons_tc25_caboose_small_c_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -965,385 +680,32 @@
 },
 {
 	// Train Cars (wagons)
-	// TC-25 Box S - PHX
-	// 2026-08-06 16:59:23
+	// M - PHX
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_box_small_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Gondola S - PHX
-	// 2026-08-06 16:59:45
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_gondola_small_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Flat Bed S - PHX
-	// 2026-08-06 17:00:05
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_flat_small_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Flat Spike S - PHX
-	// 2026-08-06 17:00:25
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_flat_small_spike_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Flat Tub S - PHX
-	// 2026-08-06 17:00:25
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_flat_small_tub_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Tanker S - PHX
-	// 2026-08-06 17:00:53
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_tank_small_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Car S - PHX
-	// 2026-08-06 17:01:11
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_car_small_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.500
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Hopper S - PHX
-	// 2026-08-06 17:01:31
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_hopper_small_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Tipper S - PHX
-	// 2026-08-06 17:01:49
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_tipper_small_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Caboose S - PHX
-	// 2026-08-06 17:02:21
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_caboose_small_a_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Caboose S - PHX
-	// 2026-08-06 17:02:39
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_caboose_small_b_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Caboose S - PHX
-	// 2026-08-06 17:02:53
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_caboose_small_c_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11211.268, 5928.218, -417.347]",
-		"ang":         "{0.126, 0.043, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.709, 6370.996, -173.590]",
-		"ang": "{19.988, -58.414, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Passenger M - PHX
-	// 2026-08-06 17:04:11
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_pass_medium_phx"],
+	"spawnname": [
+		"sligwolf_wagons_tc25_pass_medium_phx",
+		"sligwolf_wagons_tc15_pass_medium_phx",
+		"sligwolf_wagons_tc25_box_medium_phx",
+		"sligwolf_wagons_tc15_box_medium_phx",
+		"sligwolf_wagons_tc25_gondola_medium_phx",
+		"sligwolf_wagons_tc15_gondola_medium_phx",
+		"sligwolf_wagons_tc25_flat_medium_phx",
+		"sligwolf_wagons_tc15_flat_medium_phx",
+		"sligwolf_wagons_tc25_flat_medium_spike_phx",
+		"sligwolf_wagons_tc25_flat_medium_tub_phx",
+		"sligwolf_wagons_tc25_tank_medium_phx",
+		"sligwolf_wagons_tc15_tank_medium_phx",
+		"sligwolf_wagons_tc25_car_medium_phx",
+		"sligwolf_wagons_tc15_car_medium_phx",
+		"sligwolf_wagons_tc25_hopper_medium_phx",
+		"sligwolf_wagons_tc25_tipper_medium_phx",
+		"sligwolf_wagons_tc25_caboose_medium_a_phx",
+		"sligwolf_wagons_tc25_caboose_medium_b_phx",
+		"sligwolf_wagons_tc25_caboose_medium_c_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -1368,571 +730,29 @@
 },
 {
 	// Train Cars (wagons)
-	// TC-15 Passenger M - PHX
-	// 2026-08-06 17:04:35
+	// L - PHX
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_pass_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Box M - PHX
-	// 2026-08-06 17:04:53
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_box_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-15 Box M - PHX
-	// 2026-08-06 17:05:10
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_box_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Gondola M - PHX
-	// 2026-08-06 17:05:23
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_gondola_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-15 Gondola M - PHX
-	// 2026-08-06 17:05:41
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_gondola_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Flat Bed M - PHX
-	// 2026-08-06 17:05:55
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_flat_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-15 Flat M - PHX
-	// 2026-08-06 17:06:09
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_flat_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Flat Spike M - PHX
-	// 2026-08-06 17:06:24
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_flat_medium_spike_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Flat Tub M - PHX
-	// 2026-08-06 17:06:40
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_flat_medium_tub_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Tanker M - PHX
-	// 2026-08-06 17:07:00
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_tank_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-15 Tank M - PHX
-	// 2026-08-06 17:07:12
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_tank_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Car M - PHX
-	// 2026-08-06 17:07:26
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_car_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.500
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-15 Car M - PHX
-	// 2026-08-06 17:07:39
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_car_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Hopper M - PHX
-	// 2026-08-06 17:07:53
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_hopper_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Tipper M - PHX
-	// 2026-08-06 17:08:06
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_tipper_medium_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Caboose M - PHX
-	// 2026-08-06 17:08:22
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_caboose_medium_a_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Caboose M - PHX
-	// 2026-08-06 17:08:35
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_caboose_medium_b_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Caboose M - PHX
-	// 2026-08-06 17:08:47
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_caboose_medium_c_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.310, 5870.011, -417.195]",
-		"ang":         "{0.126, -0.011, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.194, 6369.562, -173.590]",
-		"ang": "{20.120, -59.816, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Passenger L - PHX
-	// 2026-08-06 17:11:00
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_pass_long_phx"],
+	"spawnname": [
+		"sligwolf_wagons_tc25_pass_long_phx",
+		"sligwolf_wagons_tc15_pass_long_phx",
+		"sligwolf_wagons_tc25_box_long_phx",
+		"sligwolf_wagons_tc15_box_long_phx",
+		"sligwolf_wagons_tc25_gondola_long_phx",
+		"sligwolf_wagons_tc15_gondola_long_phx",
+		"sligwolf_wagons_tc25_flat_long_phx",
+		"sligwolf_wagons_tc15_flat_long_phx",
+		"sligwolf_wagons_tc25_flat_long_spike_phx",
+		"sligwolf_wagons_tc25_flat_long_tub_phx",
+		"sligwolf_wagons_tc25_tank_long_phx",
+		"sligwolf_wagons_tc15_tank_long_phx",
+		"sligwolf_wagons_tc25_car_long_phx",
+		"sligwolf_wagons_tc15_car_long_phx",
+		"sligwolf_wagons_tc25_hopper_long_phx",
+		"sligwolf_wagons_tc25_tipper_long_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -1957,473 +777,7 @@
 },
 {
 	// Train Cars (wagons)
-	// TC-15 Passenger L - PHX
-	// 2026-08-06 17:11:15
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_pass_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Box L - PHX
-	// 2026-08-06 17:11:28
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_box_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-15 Box L - PHX
-	// 2026-08-06 17:11:41
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_box_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Gondola L - PHX
-	// 2026-08-06 17:12:12
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_gondola_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-15 Gondola L - PHX
-	// 2026-08-06 17:12:32
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_gondola_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Flat Bed L - PHX
-	// 2026-08-06 17:12:45
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_flat_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-15 Flat L - PHX
-	// 2026-08-06 17:12:59
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_flat_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Flat Spike L - PHX
-	// 2026-08-06 17:13:15
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_flat_long_spike_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Flat Tub L - PHX
-	// 2026-08-06 17:13:31
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_flat_long_tub_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Tanker L - PHX
-	// 2026-08-06 17:13:46
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_tank_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-15 Tank L - PHX
-	// 2026-08-06 17:13:58
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_tank_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Car L - PHX
-	// 2026-08-06 17:14:13
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_car_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.500
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-15 Car L - PHX
-	// 2026-08-06 17:14:26
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc15_car_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Hopper L - PHX
-	// 2026-08-06 17:14:40
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_hopper_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Tipper L - PHX
-	// 2026-08-06 17:14:54
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_wagons_tc25_tipper_long_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.269, 5785.486, -417.140]",
-		"ang":         "{0.087, 0.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.454, 6369.779, -173.590]",
-		"ang": "{20.582, -61.168, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 366.863,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// TC-25 Bogie - PHX
-	// 2026-08-06 17:16:20
+	// Bogie - PHX
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -2452,10 +806,6 @@
 	}
 },
 {
-	// Train Cars (wagons)
-	// TC-25 Bogie - PHX
-	// 2026-08-06 17:17:07
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -2483,10 +833,6 @@
 	}
 },
 {
-	// Train Cars (wagons)
-	// TC-25 Bogie - PHX
-	// 2026-08-06 17:17:51
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -2514,10 +860,6 @@
 	}
 },
 {
-	// Train Cars (wagons)
-	// TC-25 Bogie - PHX
-	// 2026-08-06 17:18:16
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -2545,10 +887,6 @@
 	}
 },
 {
-	// Train Cars (wagons)
-	// TC-15 Bogie - PHX
-	// 2026-08-06 17:18:45
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -2577,8 +915,6 @@
 },
 {
 	// Tram (tram)
-	// Metrovelvet - PHX
-	// 2026-08-06 16:40:27
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -2607,10 +943,6 @@
 	}
 },
 {
-	// Tram (tram)
-	// Metrovelvet Bendy - PHX
-	// 2026-08-06 16:41:16
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -2639,13 +971,14 @@
 },
 {
 	// Western Loco (westernloco)
-	// WL-26 Loco - PHX
-	// 2026-08-06 16:42:43
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl26_loco_phx"],
+	"spawnname": [
+		"sligwolf_westernloco_wl26_loco_phx",
+		"sligwolf_westernloco_wl26_loco_wfc_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -2669,45 +1002,13 @@
 	}
 },
 {
-	// Western Loco (westernloco)
-	// WL-26 Loco (Front coupler) - PHX
-	// 2026-08-06 16:43:00
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl26_loco_wfc_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.867, 5901.579, -416.059]",
-		"ang":         "{-0.039, -0.770, 0.181}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10979.070, 6370.398, -173.590]",
-		"ang": "{21.671, -60.769, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Western Loco (westernloco)
-	// WL-13 Loco - PHX
-	// 2026-08-06 16:43:54
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl13_loco_phx"],
+	"spawnname": [
+		"sligwolf_westernloco_wl13_loco_phx",
+		"sligwolf_westernloco_wl13_loco_wfc_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -2731,41 +1032,6 @@
 	}
 },
 {
-	// Western Loco (westernloco)
-	// WL-13 Loco (Front coupler) - PHX
-	// 2026-08-06 16:44:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl13_loco_wfc_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11209.911, 5908.754, -416.243]",
-		"ang":         "{0.098, -0.588, 0.269}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.638, 6370.458, -173.590]",
-		"ang": "{20.813, -61.660, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Western Loco (westernloco)
-	// WL-13 Tender - PHX
-	// 2026-08-06 16:44:50
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -2793,14 +1059,14 @@
 	}
 },
 {
-	// Western Loco (westernloco)
-	// WL-26 Passenger - PHX
-	// 2026-08-06 16:45:44
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl26_passenger_phx"],
+	"spawnname": [
+		"sligwolf_westernloco_wl26_passenger_phx",
+		"sligwolf_westernloco_wl26_combined_phx",
+		"sligwolf_westernloco_wl26_luggage_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -2824,103 +1090,6 @@
 	}
 },
 {
-	// Western Loco (westernloco)
-	// WL-26 Combined - PHX
-	// 2026-08-06 16:45:57
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl26_combined_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.556, 5842.778, -416.261]",
-		"ang":         "{0.093, -0.198, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.724, 6370.025, -173.590]",
-		"ang": "{21.886, -59.786, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Western Loco (westernloco)
-	// WL-26 Luggage - PHX
-	// 2026-08-06 16:45:57
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl26_luggage_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.556, 5842.778, -416.261]",
-		"ang":         "{0.093, -0.198, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.724, 6370.025, -173.590]",
-		"ang": "{21.886, -59.786, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Western Loco (westernloco)
-	// WL-26 Passenger - PHX
-	// 2026-08-06 16:46:17
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl26_passenger_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.556, 5842.778, -416.261]",
-		"ang":         "{0.093, -0.198, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.724, 6370.025, -173.590]",
-		"ang": "{21.886, -59.786, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Western Loco (westernloco)
-	// WL-26 Caboose - PHX
-	// 2026-08-06 16:47:34
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -2948,14 +1117,15 @@
 	}
 },
 {
-	// Western Loco (westernloco)
-	// WL-13 Passenger - PHX
-	// 2026-08-06 16:48:19
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl13_passenger_phx"],
+	"spawnname": [
+		"sligwolf_westernloco_wl13_passenger_phx",
+		"sligwolf_westernloco_wl13_brake_phx",
+		"sligwolf_westernloco_wl13_gondola_phx",
+		"sligwolf_westernloco_wl13_flat_phx"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -2979,103 +1149,6 @@
 	}
 },
 {
-	// Western Loco (westernloco)
-	// WL-13 Caboose - PHX
-	// 2026-08-06 16:48:34
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl13_brake_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.208, 5988.408, -416.260]",
-		"ang":         "{0.093, 0.010, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.387, 6370.707, -173.590]",
-		"ang": "{22.694, -54.340, 0.000}",
-		"fov": 55.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Western Loco (westernloco)
-	// WL-13 Gondola - PHX
-	// 2026-08-06 16:48:56
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl13_gondola_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.208, 5988.408, -416.260]",
-		"ang":         "{0.093, 0.010, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.387, 6370.707, -173.590]",
-		"ang": "{22.694, -54.340, 0.000}",
-		"fov": 55.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Western Loco (westernloco)
-	// WL-13 Flatbed - PHX
-	// 2026-08-06 16:49:18
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_westernloco_wl13_flat_phx"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11210.208, 5988.408, -416.260]",
-		"ang":         "{0.093, 0.010, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[10978.387, 6370.707, -173.590]",
-		"ang": "{22.694, -54.340, 0.000}",
-		"fov": 55.000,
-		"dof": {
-			"distance": 372.695,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Western Loco (westernloco)
-	// WL-26 Bogie - PHX
-	// 2026-08-06 16:50:04
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -3103,10 +1176,6 @@
 	}
 },
 {
-	// Western Loco (westernloco)
-	// WL-26 Bogie (Front coupler) - PHX
-	// 2026-08-06 16:50:34
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -3134,10 +1203,6 @@
 	}
 },
 {
-	// Western Loco (westernloco)
-	// WL-26 Wagon Bogie - PHX
-	// 2026-08-06 16:51:14
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -3166,882 +1231,42 @@
 },
 {
 	// Mini Trains (minitrains)
-	// Minitrain Express
-	// 2026-08-06 17:37:13
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_train_electric_express"],
+	"spawnname": [
+		"sligwolf_minitrains_train_electric_express",
+		"sligwolf_minitrains_train_diesel_ludmilla",
+		"sligwolf_minitrains_train_diesel_shunter",
+		"sligwolf_minitrains_train_steam_bulli",
+		"sligwolf_minitrains_train_diesel_pacer",
+		"sligwolf_minitrains_train_electric_subway",
+		"sligwolf_minitrains_wagon_coach_regular_passenger",
+		"sligwolf_minitrains_wagon_coach_regular_end_passenger",
+		"sligwolf_minitrains_wagon_coach_express_passenger",
+		"sligwolf_minitrains_wagon_coach_subway_passenger",
+		"sligwolf_minitrains_wagon_coach_steam_passenger",
+		"sligwolf_minitrains_wagon_passenger_caboose",
+		"sligwolf_minitrains_wagon_medicine",
+		"sligwolf_minitrains_wagon_boxcar_cattles",
+		"sligwolf_minitrains_wagon_boxcar_furniture",
+		"sligwolf_minitrains_wagon_boxcar_wheat",
+		"sligwolf_minitrains_wagon_boxcar_meat",
+		"sligwolf_minitrains_wagon_gondola_coal",
+		"sligwolf_minitrains_wagon_gondola_paper",
+		"sligwolf_minitrains_wagon_gondola_furniture",
+		"sligwolf_minitrains_wagon_tanker_milk",
+		"sligwolf_minitrains_wagon_tanker_crudeoil_a",
+		"sligwolf_minitrains_wagon_tanker_crudeoil_b",
+		"sligwolf_minitrains_wagon_container_groceries",
+		"sligwolf_minitrains_wagon_container_goods",
+		"sligwolf_minitrains_wagon_container_medicalgoods",
+		"sligwolf_minitrains_wagon_container_readinggoods",
+		"sligwolf_minitrains_wagon_flatbed_woodentrunks",
+		"sligwolf_minitrains_wagon_flatbed_steel"
+	],
 	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Minitrain Ludmilla
-	// 2026-08-06 17:25:17
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_train_diesel_ludmilla"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Minitrain Shunter
-	// 2026-08-06 17:38:35
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_train_diesel_shunter"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Minitrain Steam
-	// 2026-08-06 17:38:47
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_train_steam_bulli"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Minitrain Pacer
-	// 2026-08-06 17:38:58
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_train_diesel_pacer"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Minitrain Subway
-	// 2026-08-06 17:39:22
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_train_electric_subway"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Passengers
-	// 2026-08-06 17:39:51
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_coach_regular_passenger"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Passengers
-	// 2026-08-06 17:40:03
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_coach_regular_end_passenger"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Passengers
-	// 2026-08-06 17:40:15
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_coach_express_passenger"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Passengers
-	// 2026-08-06 17:40:38
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_coach_subway_passenger"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Passengers
-	// 2026-08-06 17:40:54
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_coach_steam_passenger"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Caboose
-	// 2026-08-06 17:41:05
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_passenger_caboose"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Medicine
-	// 2026-08-06 17:52:44
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_medicine"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Cattles
-	// 2026-08-06 17:52:58
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_boxcar_cattles"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Furniture
-	// 2026-08-06 17:53:10
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_boxcar_furniture"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Wheat
-	// 2026-08-06 17:53:21
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_boxcar_wheat"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Meat
-	// 2026-08-06 17:53:32
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_boxcar_meat"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Coal
-	// 2026-08-06 17:53:46
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_gondola_coal"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Paper
-	// 2026-08-06 17:53:58
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_gondola_paper"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Furniture
-	// 2026-08-06 17:54:08
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_gondola_furniture"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Milk
-	// 2026-08-06 17:54:17
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_tanker_milk"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Crude Oil
-	// 2026-08-06 17:54:29
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_tanker_crudeoil_a"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Crude Oil
-	// 2026-08-06 17:54:39
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_tanker_crudeoil_b"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Groceries
-	// 2026-08-06 17:54:50
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_container_groceries"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Goods
-	// 2026-08-06 17:55:09
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_container_goods"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Medical Goods
-	// 2026-08-06 17:55:23
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_container_medicalgoods"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Reading Goods
-	// 2026-08-06 17:55:34
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_container_readinggoods"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Wood Logs
-	// 2026-08-06 17:55:44
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_flatbed_woodentrunks"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[11591.200, 5742.415, -403.729]",
-		"ang":         "{-0.066, 1.000, 0.010}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[11517.639, 5830.877, -336.643]",
-		"ang": "{26.613, -49.130, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 111.703,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Miniwagon Steel
-	// 2026-08-06 17:55:54
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "gm_construct_flatgrass_v6-2_minitrains",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_minitrains_wagon_flatbed_steel"],
-	"theme":     ["default"],
 
 	"entity": {
 		"pos":         "[11591.200, 5742.415, -403.729]",
@@ -4065,8 +1290,6 @@
 },
 {
 	// Blue-X11 (bluex11)
-	// Blue-X11
-	// 2026-08-08 10:38:51
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -4096,8 +1319,6 @@
 },
 {
 	// Blue-X13 (bluex13)
-	// Blue-X13
-	// 2026-08-08 10:39:48
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -4127,44 +1348,14 @@
 },
 {
 	// Blue-X14 (bluex14)
-	// Blue-X14
-	// 2026-08-08 10:40:49
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_bluex14_normal"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13007.040, 9490.261, -288.492]",
-		"ang":         "{0.005, 0.977, -0.127}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.311, 9840.415, -141.220]",
-		"ang": "{17.282, -57.958, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 358.278,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Blue-X14 (bluex14)
-	// PvP Blue-X14
-	// 2026-08-08 10:41:02
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_bluex14_armed"],
+	"spawnname": [
+		"sligwolf_bluex14_normal",
+		"sligwolf_bluex14_armed"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -4189,8 +1380,6 @@
 },
 {
 	// Blue-X15 (bluex15)
-	// Blue-X15
-	// 2026-08-08 10:41:56
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -4220,199 +1409,19 @@
 },
 {
 	// Bodygroup Car (bgcar)
-	// BG Car - Road Legal
-	// 2026-08-08 10:43:05
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_bgcar_roadlegal"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13004.184, 9504.292, -290.938]",
-		"ang":         "{0.000, -0.896, 0.944}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.553, 9840.170, -141.220]",
-		"ang": "{19.089, -57.816, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 346.868,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Bodygroup Car (bgcar)
-	// BG Car - GMod
-	// 2026-08-08 10:43:14
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_bgcar_gmod"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13004.184, 9504.292, -290.938]",
-		"ang":         "{0.000, -0.896, 0.944}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.553, 9840.170, -141.220]",
-		"ang": "{19.089, -57.816, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 346.868,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Bodygroup Car (bgcar)
-	// BG Car - 2Fast4U
-	// 2026-08-08 10:43:28
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_bgcar_2fast4u"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13004.184, 9504.292, -290.938]",
-		"ang":         "{0.000, -0.896, 0.944}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.553, 9840.170, -141.220]",
-		"ang": "{19.089, -57.816, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 346.868,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Bodygroup Car (bgcar)
-	// BG Car - Road King
-	// 2026-08-08 10:43:42
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_bgcar_roadking"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13004.184, 9504.292, -290.938]",
-		"ang":         "{0.000, -0.896, 0.944}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.553, 9840.170, -141.220]",
-		"ang": "{19.089, -57.816, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 346.868,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Bodygroup Car (bgcar)
-	// BG Car - Hot Wheels
-	// 2026-08-08 10:43:55
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_bgcar_hotwheels"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13004.184, 9504.292, -290.938]",
-		"ang":         "{0.000, -0.896, 0.944}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.553, 9840.170, -141.220]",
-		"ang": "{19.089, -57.816, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 346.868,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Bodygroup Car (bgcar)
-	// BG Car - Wide Air
-	// 2026-08-08 10:44:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_bgcar_wideair"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13004.184, 9504.292, -290.938]",
-		"ang":         "{0.000, -0.896, 0.944}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.553, 9840.170, -141.220]",
-		"ang": "{19.089, -57.816, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 346.868,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Bodygroup Car (bgcar)
-	// BG Car - Stripe
-	// 2026-08-08 10:44:20
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_bgcar_stripe"],
+	"spawnname": [
+		"sligwolf_bgcar_roadlegal",
+		"sligwolf_bgcar_gmod",
+		"sligwolf_bgcar_2fast4u",
+		"sligwolf_bgcar_roadking",
+		"sligwolf_bgcar_hotwheels",
+		"sligwolf_bgcar_wideair",
+		"sligwolf_bgcar_stripe"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -4437,8 +1446,6 @@
 },
 {
 	// Bus and Bendy Bus (bus)
-	// B-25 Bus
-	// 2026-08-08 10:45:37
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -4467,10 +1474,6 @@
 	}
 },
 {
-	// Bus and Bendy Bus (bus)
-	// B-25 Bendy Bus
-	// 2026-08-08 10:46:36
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -4498,10 +1501,6 @@
 	}
 },
 {
-	// Bus and Bendy Bus (bus)
-	// B-25 Dual-Bendy Bus
-	// 2026-08-08 10:47:46
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -4529,10 +1528,6 @@
 	}
 },
 {
-	// Bus and Bendy Bus (bus)
-	// B-13 Bus
-	// 2026-08-08 10:48:42
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -4560,10 +1555,6 @@
 	}
 },
 {
-	// Bus and Bendy Bus (bus)
-	// B-13 Bendy Bus
-	// 2026-08-08 10:49:51
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -4591,10 +1582,6 @@
 	}
 },
 {
-	// Bus and Bendy Bus (bus)
-	// B-25 Bus Stop
-	// 2026-08-08 10:51:22
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -4622,10 +1609,6 @@
 	}
 },
 {
-	// Bus and Bendy Bus (bus)
-	// B-25 Big Bus Stop
-	// 2026-08-08 10:52:27
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -4653,10 +1636,6 @@
 	}
 },
 {
-	// Bus and Bendy Bus (bus)
-	// B-13 Bus Stop
-	// 2026-08-08 10:53:22
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -4685,8 +1664,6 @@
 },
 {
 	// Cranetruck (cranetruck)
-	// Cranetruck
-	// 2026-08-08 10:56:04
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -4715,45 +1692,13 @@
 	}
 },
 {
-	// Cranetruck (cranetruck)
-	// Crane - Hook
-	// 2026-08-08 10:56:57
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_cranetruck_crane_hook"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.047, 9521.418, -287.532]",
-		"ang":         "{-0.022, 0.010, -0.061}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.114, 9839.622, -141.220]",
-		"ang": "{9.280, -57.948, 0.000}",
-		"fov": 55.000,
-		"dof": {
-			"distance": 355.036,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Cranetruck (cranetruck)
-	// Crane - Magnet
-	// 2026-08-08 10:57:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_cranetruck_crane_magnet"],
+	"spawnname": [
+		"sligwolf_cranetruck_crane_hook",
+		"sligwolf_cranetruck_crane_magnet"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -4778,44 +1723,14 @@
 },
 {
 	// F.C.C. (fcc)
-	// F.C.C.
-	// 2026-08-08 10:58:41
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_fcc_normal"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13003.661, 9520.324, -286.251]",
-		"ang":         "{0.082, -0.874, -0.033}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.070, 9839.416, -141.220]",
-		"ang": "{16.655, -57.822, 0.000}",
-		"fov": 40.000,
-		"dof": {
-			"distance": 347.367,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// F.C.C. (fcc)
-	// F.C.C with gun
-	// 2026-08-08 10:58:51
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_fcc_armed"],
+	"spawnname": [
+		"sligwolf_fcc_normal",
+		"sligwolf_fcc_armed"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -4840,8 +1755,6 @@
 },
 {
 	// Forklift Truck (forklift)
-	// Forklift Truck
-	// 2026-08-08 10:59:54
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -4870,10 +1783,6 @@
 	}
 },
 {
-	// Forklift Truck (forklift)
-	// High Lift Pallet Jack
-	// 2026-08-08 11:00:34
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -4902,8 +1811,6 @@
 },
 {
 	// Garbage Truck (garbagetruck)
-	// Garbagetruck
-	// 2026-08-08 11:01:16
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -4933,44 +1840,14 @@
 },
 {
 	// Gauss Tank (gausstank)
-	// Tank
-	// 2026-08-08 11:03:12
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_gausstank_armed"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13006.291, 9524.323, -290.183]",
-		"ang":         "{0.120, 0.406, -1.346}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12803.957, 9840.745, -141.220]",
-		"ang": "{17.348, -57.030, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 360.266,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Gauss Tank (gausstank)
-	// Unarmed Tank
-	// 2026-08-08 11:03:20
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_gausstank_unarmed"],
+	"spawnname": [
+		"sligwolf_gausstank_armed",
+		"sligwolf_gausstank_unarmed"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -4995,8 +1872,6 @@
 },
 {
 	// Gokart (gokart)
-	// Go Kart
-	// 2026-08-08 11:04:28
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -5026,8 +1901,6 @@
 },
 {
 	// Hotrod (hotrod)
-	// Benjamin HotRod
-	// 2026-08-08 11:05:08
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -5056,10 +1929,6 @@
 	}
 },
 {
-	// Hotrod (hotrod)
-	// Lincoln HotRod
-	// 2026-08-08 11:05:55
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -5088,323 +1957,23 @@
 },
 {
 	// Jeeps (jeeps)
-	// Jeep - Classic Race
-	// 2026-08-08 11:06:44
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_jeeps_race_classic"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.688, 9530.426, -286.149]",
-		"ang":         "{0.000, 0.000, -2.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.724, 9839.825, -141.220]",
-		"ang": "{16.531, -58.028, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 364.877,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Jeeps (jeeps)
-	// Jeep - Classic Race
-	// 2026-08-08 11:06:57
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_jeeps_race_noble"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.688, 9530.426, -286.149]",
-		"ang":         "{0.000, 0.000, -2.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.724, 9839.825, -141.220]",
-		"ang": "{16.531, -58.028, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 364.877,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Jeeps (jeeps)
-	// Jeep - Casual Race
-	// 2026-08-08 11:07:10
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_jeeps_race_casual"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.688, 9530.426, -286.149]",
-		"ang":         "{0.000, 0.000, -2.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.724, 9839.825, -141.220]",
-		"ang": "{16.531, -58.028, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 364.877,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Jeeps (jeeps)
-	// Jeep - Spiky Race
-	// 2026-08-08 11:07:21
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_jeeps_race_spiky"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.688, 9530.426, -286.149]",
-		"ang":         "{0.000, 0.000, -2.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.724, 9839.825, -141.220]",
-		"ang": "{16.531, -58.028, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 364.877,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Jeeps (jeeps)
-	// Jeep - Coated Classic
-	// 2026-08-08 11:07:33
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_jeeps_coated_classic"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.688, 9530.426, -286.149]",
-		"ang":         "{0.000, 0.000, -2.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.724, 9839.825, -141.220]",
-		"ang": "{16.531, -58.028, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 364.877,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Jeeps (jeeps)
-	// Jeep - Coated Noble
-	// 2026-08-08 11:07:45
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_jeeps_coated_noble"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.688, 9530.426, -286.149]",
-		"ang":         "{0.000, 0.000, -2.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.724, 9839.825, -141.220]",
-		"ang": "{16.531, -58.028, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 364.877,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Jeeps (jeeps)
-	// Jeep - Coated Casual
-	// 2026-08-08 11:08:02
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_jeeps_coated_casual"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.688, 9530.426, -286.149]",
-		"ang":         "{0.000, 0.000, -2.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.724, 9839.825, -141.220]",
-		"ang": "{16.531, -58.028, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 364.877,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Jeeps (jeeps)
-	// Jeep - Coated Spiky
-	// 2026-08-08 11:08:13
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_jeeps_coated_spiky"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.688, 9530.426, -286.149]",
-		"ang":         "{0.000, 0.000, -2.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.724, 9839.825, -141.220]",
-		"ang": "{16.531, -58.028, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 364.877,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Jeeps (jeeps)
-	// Bandito - Spiky
-	// 2026-08-08 11:08:24
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_jeeps_bandito_spiky"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.688, 9530.426, -286.149]",
-		"ang":         "{0.000, 0.000, -2.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.724, 9839.825, -141.220]",
-		"ang": "{16.531, -58.028, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 364.877,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Jeeps (jeeps)
-	// Bandito - Noble
-	// 2026-08-08 11:08:36
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_jeeps_bandito_noble"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.688, 9530.426, -286.149]",
-		"ang":         "{0.000, 0.000, -2.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.724, 9839.825, -141.220]",
-		"ang": "{16.531, -58.028, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 364.877,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Jeeps (jeeps)
-	// Bandito - Casual
-	// 2026-08-08 11:08:49
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_jeeps_bandito_casual"],
+	"spawnname": [
+		"sligwolf_jeeps_race_classic",
+		"sligwolf_jeeps_race_noble",
+		"sligwolf_jeeps_race_casual",
+		"sligwolf_jeeps_race_spiky",
+		"sligwolf_jeeps_coated_classic",
+		"sligwolf_jeeps_coated_noble",
+		"sligwolf_jeeps_coated_casual",
+		"sligwolf_jeeps_coated_spiky",
+		"sligwolf_jeeps_bandito_spiky",
+		"sligwolf_jeeps_bandito_noble",
+		"sligwolf_jeeps_bandito_casual"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -5429,8 +1998,6 @@
 },
 {
 	// Leopard 2 Tank (leotank)
-	// Leopard 2
-	// 2026-08-08 11:09:55
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -5459,10 +2026,6 @@
 	}
 },
 {
-	// Leopard 2 Tank (leotank)
-	// Leopard 2 Gunner
-	// 2026-08-08 11:10:32
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -5490,10 +2053,6 @@
 	}
 },
 {
-	// Leopard 2 Tank (leotank)
-	// Leopard 2 Seat
-	// 2026-08-08 11:11:16
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -5522,8 +2081,6 @@
 },
 {
 	// Limousine (limousine)
-	// Limousine
-	// 2026-08-08 11:11:50
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -5553,8 +2110,6 @@
 },
 {
 	// Manned Turret (mannedturret)
-	// Rocket Turret
-	// 2026-08-08 11:12:24
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -5584,8 +2139,6 @@
 },
 {
 	// Motorbike (motorbike)
-	// Simson
-	// 2026-08-08 11:13:18
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -5614,10 +2167,6 @@
 	}
 },
 {
-	// Motorbike (motorbike)
-	// Simson with Sidecar
-	// 2026-08-08 11:14:31
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -5645,14 +2194,13 @@
 	}
 },
 {
-	// Motorbike (motorbike)
-	// BMW R75 Military
-	// 2026-08-08 11:16:30
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_motorbike_bmwr75_military"],
+	"spawnname": [
+		"sligwolf_motorbike_bmwr75_military",
+		"sligwolf_motorbike_bmwr75_civil"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -5676,76 +2224,13 @@
 	}
 },
 {
-	// Motorbike (motorbike)
-	// BMW R75 Civil
-	// 2026-08-08 11:16:38
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_motorbike_bmwr75_civil"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13004.669, 9541.449, -287.525]",
-		"ang":         "{-0.044, 0.549, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12805.027, 9840.391, -141.220]",
-		"ang": "{19.741, -56.345, 0.000}",
-		"fov": 15.000,
-		"dof": {
-			"distance": 370.131,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Motorbike (motorbike)
-	// BMW R75 Military with Sidecar
-	// 2026-08-08 11:17:34
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_motorbike_bmwr75_military_sidecar"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13007.740, 9538.120, -287.522]",
-		"ang":         "{0.000, 0.280, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12800.858, 9843.458, -141.220]",
-		"ang": "{18.372, -54.513, 0.000}",
-		"fov": 20.000,
-		"dof": {
-			"distance": 366.035,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Motorbike (motorbike)
-	// BMW R75 Civil with Sidecar
-	// 2026-08-08 11:17:40
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_motorbike_bmwr75_civil_sidecar"],
+	"spawnname": [
+		"sligwolf_motorbike_bmwr75_military_sidecar",
+		"sligwolf_motorbike_bmwr75_civil_sidecar"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -5770,106 +2255,16 @@
 },
 {
 	// Racecar (racecar)
-	// Race Car - Road Legal
-	// 2026-08-08 11:18:56
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_racecar_car_roadlegal"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13004.698, 9482.670, -293.671]",
-		"ang":         "{0.032, -0.885, -0.627}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.650, 9840.722, -141.220]",
-		"ang": "{17.183, -59.330, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 362.695,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Racecar (racecar)
-	// Race Car - Race
-	// 2026-08-08 11:19:03
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_racecar_car_race"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13004.698, 9482.670, -293.671]",
-		"ang":         "{0.032, -0.885, -0.627}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.650, 9840.722, -141.220]",
-		"ang": "{17.183, -59.330, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 362.695,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Racecar (racecar)
-	// Race Car - City
-	// 2026-08-08 11:19:13
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_racecar_car_city"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13004.698, 9482.670, -293.671]",
-		"ang":         "{0.032, -0.885, -0.627}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.650, 9840.722, -141.220]",
-		"ang": "{17.183, -59.330, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 362.695,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Racecar (racecar)
-	// Race Car - Rally
-	// 2026-08-08 11:19:22
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_racecar_car_rally"],
+	"spawnname": [
+		"sligwolf_racecar_car_roadlegal",
+		"sligwolf_racecar_car_race",
+		"sligwolf_racecar_car_city",
+		"sligwolf_racecar_car_rally"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -5894,230 +2289,20 @@
 },
 {
 	// Seats (seats)
-	// Seat - Normal
-	// 2026-08-08 11:21:28
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_seats_normal"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.686, 9568.809, -288.501]",
-		"ang":         "{0.000, 0.812, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12805.178, 9840.581, -141.215]",
-		"ang": "{21.184, -53.487, 0.000}",
-		"fov": 10.000,
-		"dof": {
-			"distance": 370.807,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Seats (seats)
-	// Seat - Airboat
-	// 2026-08-08 11:21:12
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_seats_airboat"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.686, 9568.809, -288.501]",
-		"ang":         "{0.000, 0.812, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12805.178, 9840.581, -141.215]",
-		"ang": "{21.184, -53.487, 0.000}",
-		"fov": 10.000,
-		"dof": {
-			"distance": 370.807,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Seats (seats)
-	// Seat - Jeep
-	// 2026-08-08 11:21:48
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_seats_jeep"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.686, 9568.809, -288.501]",
-		"ang":         "{0.000, 0.812, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12805.178, 9840.581, -141.215]",
-		"ang": "{21.184, -53.487, 0.000}",
-		"fov": 10.000,
-		"dof": {
-			"distance": 370.807,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Seats (seats)
-	// Seat - Weapon
-	// 2026-08-08 11:21:59
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_seats_normal_weaponized"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.686, 9568.809, -288.501]",
-		"ang":         "{0.000, 0.812, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12805.178, 9840.581, -141.215]",
-		"ang": "{21.184, -53.487, 0.000}",
-		"fov": 10.000,
-		"dof": {
-			"distance": 370.807,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Seats (seats)
-	// Seat - Normal
-	// 2026-08-08 11:22:10
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_seats_normal_race"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.686, 9568.809, -288.501]",
-		"ang":         "{0.000, 0.812, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12805.178, 9840.581, -141.215]",
-		"ang": "{21.184, -53.487, 0.000}",
-		"fov": 10.000,
-		"dof": {
-			"distance": 370.807,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Seats (seats)
-	// Seat - Airboat
-	// 2026-08-08 11:22:21
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_seats_airboat_race"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.686, 9568.809, -288.501]",
-		"ang":         "{0.000, 0.812, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12805.178, 9840.581, -141.215]",
-		"ang": "{21.184, -53.487, 0.000}",
-		"fov": 10.000,
-		"dof": {
-			"distance": 370.807,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Seats (seats)
-	// Seat - Jeep
-	// 2026-08-08 11:22:32
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_seats_jeep_race"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13005.686, 9568.809, -288.501]",
-		"ang":         "{0.000, 0.812, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12805.178, 9840.581, -141.215]",
-		"ang": "{21.184, -53.487, 0.000}",
-		"fov": 10.000,
-		"dof": {
-			"distance": 370.807,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Seats (seats)
-	// Seat - Weapon
-	// 2026-08-08 11:22:42
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_seats_normal_race_weaponized"],
+	"spawnname": [
+		"sligwolf_seats_normal",
+		"sligwolf_seats_airboat",
+		"sligwolf_seats_jeep",
+		"sligwolf_seats_normal_weaponized",
+		"sligwolf_seats_normal_race",
+		"sligwolf_seats_airboat_race",
+		"sligwolf_seats_jeep_race",
+		"sligwolf_seats_normal_race_weaponized"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -6142,44 +2327,14 @@
 },
 {
 	// Snowmobile (snowmobile)
-	// Snowmobile
-	// 2026-08-08 11:26:00
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_snowmobile_normal"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13004.938, 9499.302, -287.520]",
-		"ang":         "{0.043, -0.314, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.780, 9840.437, -141.220]",
-		"ang": "{18.693, -57.855, 0.000}",
-		"fov": 30.000,
-		"dof": {
-			"distance": 372.799,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Snowmobile (snowmobile)
-	// Snowmobile with Gun
-	// 2026-08-08 11:26:31
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_snowmobile_armed"],
+	"spawnname": [
+		"sligwolf_snowmobile_normal",
+		"sligwolf_snowmobile_armed"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -6204,75 +2359,15 @@
 },
 {
 	// Tiny Hover Racer (tinyhoverracer)
-	// THR - Proto
-	// 2026-08-08 11:27:57
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_tinyhoverracer_proto"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13007.317, 9583.478, -287.528]",
-		"ang":         "{-0.121, 90.000, 0.219}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.653, 9845.456, -141.220]",
-		"ang": "{23.534, -52.105, 0.000}",
-		"fov": 3.070,
-		"dof": {
-			"distance": 354.545,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Tiny Hover Racer (tinyhoverracer)
-	// THR - Manta
-	// 2026-08-08 11:28:05
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_tinyhoverracer_manta"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13007.317, 9583.478, -287.528]",
-		"ang":         "{-0.121, 90.000, 0.219}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.653, 9845.456, -141.220]",
-		"ang": "{23.534, -52.105, 0.000}",
-		"fov": 3.070,
-		"dof": {
-			"distance": 354.545,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Tiny Hover Racer (tinyhoverracer)
-	// THR - Tarno
-	// 2026-08-08 11:28:18
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_tinyhoverracer_tarno"],
+	"spawnname": [
+		"sligwolf_tinyhoverracer_proto",
+		"sligwolf_tinyhoverracer_manta",
+		"sligwolf_tinyhoverracer_tarno"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -6297,8 +2392,6 @@
 },
 {
 	// Tow Truck (towtruck)
-	// Tow Truck
-	// 2026-08-08 11:29:05
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -6328,8 +2421,6 @@
 },
 {
 	// Trabant (trabant)
-	// Trabant
-	// 2026-08-08 11:29:46
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -6359,13 +2450,14 @@
 },
 {
 	// Tractor (tractor)
-	// Tractor
-	// 2026-08-08 11:31:47
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_tractor"],
+	"spawnname": [
+		"sligwolf_tractor",
+		"sligwolf_tractor_trailer"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -6389,40 +2481,7 @@
 	}
 },
 {
-	// Tractor (tractor)
-	// Tractor Trailer
-	// 2026-08-08 11:32:33
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_tractor_trailer"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13006.797, 9528.616, -289.780]",
-		"ang":         "{0.087, -0.209, 0.395}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.280, 9840.392, -141.220]",
-		"ang": "{18.181, -56.344, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 340.553,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
 	// Trucks (truck)
-	// Peterbilt
-	// 2026-08-08 11:34:58
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -6451,10 +2510,6 @@
 	}
 },
 {
-	// Trucks (truck)
-	// Heavy Peterbilt
-	// 2026-08-08 11:35:29
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -6482,10 +2537,6 @@
 	}
 },
 {
-	// Trucks (truck)
-	// Actros
-	// 2026-08-08 11:36:15
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -6513,10 +2564,6 @@
 	}
 },
 {
-	// Trucks (truck)
-	// Heavy Actros
-	// 2026-08-08 11:36:48
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -6544,14 +2591,15 @@
 	}
 },
 {
-	// Trucks (truck)
-	// Actros Empty
-	// 2026-08-08 11:37:37
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_actros_tandem_empty"],
+	"spawnname": [
+		"sligwolf_truck_actros_tandem_empty",
+		"sligwolf_truck_actros_tandem_flatbed",
+		"sligwolf_truck_actros_tandem_box",
+		"sligwolf_truck_actros_tandem_tanker"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -6575,107 +2623,14 @@
 	}
 },
 {
-	// Trucks (truck)
-	// Actros Flatbed
-	// 2026-08-08 11:37:44
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_actros_tandem_flatbed"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13007.496, 9405.705, -284.193]",
-		"ang":         "{0.093, 0.065, 0.362}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.815, 9839.781, -141.220]",
-		"ang": "{10.921, -60.328, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 307.630,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Trucks (truck)
-	// Actros Box
-	// 2026-08-08 11:37:57
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_actros_tandem_box"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13007.496, 9405.705, -284.193]",
-		"ang":         "{0.093, 0.065, 0.362}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.815, 9839.781, -141.220]",
-		"ang": "{10.921, -60.328, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 307.630,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Trucks (truck)
-	// Actros Tanker
-	// 2026-08-08 11:38:12
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_actros_tandem_tanker"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13007.496, 9405.705, -284.193]",
-		"ang":         "{0.093, 0.065, 0.362}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.815, 9839.781, -141.220]",
-		"ang": "{10.921, -60.328, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 307.630,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Trucks (truck)
-	// Heavy Car Trailer
-	// 2026-08-08 11:40:59
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_trailer_semi_heavy_cartransporter"],
+	"spawnname": [
+		"sligwolf_truck_trailer_semi_heavy_cartransporter",
+		"sligwolf_truck_trailer_semi_heavy_container",
+		"sligwolf_truck_trailer_semi_heavy_train"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -6699,169 +2654,15 @@
 	}
 },
 {
-	// Trucks (truck)
-	// Heavy Container Trailer
-	// 2026-08-08 11:41:17
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_trailer_semi_heavy_container"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13006.088, 9536.756, -284.003]",
-		"ang":         "{0.010, 0.477, -0.077}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12805.185, 9840.275, -141.220]",
-		"ang": "{6.813, -65.072, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 410.393,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Trucks (truck)
-	// Heavy Train Trailer
-	// 2026-08-08 11:41:29
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_trailer_semi_heavy_train"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13006.088, 9536.756, -284.003]",
-		"ang":         "{0.010, 0.477, -0.077}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12805.185, 9840.275, -141.220]",
-		"ang": "{6.813, -65.072, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 410.393,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Trucks (truck)
-	// Semi Car Trailer
-	// 2026-08-08 11:42:25
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_trailer_semi_cartransporter"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13006.587, 9544.327, -283.895]",
-		"ang":         "{0.032, 0.631, -0.061}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.490, 9840.236, -141.220]",
-		"ang": "{7.357, -61.317, 0.000}",
-		"fov": 55.000,
-		"dof": {
-			"distance": 301.753,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Trucks (truck)
-	// Semi Flatbed Trailer
-	// 2026-08-08 11:42:32
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_trailer_semi_flatbed"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13006.587, 9544.327, -283.895]",
-		"ang":         "{0.032, 0.631, -0.061}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.490, 9840.236, -141.220]",
-		"ang": "{7.357, -61.317, 0.000}",
-		"fov": 55.000,
-		"dof": {
-			"distance": 301.753,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Trucks (truck)
-	// Semi Box Trailer
-	// 2026-08-08 11:42:42
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_trailer_semi_box"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13006.587, 9544.327, -283.895]",
-		"ang":         "{0.032, 0.631, -0.061}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.490, 9840.236, -141.220]",
-		"ang": "{7.357, -61.317, 0.000}",
-		"fov": 55.000,
-		"dof": {
-			"distance": 301.753,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Trucks (truck)
-	// Semi Tanker Trailer
-	// 2026-08-08 11:42:53
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_trailer_semi_tanker"],
+	"spawnname": [
+		"sligwolf_truck_trailer_semi_cartransporter",
+		"sligwolf_truck_trailer_semi_flatbed",
+		"sligwolf_truck_trailer_semi_box",
+		"sligwolf_truck_trailer_semi_tanker"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -6892,7 +2693,12 @@
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_trailer_tandem_box"],
+	"spawnname": [
+		"sligwolf_truck_trailer_tandem_box",
+		"sligwolf_truck_trailer_tandem_empty",
+		"sligwolf_truck_trailer_tandem_flatbed",
+		"sligwolf_truck_trailer_tandem_tanker"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -6916,103 +2722,6 @@
 	}
 },
 {
-	// Trucks (truck)
-	// Tandem Empty Trailer
-	// 2026-08-08 11:44:05
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_trailer_tandem_empty"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13007.670, 9402.799, -283.848]",
-		"ang":         "{0.016, 0.444, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.565, 9840.517, -141.220]",
-		"ang": "{9.395, -61.144, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 343.699,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Trucks (truck)
-	// Tandem Flatbed Trailer
-	// 2026-08-08 11:44:15
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_trailer_tandem_flatbed"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13007.670, 9402.799, -283.848]",
-		"ang":         "{0.016, 0.444, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.565, 9840.517, -141.220]",
-		"ang": "{9.395, -61.144, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 343.699,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Trucks (truck)
-	// Tandem Tanker Trailer
-	// 2026-08-08 11:44:26
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_truck_trailer_tandem_tanker"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[13007.670, 9402.799, -283.848]",
-		"ang":         "{0.016, 0.444, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.565, 9840.517, -141.220]",
-		"ang": "{9.395, -61.144, 0.000}",
-		"fov": 50.000,
-		"dof": {
-			"distance": 343.699,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Trucks (truck)
-	// Dolly Trailer
-	// 2026-08-08 11:45:11
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -7040,10 +2749,6 @@
 	}
 },
 {
-	// Trucks (truck)
-	// Camper Module
-	// 2026-08-08 11:45:45
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -7072,44 +2777,14 @@
 },
 {
 	// Crane (crane)
-	// Crane - Hook
-	// 2026-08-08 11:47:03
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_crane_hook"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[7951.574, 8767.390, -207.994]",
-		"ang":         "{0.000, -0.764, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[7519.448, 9155.844, 827.647]",
-		"ang": "{16.573, -34.106, 0.000}",
-		"fov": 45.000,
-		"dof": {
-			"distance": 571.471,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Crane (crane)
-	// Crane - Magnet
-	// 2026-08-08 11:47:12
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_crane_magnet"],
+	"spawnname": [
+		"sligwolf_crane_hook",
+		"sligwolf_crane_magnet"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -7134,8 +2809,6 @@
 },
 {
 	// Ferry (ferry)
-	// Ferry
-	// 2026-08-08 11:51:03
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -7165,8 +2838,6 @@
 },
 {
 	// Hovercraft (hovercraft)
-	// Hovercraft
-	// 2026-08-08 11:52:15
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -7196,8 +2867,6 @@
 },
 {
 	// Powerboat (powerboat)
-	// Powerorb
-	// 2026-08-08 11:53:01
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -7226,10 +2895,6 @@
 	}
 },
 {
-	// Powerboat (powerboat)
-	// Speedstar
-	// 2026-08-08 11:53:08
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -7258,8 +2923,6 @@
 },
 {
 	// Suspension Train (wpsuspensiontrain)
-	// Train G15
-	// 2026-08-08 12:07:01
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "gm_construct_flatgrass_v6-2_monorail",
@@ -7288,10 +2951,6 @@
 	}
 },
 {
-	// Suspension Train (wpsuspensiontrain)
-	// Bogie G15
-	// 2026-08-08 12:08:39
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "gm_construct_flatgrass_v6-2_monorail",
 	"category":  "vehicle",
@@ -7320,8 +2979,6 @@
 },
 {
 	// ST-3 Tram (st3tram)
-	// ST3 Tram - RON2FT
-	// 2026-08-11 12:17:55
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "gm_construct_flatgrass_v6-2_ron2ft",
@@ -7351,8 +3008,6 @@
 },
 {
 	// HL2 Coop Vehicles (hl2coopvehicles)
-	// Coop Airboat
-	// 2026-08-11 12:21:59
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -7381,14 +3036,13 @@
 	}
 },
 {
-	// HL2 Coop Vehicles (hl2coopvehicles)
-	// Coop Buggy
-	// 2026-08-11 12:22:51
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
-	"spawnname": ["sligwolf_hl2coopvehicles_jeep"],
+	"spawnname": [
+		"sligwolf_hl2coopvehicles_jeep",
+		"sligwolf_hl2coopvehicles_jeep_alyx"
+	],
 	"theme":     ["default"],
 
 	"entity": {
@@ -7412,41 +3066,6 @@
 	}
 },
 {
-	// HL2 Coop Vehicles (hl2coopvehicles)
-	// Coop Buggy (Alyx)
-	// 2026-08-11 12:23:26
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "vehicle",
-	"spawnname": ["sligwolf_hl2coopvehicles_jeep_alyx"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[13005.328, 9520.221, -284.777]",
-		"ang":         "{0.087, 0.324, -0.456}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[12804.792, 9840.172, -141.220]",
-		"ang": "{16.284, -58.607, 0.000}",
-		"fov": 35.000,
-		"dof": {
-			"distance": 355.571,
-			"blur":     0.333,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// HL2 Coop Vehicles (hl2coopvehicles)
-	// Coop Jalopy (Alyx)
-	// 2026-08-11 12:24:08
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "vehicle",
@@ -7478,8 +3097,6 @@
 
 {
 	// Alien Cutbug (aliencutbug)
-	// Big Cutbug
-	// 2026-08-08 12:21:01
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -7508,10 +3125,6 @@
 	}
 },
 {
-	// Alien Cutbug (aliencutbug)
-	// Small Cutbug
-	// 2026-08-08 12:21:58
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "npc",
@@ -7540,12 +3153,14 @@
 },
 {
 	// German Cop (germancop)
-	// 2026-08-08 12:37:29
 
-	"map":         "gm_construct_flatgrass_v6-2",
-	"savegame":    "gm_construct_flatgrass_v6-2_npc_light",
-	"category":    "npc",
-	"spawnname":   ["sligwolf_germancop_rebel", "sligwolf_germancop_combine"],
+	"map":       "gm_construct_flatgrass_v6-2",
+	"savegame":  "none",
+	"category":  "npc",
+	"spawnname": [
+		"sligwolf_germancop_rebel",
+		"sligwolf_germancop_combine"
+	],
 	"spawnparams": ["weapon_ar2"],
 	"theme":       ["all"],
 
@@ -7567,16 +3182,29 @@
 			"steps":    24,
 			"shape":    0.500
 		}
-	}
+	},
+
+	"lights": [
+		{
+			"pos": "[13033.691, 10979.909, -194.577]",
+			"size": 1024,
+			"brightness": 1.000,
+			"r": 255,
+			"g": 255,
+			"b": 255
+		}
+	]
 },
 {
 	// Robot GEN1 (robotgen1)
-	// 2026-08-08 12:38:41
 
-	"map":         "gm_construct_flatgrass_v6-2",
-	"savegame":    "gm_construct_flatgrass_v6-2_npc_light",
-	"category":    "npc",
-	"spawnname":   ["sligwolf_robotgen1_rebel", "sligwolf_robotgen1_combine"],
+	"map":       "gm_construct_flatgrass_v6-2",
+	"savegame":  "none",
+	"category":  "npc",
+	"spawnname": [
+		"sligwolf_robotgen1_rebel",
+		"sligwolf_robotgen1_combine"
+	],
 	"spawnparams": ["weapon_ar2"],
 	"theme":       ["all"],
 
@@ -7598,19 +3226,26 @@
 			"steps":    24,
 			"shape":    0.500
 		}
-	}
+	},
+
+	"lights": [
+		{
+			"pos": "[13033.691, 10979.909, -194.577]",
+			"size": 1024,
+			"brightness": 1.000,
+			"r": 255,
+			"g": 255,
+			"b": 255
+		}
+	]
 },
 {
 	// Robot GEN2 (robotgen2)
-	// 2026-08-08 12:39:25
 
-	"map":         "gm_construct_flatgrass_v6-2",
-	"savegame":    "gm_construct_flatgrass_v6-2_npc_light",
-	"category":    "npc",
-	"spawnname":   [
-		"sligwolf_robotgen2_citizen",
-		"sligwolf_robotgen2_rebel_resistance",
-		"sligwolf_robotgen2_rebel_medic",
+	"map":       "gm_construct_flatgrass_v6-2",
+	"savegame":  "none",
+	"category":  "npc",
+	"spawnname": [
 		"sligwolf_robotgen2_combine",
 		"sligwolf_robotgen2_combine_soldier",
 		"sligwolf_robotgen2_combine_prison",
@@ -7638,14 +3273,65 @@
 			"steps":    24,
 			"shape":    0.500
 		}
-	}
+	},
+
+	"lights": [
+		{
+			"pos": "[13033.691, 10979.909, -194.577]",
+			"size": 1024,
+			"brightness": 1.000,
+			"r": 255,
+			"g": 255,
+			"b": 255
+		}
+	]
 },
 {
-	// Robot GEN2 (robotgen2)
-	// 2026-08-08 12:39:25
+	"map":       "gm_construct_flatgrass_v6-2",
+	"savegame":  "none",
+	"category":  "npc",
+	"spawnname": [
+		"sligwolf_robotgen2_citizen",
+		"sligwolf_robotgen2_rebel_resistance",
+		"sligwolf_robotgen2_rebel_medic"
+	],
+	"spawnparams": [],
+	"theme":       ["all"],
 
+	"entity": {
+		"pos":         "[13191.334, 10979.832, -287.969]",
+		"ang":         "{0.000, 179.846, 0.000}",
+		"spawnfrozen": true,
+		"wait":        0.500
+	},
+
+	"camera": {
+		"pos": "[13079.862, 10979.288, -223.969]",
+		"ang": "{1.621, 0.767, 0.000}",
+		"fov": 21.540,
+		"dof": {
+			"distance": 110.328,
+			"blur":     0.333,
+			"passes":   12,
+			"steps":    24,
+			"shape":    0.500
+		}
+	},
+
+	"lights": [
+		{
+			"pos": "[13033.691, 10979.909, -194.577]",
+			"size": 1024,
+			"brightness": 1.000,
+			"r": 255,
+			"g": 255,
+			"b": 255
+		}
+	]
+},
+{
 	"map":         "gm_construct_flatgrass_v6-2",
-	"savegame":    "gm_construct_flatgrass_v6-2_npc_light",
+	"savegame":    "none",
 	"category":    "npc",
 	"spawnname":   ["sligwolf_robotgen2_combine_metrocop"],
 	"spawnparams": [],
@@ -7660,7 +3346,7 @@
 
 	"camera": {
 		"pos": "[13079.862, 10979.288, -223.969]",
-		"ang": "{1.621, 0.200, 0.000}",
+		"ang": "{1.621, -0.500, 0.000}",
 		"fov": 21.540,
 		"dof": {
 			"distance": 110.328,
@@ -7669,18 +3355,26 @@
 			"steps":    24,
 			"shape":    0.500
 		}
-	}
+	},
+
+	"lights": [
+		{
+			"pos": "[13033.691, 10979.909, -194.577]",
+			"size": 1024,
+			"brightness": 1.000,
+			"r": 255,
+			"g": 255,
+			"b": 255
+		}
+	]
 },
 {
 	// Robot GEN3 (robotgen3)
-	// 2026-08-08 12:53:06
 
-	"map":         "gm_construct_flatgrass_v6-2",
-	"savegame":    "gm_construct_flatgrass_v6-2_npc_light",
-	"category":    "npc",
-	"spawnname":   [
-		"sligwolf_robotgen3_rebel_resistance",
-		"sligwolf_robotgen3_rebel_medic",
+	"map":       "gm_construct_flatgrass_v6-2",
+	"savegame":  "none",
+	"category":  "npc",
+	"spawnname": [
 		"sligwolf_robotgen3_combine_soldier",
 		"sligwolf_robotgen3_combine_elite"
 	],
@@ -7705,14 +3399,64 @@
 			"steps":    24,
 			"shape":    0.500
 		}
-	}
+	},
+
+	"lights": [
+		{
+			"pos": "[13033.691, 10979.909, -194.577]",
+			"size": 1024,
+			"brightness": 1.000,
+			"r": 255,
+			"g": 255,
+			"b": 255
+		}
+	]
 },
 {
-	// Robot GEN3 (robotgen3)
-	// 2026-08-08 12:53:06
+	"map":       "gm_construct_flatgrass_v6-2",
+	"savegame":  "none",
+	"category":  "npc",
+	"spawnname": [
+		"sligwolf_robotgen3_rebel_resistance",
+		"sligwolf_robotgen3_rebel_medic"
+	],
+	"spawnparams": [],
+	"theme":       ["all"],
 
+	"entity": {
+		"pos":         "[13191.334, 10979.832, -287.969]",
+		"ang":         "{0.000, 179.846, 0.000}",
+		"spawnfrozen": true,
+		"wait":        0.500
+	},
+
+	"camera": {
+		"pos": "[13079.862, 10979.288, -223.969]",
+		"ang": "{1.621, 0.767, 0.000}",
+		"fov": 21.540,
+		"dof": {
+			"distance": 110.328,
+			"blur":     0.333,
+			"passes":   12,
+			"steps":    24,
+			"shape":    0.500
+		}
+	},
+
+	"lights": [
+		{
+			"pos": "[13033.691, 10979.909, -194.577]",
+			"size": 1024,
+			"brightness": 1.000,
+			"r": 255,
+			"g": 255,
+			"b": 255
+		}
+	]
+},
+{
 	"map":         "gm_construct_flatgrass_v6-2",
-	"savegame":    "gm_construct_flatgrass_v6-2_npc_light",
+	"savegame":    "none",
 	"category":    "npc",
 	"spawnname":   ["sligwolf_robotgen3_combine_metrocop"],
 	"spawnparams": [],
@@ -7727,7 +3471,7 @@
 
 	"camera": {
 		"pos": "[13079.862, 10979.288, -223.969]",
-		"ang": "{1.621, 0.200, 0.000}",
+		"ang": "{1.621, -0.500, 0.000}",
 		"fov": 21.540,
 		"dof": {
 			"distance": 110.328,
@@ -7736,16 +3480,29 @@
 			"steps":    24,
 			"shape":    0.500
 		}
-	}
+	},
+
+	"lights": [
+		{
+			"pos": "[13033.691, 10979.909, -194.577]",
+			"size": 1024,
+			"brightness": 1.000,
+			"r": 255,
+			"g": 255,
+			"b": 255
+		}
+	]
 },
 {
 	// Robot Rustyer (rustyer)
-	// 2026-08-08 13:14:24
 
-	"map":         "gm_construct_flatgrass_v6-2",
-	"savegame":    "gm_construct_flatgrass_v6-2_npc_light",
-	"category":    "npc",
-	"spawnname":   ["sligwolf_rustyer_rebel", "sligwolf_rustyer_combine"],
+	"map":       "gm_construct_flatgrass_v6-2",
+	"savegame":  "none",
+	"category":  "npc",
+	"spawnname": [
+		"sligwolf_rustyer_rebel",
+		"sligwolf_rustyer_combine"
+	],
 	"spawnparams": ["weapon_ar2"],
 	"theme":       ["all"],
 
@@ -7767,19 +3524,26 @@
 			"steps":    24,
 			"shape":    0.500
 		}
-	}
+	},
+
+	"lights": [
+		{
+			"pos": "[13033.691, 10979.909, -194.577]",
+			"size": 1024,
+			"brightness": 1.000,
+			"r": 255,
+			"g": 255,
+			"b": 255
+		}
+	]
 },
 {
 	// Slig (slig)
-	// 2026-08-08 13:18:43
 
-	"map":         "gm_construct_flatgrass_v6-2",
-	"savegame":    "gm_construct_flatgrass_v6-2_npc_light",
-	"category":    "npc",
-	"spawnname":   [
-		"sligwolf_slig_citizen",
-		"sligwolf_slig_rebel_resistance",
-		"sligwolf_slig_rebel_medic",
+	"map":       "gm_construct_flatgrass_v6-2",
+	"savegame":  "none",
+	"category":  "npc",
+	"spawnname": [
 		"sligwolf_slig_combine",
 		"sligwolf_slig_combine_soldier",
 		"sligwolf_slig_combine_prison",
@@ -7807,15 +3571,67 @@
 			"steps":    24,
 			"shape":    0.500
 		}
-	}
+	},
+
+	"lights": [
+		{
+			"pos": "[13033.691, 10979.909, -194.577]",
+			"size": 1024,
+			"brightness": 1.000,
+			"r": 255,
+			"g": 255,
+			"b": 255
+		}
+	]
+},
+{
+	"map":       "gm_construct_flatgrass_v6-2",
+	"savegame":  "none",
+	"category":  "npc",
+	"spawnname": [
+		"sligwolf_slig_citizen",
+		"sligwolf_slig_rebel_resistance",
+		"sligwolf_slig_rebel_medic"
+	],
+	"spawnparams": ["weapon_ar2"],
+	"theme":       ["all"],
+
+	"entity": {
+		"pos":         "[13191.334, 10982.500, -287.969]",
+		"ang":         "{0.000, -150.000, 0.000}",
+		"spawnfrozen": true,
+		"wait":        0.500
+	},
+
+	"camera": {
+		"pos": "[13079.862, 10979.288, -223.969]",
+		"ang": "{1.621, 0.767, 0.000}",
+		"fov": 21.540,
+		"dof": {
+			"distance": 110.328,
+			"blur":     0.333,
+			"passes":   12,
+			"steps":    24,
+			"shape":    0.500
+		}
+	},
+
+	"lights": [
+		{
+			"pos": "[13033.691, 10979.909, -194.577]",
+			"size": 1024,
+			"brightness": 1.000,
+			"r": 255,
+			"g": 255,
+			"b": 255
+		}
+	]
 },
 
 // ENTITIES //
 
 {
 	// Blue-X14 (bluex14)
-	// Blue-X14 Pickup - Rocket
-	// 2026-08-11 10:51:41
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -7844,10 +3660,6 @@
 	}
 },
 {
-	// Blue-X14 (bluex14)
-	// Blue-X14 Pickup - Health
-	// 2026-08-11 10:53:04
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -7875,10 +3687,6 @@
 	}
 },
 {
-	// Blue-X14 (bluex14)
-	// Blue-X14 Pickup - Gatling
-	// 2026-08-11 10:53:46
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -7906,10 +3714,6 @@
 	}
 },
 {
-	// Blue-X14 (bluex14)
-	// Blue-X14 Pickup - Mine
-	// 2026-08-11 10:54:10
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -7938,8 +3742,6 @@
 },
 {
 	// Couplers (couplers)
-	// Tractor - Female
-	// 2026-08-08 12:14:05
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -7968,10 +3770,6 @@
 	}
 },
 {
-	// Couplers (couplers)
-	// Tractor - Male
-	// 2026-08-08 12:14:27
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -7999,10 +3797,6 @@
 	}
 },
 {
-	// Couplers (couplers)
-	// Car - Female
-	// 2026-08-08 12:14:58
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -8030,10 +3824,6 @@
 	}
 },
 {
-	// Couplers (couplers)
-	// Car - Male
-	// 2026-08-08 12:15:21
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -8061,10 +3851,6 @@
 	}
 },
 {
-	// Couplers (couplers)
-	// Semi Truck - Female
-	// 2026-08-08 12:15:43
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -8092,10 +3878,6 @@
 	}
 },
 {
-	// Couplers (couplers)
-	// Semi Truck - Male
-	// 2026-08-08 12:16:04
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -8123,10 +3905,6 @@
 	}
 },
 {
-	// Couplers (couplers)
-	// Tandem Truck - Female
-	// 2026-08-08 12:16:26
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -8154,10 +3932,6 @@
 	}
 },
 {
-	// Couplers (couplers)
-	// Tandem Truck - Male
-	// 2026-08-08 12:12:56
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -8185,10 +3959,6 @@
 	}
 },
 {
-	// Couplers (couplers)
-	// Train - Neutral
-	// 2026-08-08 12:16:52
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -8216,10 +3986,6 @@
 	}
 },
 {
-	// Couplers (couplers)
-	// Magnet - Neutral
-	// 2026-08-08 12:17:17
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -8248,8 +4014,6 @@
 },
 {
 	// Forklift Truck (forklift)
-	// EURO Pallet
-	// 2026-08-11 10:57:52
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -8279,8 +4043,6 @@
 },
 {
 	// Forklift Truck (forklift)
-	// DD Pallet
-	// 2026-08-11 10:58:10
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -8310,13 +4072,18 @@
 },
 {
 	// Police Siren (siren)
-	// Siren - German
-	// 2026-08-11 11:00:34
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
-	"spawnname": ["sligwolf_siren_double_ger"],
+	"spawnname": [
+		"sligwolf_siren_double_ger",
+		"sligwolf_siren_double_usa",
+		"sligwolf_siren_double_uk",
+		"sligwolf_siren_double_jp",
+		"sligwolf_siren_double_fr",
+		"sligwolf_siren_double_hazard"
+	],
 	"theme":     ["default"],
 
 	"entity": {
@@ -8340,231 +4107,14 @@
 	}
 },
 {
-	// Police Siren (siren)
-	// Siren - USA
-	// 2026-08-11 11:00:34
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
-	"spawnname": ["sligwolf_siren_double_usa"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[7731.663, 11023.119, -395.643]",
-		"ang":         "{0.000, 89.994, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[7816.155, 11125.779, -300.171]",
-		"ang": "{35.082, -129.125, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 155.561,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Police Siren (siren)
-	// Siren - British
-	// 2026-08-11 11:00:34
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_siren_double_uk"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[7731.663, 11023.119, -395.643]",
-		"ang":         "{0.000, 89.994, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[7816.155, 11125.779, -300.171]",
-		"ang": "{35.082, -129.125, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 155.561,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Police Siren (siren)
-	// Siren - Japan
-	// 2026-08-11 11:00:34
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_siren_double_jp"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[7731.663, 11023.119, -395.643]",
-		"ang":         "{0.000, 89.994, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[7816.155, 11125.779, -300.171]",
-		"ang": "{35.082, -129.125, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 155.561,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Police Siren (siren)
-	// Siren - French
-	// 2026-08-11 11:00:34
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_siren_double_fr"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[7731.663, 11023.119, -395.643]",
-		"ang":         "{0.000, 89.994, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[7816.155, 11125.779, -300.171]",
-		"ang": "{35.082, -129.125, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 155.561,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Police Siren (siren)
-	// Siren - Hazard
-	// 2026-08-11 11:00:34
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_siren_double_hazard"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[7731.663, 11023.119, -395.643]",
-		"ang":         "{0.000, 89.994, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[7816.155, 11125.779, -300.171]",
-		"ang": "{35.082, -129.125, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 155.561,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Police Siren (siren)
-	// Siren - Red
-	// 2026-08-11 11:03:56
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_siren_single_red"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[7726.481, 11015.529, -400.911]",
-		"ang":         "{-0.264, 51.366, -0.638}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[7816.155, 11125.779, -300.171]",
-		"ang": "{34.257, -129.125, 0.000}",
-		"fov": 10.000,
-		"dof": {
-			"distance": 168.565,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Police Siren (siren)
-	// Siren - Blue
-	// 2026-08-11 11:03:56
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_siren_single_blue"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[7726.481, 11015.529, -400.911]",
-		"ang":         "{-0.264, 51.366, -0.638}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[7816.155, 11125.779, -300.171]",
-		"ang": "{34.257, -129.125, 0.000}",
-		"fov": 10.000,
-		"dof": {
-			"distance": 168.565,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Police Siren (siren)
-	// Siren - Orange
-	// 2026-08-11 11:03:56
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_siren_single_hazard"],
+	"spawnname": [
+		"sligwolf_siren_single_red",
+		"sligwolf_siren_single_blue",
+		"sligwolf_siren_single_hazard"
+	],
 	"theme":     ["default"],
 
 	"entity": {
@@ -8589,75 +4139,15 @@
 },
 {
 	// Suspension Train (wpsuspensiontrain)
-	// Turntable 8 Way
-	// 2026-08-08 12:18:46
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
-	"spawnname": ["sligwolf_wpsuspensiontrain_turntable_8way"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[10093.172, 9860.562, -398.968]",
-		"ang":         "{0.000, 90.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.500
-	},
-
-	"camera": {
-		"pos": "[8881.416, 11514.781, 1157.499]",
-		"ang": "{34.126, -55.294, 0.000}",
-		"fov": 55.000,
-		"dof": {
-			"distance": 2236.622,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Suspension Train (wpsuspensiontrain)
-	// Turntable 4 Way
-	// 2026-08-08 12:19:23
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wpsuspensiontrain_turntable_4way"],
-	"theme":     ["all"],
-
-	"entity": {
-		"pos":         "[10093.172, 9860.562, -398.968]",
-		"ang":         "{0.000, 90.000, 0.000}",
-		"spawnfrozen": true,
-		"wait":        0.500
-	},
-
-	"camera": {
-		"pos": "[8881.416, 11514.781, 1157.499]",
-		"ang": "{34.126, -55.294, 0.000}",
-		"fov": 55.000,
-		"dof": {
-			"distance": 2236.622,
-			"blur":     0.263,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Suspension Train (wpsuspensiontrain)
-	// Turntable 2 Way
-	// 2026-08-08 12:19:46
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wpsuspensiontrain_turntable_2way"],
+	"spawnname": [
+		"sligwolf_wpsuspensiontrain_turntable_8way",
+		"sligwolf_wpsuspensiontrain_turntable_4way",
+		"sligwolf_wpsuspensiontrain_turntable_2way"
+	],
 	"theme":     ["all"],
 
 	"entity": {
@@ -8682,13 +4172,18 @@
 },
 {
 	// Train Cars (wagons)
-	// Wood Trunks - S
-	// 2026-08-11 11:21:07
+	// Freight - S
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_woodtrunks_small"],
+	"spawnname": [
+		"sligwolf_wagons_freight_woodtrunks_small",
+		"sligwolf_wagons_freight_woodplanks_small",
+		"sligwolf_wagons_freight_metalbeams_small",
+		"sligwolf_wagons_freight_concretepipes_small",
+		"sligwolf_wagons_freight_container_small"
+	],
 	"theme":     ["default"],
 
 	"entity": {
@@ -8713,137 +4208,18 @@
 },
 {
 	// Train Cars (wagons)
-	// Wood Planks - S
-	// 2026-08-11 11:21:07
+	// Freight - M
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_woodplanks_small"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10195.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Metal Beams - S
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_metalbeams_small"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10195.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Concrete Pipes - S
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_concretepipes_small"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10195.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Container - S
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_container_small"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10195.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Wood Trunks - M
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_woodtrunks_med"],
+	"spawnname": [
+		"sligwolf_wagons_freight_woodtrunks_med",
+		"sligwolf_wagons_freight_woodplanks_med",
+		"sligwolf_wagons_freight_metalbeams_med",
+		"sligwolf_wagons_freight_concretepipes_med",
+		"sligwolf_wagons_freight_container_med"
+	],
 	"theme":     ["default"],
 
 	"entity": {
@@ -8868,261 +4244,18 @@
 },
 {
 	// Train Cars (wagons)
-	// Wood Planks - M
-	// 2026-08-11 11:21:07
+	// Freight - L
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_woodplanks_med"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10125.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Metal Beams - M
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_metalbeams_med"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10125.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Concrete Pipes - M
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_concretepipes_med"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10125.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Container - M
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_container_med"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10125.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Wood Trunks - L
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_woodtrunks_long"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10047.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Wood Planks - L
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_woodplanks_long"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10047.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Metal Beams - L
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_metalbeams_long"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10047.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Concrete Pipes - L
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_concretepipes_long"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9261.654, 10047.759, -403.619]",
-		"ang":         "{0.000, -179.984, -0.017}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9018.655, 10687.799, -78.699]",
-		"ang": "{32.504, -56.776, 0.000}",
-		"fov": 25.000,
-		"dof": {
-			"distance": 500.251,
-			"blur":     0.250,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Train Cars (wagons)
-	// Container - L
-	// 2026-08-11 11:21:07
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_wagons_freight_container_long"],
+	"spawnname": [
+		"sligwolf_wagons_freight_woodtrunks_long",
+		"sligwolf_wagons_freight_woodplanks_long",
+		"sligwolf_wagons_freight_metalbeams_long",
+		"sligwolf_wagons_freight_concretepipes_long",
+		"sligwolf_wagons_freight_container_long"
+	],
 	"theme":     ["default"],
 
 	"entity": {
@@ -9147,8 +4280,6 @@
 },
 {
 	// Train Controller (traincontroller)
-	// Train Communicator
-	// 2026-08-11 11:35:06
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -9178,8 +4309,6 @@
 },
 {
 	// Train Tracks (traintracks)
-	// Switch Left
-	// 2026-08-11 11:36:37
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -9208,10 +4337,6 @@
 	}
 },
 {
-	// Train Tracks (traintracks)
-	// Switch Right
-	// 2026-08-11 11:37:04
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9239,10 +4364,6 @@
 	}
 },
 {
-	// Train Tracks (traintracks)
-	// Switch Y
-	// 2026-08-11 11:37:37
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9271,8 +4392,6 @@
 },
 {
 	// Mini Trains (minitrains)
-	// Mini Trains Help
-	// 2026-08-11 11:39:46
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -9302,13 +4421,22 @@
 },
 {
 	// Mini Trains (minitrains)
-	// Switch W (128, 256 - 22.5°)
-	// 2026-08-11 11:41:03
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
-	"spawnname": ["sligwolf_minitrains_switch_w_128_256_22p5"],
+	"spawnname": [
+		"sligwolf_minitrains_switch_w_128_256_22p5",
+		"sligwolf_minitrains_switch_v_128_256_22p5",
+		"sligwolf_minitrains_switch_w_128_230_22p5",
+		"sligwolf_minitrains_switch_v_128_230_22p5",
+		"sligwolf_minitrains_switch_w_128_204_22p5",
+		"sligwolf_minitrains_switch_v_128_204_22p5",
+		"sligwolf_minitrains_switch_w_128_178_22p5",
+		"sligwolf_minitrains_switch_v_128_178_22p5",
+		"sligwolf_minitrains_switch_v_128",
+		"sligwolf_minitrains_switch_y_128"
+	],
 	"theme":     ["default"],
 
 	"entity": {
@@ -9332,289 +4460,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Switch V (128, 256 - 22.5°)
-	// 2026-08-11 11:41:30
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_minitrains_switch_v_128_256_22p5"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9707.970, 10258.687, -403.560]",
-		"ang":         "{0.021, 179.983, -0.039}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9618.771, 10343.003, -262.836]",
-		"ang": "{41.399, -31.683, 0.000}",
-		"fov": 40.000,
-		"dof": {
-			"distance": 202.729,
-			"blur":     0.085,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Switch W (128, 230 - 22.5°)
-	// 2026-08-11 11:42:14
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_minitrains_switch_w_128_230_22p5"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9707.970, 10258.687, -403.560]",
-		"ang":         "{0.021, 179.983, -0.039}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9618.771, 10343.003, -262.836]",
-		"ang": "{41.399, -31.683, 0.000}",
-		"fov": 40.000,
-		"dof": {
-			"distance": 202.729,
-			"blur":     0.085,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Switch V (128, 230 - 22.5°)
-	// 2026-08-11 11:42:35
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_minitrains_switch_v_128_230_22p5"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9707.970, 10258.687, -403.560]",
-		"ang":         "{0.021, 179.983, -0.039}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9618.771, 10343.003, -262.836]",
-		"ang": "{41.399, -31.683, 0.000}",
-		"fov": 40.000,
-		"dof": {
-			"distance": 202.729,
-			"blur":     0.085,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Switch W (128, 204 - 22.5°)
-	// 2026-08-11 11:42:56
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_minitrains_switch_w_128_204_22p5"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9707.970, 10258.687, -403.560]",
-		"ang":         "{0.021, 179.983, -0.039}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9618.771, 10343.003, -262.836]",
-		"ang": "{41.399, -31.683, 0.000}",
-		"fov": 40.000,
-		"dof": {
-			"distance": 202.729,
-			"blur":     0.085,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Switch V (128, 204 - 22.5°)
-	// 2026-08-11 11:43:18
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_minitrains_switch_v_128_204_22p5"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9707.970, 10258.687, -403.560]",
-		"ang":         "{0.021, 179.983, -0.039}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9618.771, 10343.003, -262.836]",
-		"ang": "{41.399, -31.683, 0.000}",
-		"fov": 40.000,
-		"dof": {
-			"distance": 202.729,
-			"blur":     0.085,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Switch W (128, 178 - 22.5°)
-	// 2026-08-11 11:43:57
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_minitrains_switch_w_128_178_22p5"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9707.970, 10258.687, -403.560]",
-		"ang":         "{0.021, 179.983, -0.039}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9618.771, 10343.003, -262.836]",
-		"ang": "{41.399, -31.683, 0.000}",
-		"fov": 40.000,
-		"dof": {
-			"distance": 202.729,
-			"blur":     0.085,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Switch V (128, 178 - 22.5°)
-	// 2026-08-11 11:44:18
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_minitrains_switch_v_128_178_22p5"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9707.970, 10258.687, -403.560]",
-		"ang":         "{0.021, 179.983, -0.039}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9618.771, 10343.003, -262.836]",
-		"ang": "{41.399, -31.683, 0.000}",
-		"fov": 40.000,
-		"dof": {
-			"distance": 202.729,
-			"blur":     0.085,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Switch v (128)
-	// 2026-08-11 11:44:45
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_minitrains_switch_v_128"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9707.970, 10258.687, -403.560]",
-		"ang":         "{0.021, 179.983, -0.039}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9618.771, 10343.003, -262.836]",
-		"ang": "{41.399, -31.683, 0.000}",
-		"fov": 40.000,
-		"dof": {
-			"distance": 202.729,
-			"blur":     0.085,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Switch Y (128)
-	// 2026-08-11 11:45:04
-
-	"map":       "gm_construct_flatgrass_v6-2",
-	"savegame":  "none",
-	"category":  "entity",
-	"spawnname": ["sligwolf_minitrains_switch_y_128"],
-	"theme":     ["default"],
-
-	"entity": {
-		"pos":         "[9707.970, 10258.687, -403.560]",
-		"ang":         "{0.021, 179.983, -0.039}",
-		"spawnfrozen": true,
-		"wait":        0.000
-	},
-
-	"camera": {
-		"pos": "[9618.771, 10343.003, -262.836]",
-		"ang": "{41.399, -31.683, 0.000}",
-		"fov": 40.000,
-		"dof": {
-			"distance": 202.729,
-			"blur":     0.085,
-			"passes":   12,
-			"steps":    24,
-			"shape":    0.500
-		}
-	}
-},
-{
-	// Mini Trains (minitrains)
-	// Switch N (128)
-	// 2026-08-11 11:45:24
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9643,8 +4488,7 @@
 },
 {
 	// Mini Trains (minitrains)
-	// Butchery
-	// 2026-08-11 11:52:31
+	// Facilities
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -9673,10 +4517,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// City Station
-	// 2026-08-11 11:53:21
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9704,10 +4544,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Chemical Factory
-	// 2026-08-11 11:53:57
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9735,10 +4571,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Coal Mine
-	// 2026-08-11 11:54:38
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9766,10 +4598,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Cow Farm
-	// 2026-08-11 11:55:16
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9797,10 +4625,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Dairy
-	// 2026-08-11 11:56:24
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9828,10 +4652,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Foodmarket
-	// 2026-08-11 11:57:04
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9859,10 +4679,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Furniture Factory
-	// 2026-08-11 11:57:47
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9890,10 +4706,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Hospital
-	// 2026-08-11 11:58:33
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9921,10 +4733,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Oil Pump
-	// 2026-08-11 11:59:08
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9952,10 +4760,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Papermill
-	// 2026-08-11 11:59:41
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -9983,10 +4787,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Printery
-	// 2026-08-11 12:00:27
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -10014,10 +4814,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Sawmill
-	// 2026-08-11 12:01:30
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -10045,10 +4841,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Steelmill
-	// 2026-08-11 12:02:11
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -10076,10 +4868,6 @@
 	}
 },
 {
-	// Mini Trains (minitrains)
-	// Wheat Farm
-	// 2026-08-11 12:03:13
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "entity",
@@ -10111,8 +4899,6 @@
 
 {
 	// Empty Hands (hands)
-	// Simply Unarmed
-	// 2026-08-11 12:35:39
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "gm_construct_flatgrass_v6-2_hands",
@@ -10144,8 +4930,6 @@
 },
 {
 	// Forklift Truck (forklift)
-	// Tension Strap
-	// 2026-08-11 12:42:33
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -10175,8 +4959,6 @@
 },
 {
 	// Garbage Truck (garbagetruck)
-	// Dumpster
-	// 2026-08-11 12:43:30
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -10206,8 +4988,6 @@
 },
 {
 	// Garbage Truck (garbagetruck)
-	// Trashbag
-	// 2026-08-11 12:44:14
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -10237,8 +5017,6 @@
 },
 {
 	// Grenadelauncher (grenadelauncher)
-	// IAF-13 Grenade Launcher
-	// 2026-08-11 12:45:06
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -10268,8 +5046,6 @@
 },
 {
 	// Motorbike (motorbike)
-	// MG 34
-	// 2026-08-11 12:45:51
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -10299,8 +5075,6 @@
 },
 {
 	// Orblauncher (orblauncher)
-	// MOL-18 Orb Launcher
-	// 2026-08-11 12:47:10
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -10330,8 +5104,6 @@
 },
 {
 	// Train Controller (traincontroller)
-	// Train Controller
-	// 2026-08-11 12:48:02
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -10361,8 +5133,6 @@
 },
 {
 	// VR Friendly Lambda SWEPs (vrhl2lambdaweapons)
-	// Lambda Crowbar
-	// 2026-08-11 12:48:56
 
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
@@ -10391,10 +5161,6 @@
 	}
 },
 {
-	// VR Friendly Lambda SWEPs (vrhl2lambdaweapons)
-	// Lambda Dissolver
-	// 2026-08-11 12:49:42
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "weapon",
@@ -10422,10 +5188,6 @@
 	}
 },
 {
-	// VR Friendly Lambda SWEPs (vrhl2lambdaweapons)
-	// Lambda Pistol
-	// 2026-08-11 12:50:23
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "weapon",
@@ -10453,10 +5215,6 @@
 	}
 },
 {
-	// VR Friendly Lambda SWEPs (vrhl2lambdaweapons)
-	// Lambda 357
-	// 2026-08-11 12:50:52
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "weapon",
@@ -10484,10 +5242,6 @@
 	}
 },
 {
-	// VR Friendly Lambda SWEPs (vrhl2lambdaweapons)
-	// Lambda SMG
-	// 2026-08-11 12:51:25
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "weapon",
@@ -10515,10 +5269,6 @@
 	}
 },
 {
-	// VR Friendly Lambda SWEPs (vrhl2lambdaweapons)
-	// Lambda AR2
-	// 2026-08-11 12:51:54
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "weapon",
@@ -10546,10 +5296,6 @@
 	}
 },
 {
-	// VR Friendly Lambda SWEPs (vrhl2lambdaweapons)
-	// Lambda Shotgun
-	// 2026-08-11 12:52:34
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "weapon",
@@ -10577,10 +5323,6 @@
 	}
 },
 {
-	// VR Friendly Lambda SWEPs (vrhl2lambdaweapons)
-	// Lambda Crossbow
-	// 2026-08-11 12:53:07
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "weapon",
@@ -10608,10 +5350,6 @@
 	}
 },
 {
-	// VR Friendly Lambda SWEPs (vrhl2lambdaweapons)
-	// Lambda RPG
-	// 2026-08-11 12:53:35
-
 	"map":       "gm_construct_flatgrass_v6-2",
 	"savegame":  "none",
 	"category":  "weapon",
