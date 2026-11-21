@@ -41,7 +41,7 @@ end
 
 SLIGWOLF_ADDON.Author = "Grocel"
 SLIGWOLF_ADDON.NiceName = "ZDevTools"
-SLIGWOLF_ADDON.Version = "1.5.0"
+SLIGWOLF_ADDON.Version = "1.6.0"
 
 -- Modules
 SLIGWOLF_ADDON:LuaInclude("module/developer.lua")
@@ -51,6 +51,7 @@ SLIGWOLF_ADDON:LuaInclude("module/debug.lua")
 SLIGWOLF_ADDON:LuaInclude("module/restart.lua")
 SLIGWOLF_ADDON:LuaInclude("module/railscan.lua")
 SLIGWOLF_ADDON:LuaInclude("module/giveall.lua")
+SLIGWOLF_ADDON:LuaInclude("module/docgen.lua")
 SLIGWOLF_ADDON:LuaInclude("module/icongen.lua")
 
 if SERVER then
